@@ -1,0 +1,203 @@
+---
+import type { Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="copy">
+      <h1 id="hero-title">
+        {t.hero.before}<span class="mis" data-text={t.hero.spark}>{t.hero.spark}</span>{t.hero.after}
+      </h1>
+      <p class="lede phrased">{t.hero.lede}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#contact">{t.hero.primary}</a>
+        <a class="btn btn-secondary" href="#work">{t.hero.secondary}</a>
+      </div>
+    </div>
+
+    <figure class="spark" data-spark>
+      <!-- Static print of the spark: what reduced-motion, no-WebGL and no-JS visitors see. -->
+      <svg class="spark-static" viewBox="0 0 400 400" role="img" aria-label={t.hero.sparkAlt}>
+        <defs>
+          <pattern id="dots-pink" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(15)">
+            <circle cx="3.5" cy="3.5" r="2.7" fill="var(--color-pink)"></circle>
+          </pattern>
+          <pattern id="dots-blue" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(75)">
+            <circle cx="3" cy="3" r="1.7" fill="var(--color-ink)"></circle>
+          </pattern>
+        </defs>
+        <g class="plate">
+          <path d="M200 16C214 150 250 186 384 200C250 214 214 250 200 384C186 250 150 214 16 200C150 186 186 150 200 16Z" fill="var(--color-pink)" opacity="0.9"></path>
+          <path d="M200 16C214 150 250 186 384 200L200 200Z M200 384C186 250 150 214 16 200L200 200Z" fill="url(#dots-pink)"></path>
+        </g>
+        <g class="plate" transform="translate(6 5)">
+          <path d="M200 200L384 200C250 214 214 250 200 384Z M200 200L16 200C150 186 186 150 200 16Z" fill="url(#dots-blue)"></path>
+          <path d="M200 16C214 150 250 186 384 200C250 214 214 250 200 384C186 250 150 214 16 200C150 186 186 150 200 16Z" fill="none" stroke="var(--color-ink)" stroke-width="1.5"></path>
+        </g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<script>
+  import { mountSpark } from '../scripts/spark';
+
+  const host = document.querySelector<HTMLElement>('[data-spark]');
+  if (host) mountSpark(host);
+</script>
+
+<style>
+  .hero {
+    padding-block: clamp(40px, 7vh, 88px) clamp(56px, 9vh, 112px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 7.2vw, 6rem);
+    line-height: 0.92;
+    isolation: isolate;
+  }
+
+  :lang(ja) h1 {
+    font-size: clamp(2.5rem, 5.6vw, 4.75rem);
+    line-height: 1.12;
+  }
+
+  /* One word a hair out of register: a pink copy behind the blue, nudged down and right. */
+  .mis {
+    position: relative;
+    display: inline-block;
+  }
+
+  .mis::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0.035em;
+    top: 0.03em;
+    color: var(--color-pink);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .lede {
+    margin-top: clamp(20px, 3vh, 32px);
+    max-width: 30ch;
+    font-size: clamp(1.1875rem, 1.6vw, 1.5rem);
+    line-height: 1.4;
+    color: var(--color-ink-2);
+  }
+
+  :lang(ja) .lede {
+    max-width: 22em;
+  }
+
+  /*
+    The print run, once on load: the headline feeds out of the drum top to
+    bottom like a sheet, the lede follows on the same pass, then the pink
+    plate under "sparks." slides in toward register. CSS only, so a failed
+    script never hides the hero; the actions never wait on it.
+  */
+  @media (prefers-reduced-motion: no-preference) {
+    h1,
+    .lede {
+      animation: feed 760ms var(--ease-out) backwards;
+    }
+
+    .lede {
+      animation-delay: 220ms;
+    }
+
+    .mis::before {
+      animation: register 640ms var(--ease-out) 560ms backwards;
+    }
+  }
+
+  @keyframes feed {
+    from {
+      clip-path: polygon(-10% -10%, 110% -10%, 110% -10%, -10% -10%);
+      transform: translateY(-0.12em);
+    }
+    to {
+      clip-path: polygon(-10% -10%, 110% -10%, 110% 130%, -10% 130%);
+      transform: none;
+    }
+  }
+
+  @keyframes register {
+    from {
+      opacity: 0;
+      transform: translate(0.24em, 0.18em);
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: clamp(28px, 4vh, 40px);
+  }
+
+  .spark {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1;
+    justify-self: center;
+  }
+
+  .spark-static {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 600ms var(--ease-out);
+  }
+
+  .plate {
+    mix-blend-mode: multiply;
+  }
+
+  .spark :global(canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 700ms var(--ease-out);
+  }
+
+  .spark:global(.is-live) :global(canvas) {
+    opacity: 1;
+  }
+
+  .spark:global(.is-live) .spark-static {
+    opacity: 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .spark {
+      order: -1;
+      max-width: min(300px, 70vw);
+    }
+  }
+</style>

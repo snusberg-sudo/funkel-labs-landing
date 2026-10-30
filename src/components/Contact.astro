@@ -1,0 +1,306 @@
+---
+import { contactEmail, type Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+// TODO: create a Web3Forms access key for the studio inbox and set PUBLIC_WEB3FORMS_KEY.
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+const f = t.contact.fields;
+---
+
+<section id="contact" class="contact grain" aria-labelledby="contact-title">
+  <div class="wrap grid">
+    <div class="intro">
+      <h2 id="contact-title">{t.contact.heading}</h2>
+      <p class="lede phrased">{t.contact.lede}</p>
+      <p class="email">
+        {t.contact.emailPrompt} <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      </p>
+    </div>
+
+    <form
+      class="sheet"
+      action="https://api.web3forms.com/submit"
+      method="POST"
+      data-contact
+      data-sending={t.contact.sending}
+      data-sent={t.contact.sent}
+      data-failed={t.contact.failed}
+    >
+      <input type="hidden" name="access_key" value={accessKey} />
+      <input type="hidden" name="subject" value={t.contact.subject} />
+      <input type="hidden" name="from_name" value="Funkel Labs website" />
+      <!-- Web3Forms spam trap: bots tick it, people never see it. -->
+      <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div class="row two">
+        <label>
+          <span>{f.name}</span>
+          <input type="text" name="name" autocomplete="name" required />
+        </label>
+        <label>
+          <span>{f.email}</span>
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+      </div>
+      <label>
+        <span>{f.company}</span>
+        <input type="text" name="company" autocomplete="organization" />
+      </label>
+      <label>
+        <span>{f.message}</span>
+        <textarea name="message" rows="5" required aria-describedby="message-hint"></textarea>
+        <small id="message-hint">{f.messageHint}</small>
+      </label>
+
+      <div class="submit">
+        <button class="btn btn-primary" type="submit">{t.contact.submit}</button>
+        <p class="status" role="status" aria-live="polite" data-status></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  const status = form?.querySelector<HTMLElement>('[data-status]');
+  const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  // Status prints itself as a stamped line on the sheet, never a toast.
+  const print = (state: 'sending' | 'sent' | 'failed') => {
+    if (!form || !status) return;
+    // Clear and reflow first so the stamp lands again on a repeat result.
+    delete status.dataset.state;
+    void status.offsetWidth;
+    status.dataset.state = state;
+    status.textContent = form.dataset[state] ?? '';
+  };
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!button) return;
+    button.disabled = true;
+    print('sending');
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      const result = (await response.json().catch(() => ({}))) as { success?: boolean };
+      if (!response.ok || !result.success) throw new Error('Submission failed');
+      form.reset();
+      print('sent');
+    } catch {
+      print('failed');
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .contact {
+    background-color: var(--color-ink);
+    color: var(--color-on-ink);
+    padding-block: clamp(72px, 11vw, 144px);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.96;
+  }
+
+  :lang(ja) h2 {
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.25;
+  }
+
+  .lede {
+    margin-top: 24px;
+    font-size: 1.25rem;
+    color: var(--color-on-ink-muted);
+    max-width: 30ch;
+  }
+
+  .email {
+    margin-top: 32px;
+    color: var(--color-on-ink-muted);
+  }
+
+  .email a {
+    color: var(--color-on-ink);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  /* The form is a sheet of stock laid on the blue band. */
+  .sheet {
+    display: grid;
+    gap: 20px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-radius: var(--radius-sheet);
+    padding: clamp(24px, 3.5vw, 44px);
+  }
+
+  .botcheck {
+    display: none;
+  }
+
+  .row.two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: grid;
+    gap: 8px;
+  }
+
+  label > span {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 1.0625rem;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    border: var(--rule-frame) solid var(--color-ink);
+    border-radius: var(--radius-sheet);
+    transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  input:hover,
+  textarea:hover {
+    background: var(--color-paper-2);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    background: var(--color-paper);
+  }
+
+  input:user-invalid,
+  textarea:user-invalid {
+    border-color: var(--color-pink);
+    background: var(--color-paper-2);
+  }
+
+  small {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 4px;
+  }
+
+  .status {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.0625rem;
+    line-height: 1.3;
+  }
+
+  :lang(ja) .status {
+    font-family: var(--font-body);
+    font-weight: 700;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status[data-state="sending"] {
+    color: var(--color-muted);
+  }
+
+  .status[data-state="sent"] {
+    padding: 4px 10px;
+    background: var(--color-pink);
+    color: var(--color-pink-ink);
+    border-radius: var(--radius-sheet);
+  }
+
+  .status[data-state="failed"] {
+    padding: 4px 10px;
+    background: var(--color-paper-2);
+    border: var(--rule-frame) solid var(--color-ink);
+    border-radius: var(--radius-sheet);
+  }
+
+  /* A result lands like a rubber stamp: pressed down, a hair askew, then square. */
+  .status[data-state="sent"],
+  .status[data-state="failed"] {
+    animation: stamp-ink 180ms var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status[data-state="sent"],
+    .status[data-state="failed"] {
+      animation: stamp 260ms var(--ease-out);
+    }
+  }
+
+  @keyframes stamp {
+    from {
+      opacity: 0;
+      transform: scale(1.12) rotate(-2deg);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(0.98) rotate(0.4deg);
+    }
+  }
+
+  @keyframes stamp-ink {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* While sending, the disabled button shows it is working. */
+  button[disabled] {
+    cursor: progress;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .row.two {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

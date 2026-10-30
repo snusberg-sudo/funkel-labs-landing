@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Wordmark from './Wordmark.astro';
+import Footer from './Footer.astro';
+import { content, contactEmail, type Lang } from '../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const t = content[Astro.props.lang];
+const home = t.lang === 'ja' ? '/ja/' : '/';
+---
+
+<Base lang={t.lang} title={`${t.privacy.title} | Funkel Labs`} description={t.meta.description} path="/privacy/">
+  <header class="wrap top">
+    <a href={home} aria-label={t.nav.home}><Wordmark /></a>
+  </header>
+  <main class="wrap doc">
+    <h1>{t.privacy.title}</h1>
+    <p class="updated">{t.privacy.updated}</p>
+    {t.privacy.sections.map((s) => (
+      <section>
+        <h2>{s.heading}</h2>
+        <p>{s.body}</p>
+      </section>
+    ))}
+    <p class="contact"><a href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
+    <p><a href={home}>{t.privacy.back}</a></p>
+  </main>
+  <Footer t={t} />
+</Base>
+
+<style>
+  .top {
+    padding-block: 28px;
+    font-size: 1.5rem;
+  }
+
+  .top a {
+    text-decoration: none;
+  }
+
+  .doc {
+    max-width: calc(68ch + 2 * var(--gutter));
+    padding-block: clamp(40px, 6vw, 80px);
+    display: grid;
+    gap: 28px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.95;
+  }
+
+  .updated {
+    color: var(--color-muted);
+    margin-top: -12px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+</style>

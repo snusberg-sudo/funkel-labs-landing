@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Two-Drum Riso</title>
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F7F3EA;--paper2:#FBE3EE;--blue:#2B45A0;--pink:#F0479A;--display:"Cabinet Grotesk",sans-serif;--body:"Literata",serif}
+*{box-sizing:border-box;margin:0}
+html,body{width:1440px;height:900px;overflow:clip;background:var(--paper);color:var(--blue);font-family:var(--body)}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(rgba(43,69,160,.10) 1px,transparent 1.2px);background-size:5px 5px;pointer-events:none;mix-blend-mode:multiply}
+nav{display:flex;align-items:center;justify-content:space-between;padding:32px 80px}
+.mark{display:flex;align-items:center;gap:10px;font:800 26px/1 var(--display);letter-spacing:-.02em}
+.mark svg{width:26px;height:26px}
+.links{display:flex;gap:36px;font-size:17px}
+.links b{background:var(--pink);color:#3a1450;padding:12px 20px;border-radius:2px;font:800 15px var(--display)}
+main{display:grid;grid-template-columns:7fr 5fr;gap:48px;padding:72px 80px 0;align-items:center}
+h1{font:800 132px/.9 var(--display);letter-spacing:-.035em}
+h1 .mis{position:relative;display:inline-block}
+h1 .mis::before{content:"sparks.";position:absolute;left:3px;top:3px;color:var(--pink);z-index:-1}
+p{font-size:24px;line-height:1.4;margin:36px 0 40px;max-width:560px}
+.cta{display:flex;gap:16px}
+.cta a{font:800 22px var(--display);padding:22px 32px;border-radius:2px;text-decoration:none}
+.p{background:var(--pink);color:#3a1450}.s{border:1.5px solid var(--blue);color:var(--blue)}
+.spark{position:relative;height:560px}
+.spark svg{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply}
+.lang{position:absolute;right:80px;bottom:32px;font-size:16px}
+</style></head><body>
+<nav><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z" fill="#2B45A0"/></svg>funkel labs</div>
+<div class="links"><span>Services</span><span>Work</span><span>How we work</span><span>EN / 日本語</span><b>Get in touch</b></div></nav>
+<main><div><h1>We build software that <span class="mis">sparks.</span></h1>
+<p>From idea to shipped product: web, mobile and AI, built by a small studio in Tokyo.</p>
+<div class="cta"><a class="p" href="#">Get in touch</a><a class="s" href="#">See our work</a></div></div>
+<div class="spark">
+<svg viewBox="0 0 400 400"><defs><pattern id="h1" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><circle cx="3.5" cy="3.5" r="2.6" fill="#F0479A"/></pattern>
+<pattern id="h2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(75)"><circle cx="3" cy="3" r="1.9" fill="#2B45A0"/></pattern></defs>
+<path d="M200 20C214 150 250 186 380 200C250 214 214 250 200 380C186 250 150 214 20 200C150 186 186 150 200 20Z" fill="url(#h1)"/>
+<path transform="translate(8 6)" d="M200 60C210 160 240 190 340 200C240 210 210 240 200 340C190 240 160 210 60 200C160 190 190 160 200 60Z" fill="url(#h2)"/>
+<circle cx="318" cy="92" r="16" fill="#F0479A"/><circle cx="96" cy="318" r="9" fill="#2B45A0"/></svg></div></main>
+</body></html>

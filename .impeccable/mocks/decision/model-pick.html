@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Station Signage</title>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700;800&family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#17213A;--white:#FFFFFF;--green:#80C241;--orange:#F15A22;--sky:#00A7DB;--ground:#EEF0F3;--f:"Overpass","BIZ UDPGothic",sans-serif;--jp:"BIZ UDPGothic",sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{width:1440px;height:900px;overflow:clip;background:var(--ground);color:var(--navy);font-family:var(--f)}
+.board{background:var(--navy);color:var(--white);padding:28px 80px 44px}
+nav{display:flex;justify-content:space-between;align-items:center;font-size:17px}
+.wm{display:flex;gap:14px;align-items:center;font:800 24px var(--f)}
+.no{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:5px solid var(--green);background:#fff;color:var(--navy);font:800 13px var(--f)}
+.links{display:flex;gap:32px}.links b{background:var(--orange);padding:12px 20px;border-radius:6px}
+h1{font:800 120px/.95 var(--f);letter-spacing:-.02em;margin-top:64px}
+.jp{font:700 44px/1.2 var(--jp);margin-top:14px;opacity:.9}
+.line{position:relative;margin:84px 80px 0;height:14px;background:var(--green);border-radius:7px}
+.st{position:absolute;top:-25px;display:flex;flex-direction:column;align-items:center;gap:14px;transform:translateX(-50%)}
+.st i{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#fff;border:7px solid var(--green);font:800 15px var(--f);font-style:normal}
+.st span{font:700 26px var(--f)}.st em{font:400 18px var(--jp);font-style:normal;opacity:.7}
+.next{position:absolute;right:80px;bottom:56px;display:flex;align-items:center;gap:20px}
+.next a{background:var(--orange);color:#fff;font:800 24px var(--f);padding:22px 34px;border-radius:8px;text-decoration:none}
+.next p{font-size:20px}
+</style></head><body>
+<div class="board"><nav><div class="wm"><span class="no">FL</span>Funkel Labs</div><div class="links"><span>Lines</span><span>Work</span><span>Team</span><span>EN / 日本語</span><b>Get in touch</b></div></nav>
+<h1>From idea to shipped product.</h1><div class="jp">アイデアから、リリースまで。</div></div>
+<div class="line">
+<div class="st" style="left:6%"><i>01</i><span>Discover</span><em>発見</em></div>
+<div class="st" style="left:36%"><i>02</i><span>Design</span><em>設計</em></div>
+<div class="st" style="left:66%"><i>03</i><span>Build</span><em>開発</em></div>
+<div class="st" style="left:94%"><i>04</i><span>Launch</span><em>リリース</em></div></div>
+<div class="next"><p>Next departure: your project</p><a href="#">Get in touch</a></div>
+</body></html>

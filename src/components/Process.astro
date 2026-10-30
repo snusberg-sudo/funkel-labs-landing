@@ -1,0 +1,229 @@
+---
+import type { Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+
+// Each step prints one more pass of the same sheet: a sketch, the blue plate,
+// the pink plate, then both drums in register.
+const passes = ['sketch', 'blue', 'pink', 'sheet'] as const;
+const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z';
+---
+
+<section id="process" class="process" aria-labelledby="process-title">
+  <div class="wrap">
+    <div class="head">
+      <h2 id="process-title">{t.process.heading}</h2>
+      <p class="phrased">{t.process.lede}</p>
+    </div>
+
+    <ol class="steps" data-process>
+      {t.process.steps.map((step, i) => {
+        const pass = passes[i] ?? 'sheet';
+        const showBlue = pass === 'sketch' || pass === 'blue' || pass === 'sheet';
+        const showPink = pass === 'pink' || pass === 'sheet';
+        return (
+          <li class:list={['step', `pass-${pass}`]} style={`--i: ${i}`}>
+            <div class="plate-frame">
+              <!-- The plate runs off the frame like a full-bleed print; the phone's foot is cropped. -->
+              <svg viewBox="20 0 160 200" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+                {showPink && (
+                  <g class="layer pink">
+                    <rect x="50" y="40" width="100" height="100" rx="3" class="screen" />
+                    <path d={spark} transform="translate(56 46) scale(3.667)" class="fill" />
+                    <rect x="56" y="202" width="88" height="26" rx="2" class="fill" />
+                  </g>
+                )}
+                {showBlue && (
+                  <g class:list={['layer', 'blue', { dashed: pass === 'sketch' }]}>
+                    <rect x="38" y="22" width="124" height="260" rx="16" class="stroke" />
+                    {pass === 'sketch' ? (
+                      <path d={spark} transform="translate(56 46) scale(3.667)" class="stroke thin" />
+                    ) : (
+                      <Fragment>
+                        <path d={spark} transform="translate(56 46) scale(3.667)" class="ink" />
+                        <rect x="56" y="152" width="88" height="9" rx="1" class="ink" />
+                        <rect x="56" y="169" width="66" height="9" rx="1" class="ink" />
+                        <rect x="56" y="186" width="76" height="9" rx="1" class="ink" />
+                      </Fragment>
+                    )}
+                  </g>
+                )}
+              </svg>
+            </div>
+            <h3>{step.name}</h3>
+            <p>{step.body}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<script>
+  // Once, when the section comes into view: each plate prints in order, then
+  // the finished sheet slides into register. Without this script (or with
+  // reduced motion) every plate simply shows in its printed state.
+  const steps = document.querySelector<HTMLElement>('[data-process]');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (steps && !reduced && 'IntersectionObserver' in window) {
+    steps.classList.add('will-register');
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          steps.classList.add('in-register');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(steps);
+  }
+</script>
+
+<style>
+  .process {
+    padding-block: clamp(72px, 11vw, 144px);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 16px clamp(32px, 5vw, 72px);
+    align-items: end;
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+    line-height: 0.98;
+  }
+
+  .head p {
+    max-width: 40ch;
+    font-size: 1.1875rem;
+    color: var(--color-ink-2);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2.4vw, 32px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+  }
+
+  .plate-frame {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: var(--rule-hair) solid var(--color-ink);
+    border-radius: var(--radius-sheet);
+    margin-bottom: 8px;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .layer {
+    mix-blend-mode: multiply;
+  }
+
+  .pink .fill {
+    fill: var(--color-pink);
+  }
+
+  .pink .screen {
+    fill: var(--color-paper-3);
+  }
+
+  .blue .stroke {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+  }
+
+  .blue .thin {
+    stroke-width: 1;
+  }
+
+  .blue .ink {
+    fill: var(--color-ink);
+  }
+
+  .dashed .stroke {
+    stroke-dasharray: 6 5;
+  }
+
+  .dashed .thin {
+    stroke-dasharray: 1.6 1.4;
+  }
+
+  /* A real print is never perfectly registered: the finished sheet keeps a
+     hair of drift, so pink and blue fringe the purple where they cross. */
+  .pass-sheet .pink {
+    transform: translate(3px, 2.5px);
+  }
+
+  /* The print run: each plate feeds out top to bottom, one pass after another. */
+  .will-register svg {
+    clip-path: polygon(-5% -5%, 105% -5%, 105% -5%, -5% -5%);
+    transition: clip-path 620ms var(--ease-out) calc(var(--i) * 170ms);
+  }
+
+  .will-register .pass-sheet .pink {
+    transition: transform 900ms var(--ease-out) calc(var(--i) * 170ms + 420ms);
+  }
+
+  .will-register:not(.in-register) .pass-sheet .pink {
+    transform: translate(12px, 10px);
+  }
+
+  .in-register svg {
+    clip-path: polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%);
+  }
+
+  h3 {
+    font-size: clamp(1.375rem, 1.8vw, 1.625rem);
+    line-height: 1.1;
+  }
+
+  .step p {
+    color: var(--color-ink-2);
+    font-size: 1rem;
+  }
+
+  @media (max-width: 960px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+    }
+
+    .head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .steps {
+      column-gap: 14px;
+      row-gap: 32px;
+    }
+
+    .step p {
+      font-size: 0.9375rem;
+    }
+  }
+</style>

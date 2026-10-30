@@ -1,0 +1,167 @@
+---
+import type { Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+---
+
+<section id="work" class="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <div class="head">
+      <h2 id="work-title">{t.work.heading}</h2>
+      <p class="phrased">{t.work.lede}</p>
+    </div>
+
+    <ul class="apps">
+      {t.work.apps.map((app, i) => (
+        <li class:list={['app', `app-${i + 1}`]}>
+          <figure>
+            <div class:list={['frame', { slot: !app.image }]}>
+              {app.image ? (
+                <img src={app.image} alt={app.imageAlt} loading="lazy" decoding="async" />
+              ) : (
+                <div class="slot-label grain" aria-hidden="true">
+                  <span>{t.work.placeholder}</span>
+                  <span class="hint">{app.slotHint}</span>
+                </div>
+              )}
+            </div>
+            <figcaption>
+              <h3>{app.name}</h3>
+              <p class="platform">{app.platform}</p>
+              <p>{app.body}</p>
+              {app.link?.href && <a href={app.link.href}>{app.link.label}</a>}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .work {
+    padding-block: clamp(72px, 11vw, 144px);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px 48px;
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+    line-height: 0.98;
+  }
+
+  .head p {
+    max-width: 34ch;
+    color: var(--color-ink-2);
+    font-size: 1.1875rem;
+  }
+
+  .apps {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto auto;
+    gap: clamp(32px, 4vw, 56px) clamp(24px, 4vw, 56px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The phone app stands tall on the left; the two browser apps stack beside it. */
+  .app-1 {
+    grid-row: span 2;
+  }
+
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 18px;
+  }
+
+  .frame {
+    border: var(--rule-frame) solid var(--color-ink);
+    border-radius: var(--radius-sheet);
+    overflow: hidden;
+    background: var(--color-paper);
+    aspect-ratio: 16 / 10;
+  }
+
+  .app-1 .frame {
+    aspect-ratio: 9 / 16;
+    max-height: 820px;
+  }
+
+  /* Screenshots print in their own full colour on the stock, never duotoned. */
+  .frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .slot-label {
+    display: grid;
+    place-content: center;
+    gap: 6px;
+    height: 100%;
+    background-color: var(--color-paper-2);
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+
+  .slot-label .hint {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+
+  figcaption {
+    display: grid;
+    gap: 6px;
+    max-width: 46ch;
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+    line-height: 1.05;
+  }
+
+  .platform {
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  figcaption a {
+    justify-self: start;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 860px) {
+    .apps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .app-1 {
+      grid-row: auto;
+    }
+
+    .app-1 .frame {
+      max-width: 360px;
+    }
+  }
+</style>

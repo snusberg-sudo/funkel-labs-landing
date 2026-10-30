@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Metro Tiles</title>
+<link href="https://fonts.googleapis.com/css2?family=Murecho:wght@200;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--ink:#fff;--lime:#A4C400;--cyan:#1BA1E2;--mag:#D80073;--f:"Murecho",sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{width:1440px;height:900px;overflow:clip;background:var(--bg);color:var(--ink);font-family:var(--f)}
+nav{display:flex;justify-content:space-between;padding:36px 80px;font:400 20px var(--f)}
+nav b{color:var(--lime);font-weight:400}
+h1{font:200 220px/.9 var(--f);letter-spacing:-.04em;white-space:nowrap;margin:24px 0 0 72px}
+h2{font:200 64px/1 var(--f);margin:12px 0 0 80px;color:#bbb}
+.tiles{display:grid;grid-template-columns:repeat(5,230px);grid-auto-rows:230px;gap:12px;margin:56px 0 0 80px}
+.t{padding:18px;font:400 22px var(--f);display:flex;align-items:flex-end}
+.a{background:var(--lime);color:#000}.b{background:var(--cyan)}.c{background:var(--mag)}.d{background:#222}.e{background:var(--lime);color:#000;font-size:28px}
+</style></head><body>
+<nav><span>funkel labs</span><span>work · services · team · 日本語 · <b>get in touch</b></span></nav>
+<h1>we build software</h1><h2>from idea to shipped product</h2>
+<div class="tiles"><div class="t a">app one</div><div class="t b">app two</div><div class="t c">app three</div><div class="t d">app four</div><div class="t e">get in touch</div></div>
+</body></html>

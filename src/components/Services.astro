@@ -1,0 +1,111 @@
+---
+import type { Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+const [lead, ...rest] = t.services.items;
+---
+
+<section id="services" class="services" aria-labelledby="services-title">
+  <div class="wrap grid">
+    <h2 id="services-title">{t.services.heading}</h2>
+    <ul class="list">
+      {lead && (
+        <li class="row lead grain">
+          <h3>{lead.name}</h3>
+          <p>{lead.body}</p>
+        </li>
+      )}
+      {rest.map((item) => (
+        <li class="row">
+          <h3>{item.name}</h3>
+          <p>{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding-block: clamp(72px, 11vw, 144px);
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+    line-height: 0.98;
+    position: sticky;
+    top: 120px;
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--rule-frame) solid var(--color-ink);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 24px;
+    padding-block: 28px 32px;
+    border-bottom: var(--rule-hair) solid var(--color-rule);
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.05;
+  }
+
+  .row p {
+    color: var(--color-ink-2);
+    max-width: 44ch;
+  }
+
+  /* The service most clients start with prints on the pink screen, set larger. */
+  .lead {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+    padding: clamp(24px, 3vw, 40px);
+    background-color: var(--color-paper-2);
+    border-radius: var(--radius-sheet);
+    border-bottom: 0;
+  }
+
+  .lead h3 {
+    font-size: clamp(2rem, 3.6vw, 3.25rem);
+  }
+
+  .lead p {
+    font-size: 1.1875rem;
+    color: var(--color-ink);
+    max-width: 52ch;
+  }
+
+  @media (max-width: 860px) {
+    .grid,
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .row {
+      gap: 10px;
+    }
+
+    h2 {
+      position: static;
+    }
+  }
+</style>

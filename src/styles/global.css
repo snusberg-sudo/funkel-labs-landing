@@ -1,0 +1,286 @@
+/* Tailwind supplies the reset and the theme tokens. Components style themselves
+   in scoped <style> blocks, so the utilities layer is left out. Add
+   `@import "tailwindcss/utilities.css" layer(utilities);` to use utility classes. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/fonts/cabinet-grotesk-800.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/fonts/cabinet-grotesk-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+  Two drums on bright stock. The blue sets every word, rule and icon; the
+  pink lays every fill; purple only ever appears where they overprint.
+*/
+@theme static {
+  --color-paper: oklch(98.7% 0.004 300);
+  --color-paper-2: oklch(94.6% 0.03 356);
+  --color-paper-3: oklch(86% 0.1 356);
+  --color-ink: oklch(40% 0.165 265);
+  --color-ink-2: oklch(46% 0.15 265);
+  --color-muted: oklch(49% 0.11 265);
+  --color-rule: oklch(85% 0.045 265);
+  --color-pink: oklch(68% 0.235 356);
+  --color-pink-ink: oklch(22% 0.11 265);
+  --color-focus: oklch(44% 0.2 265);
+  --color-on-ink: oklch(98.7% 0.004 300);
+  --color-on-ink-muted: oklch(88% 0.04 265);
+
+  --font-display: "Cabinet Grotesk", "Dela Gothic One", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Literata Variable", "Zen Kaku Gothic New", ui-serif, Georgia, serif;
+  --font-wordmark: "Cabinet Grotesk", ui-sans-serif, sans-serif;
+  --font-ja-system: "Hiragino Sans", "Yu Gothic", "Meiryo", ui-sans-serif, sans-serif;
+
+  --radius-sheet: 2px;
+}
+
+:root {
+  --gutter: clamp(16px, 5vw, 80px);
+  --measure: 1240px;
+  --rule-hair: 1px;
+  --rule-frame: 1.5px;
+  --tracking-display: -0.03em;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Japanese pages set kana and kanji in Zen Kaku Gothic New for reading,
+   Dela Gothic One for display; Latin inside them follows the same faces. */
+:root:lang(ja) {
+  --font-body: "Zen Kaku Gothic New", var(--font-ja-system);
+  --tracking-display: -0.01em;
+}
+
+/* Japanese words on English pages (the language switch) use a Japanese sans, never a Mincho fallback. */
+:root:lang(en) [lang="ja"] {
+  font-family: var(--font-ja-system);
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  scrollbar-color: var(--color-ink) var(--color-paper-2);
+  caret-color: var(--color-pink);
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+:lang(ja) body {
+  line-height: 1.85;
+  font-feature-settings: "palt" 0;
+}
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-pink-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  transition: none;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--color-pink);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-thickness 150ms var(--ease-out), text-decoration-color 150ms var(--ease-out);
+}
+
+a:hover {
+  text-decoration-thickness: 3.5px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Japanese heads break only at the phrase boundaries marked in the copy (U+200B). */
+:lang(ja) h1,
+:lang(ja) h2,
+:lang(ja) h3 {
+  word-break: keep-all;
+}
+
+/* Dela Gothic One has one weight: never fake-bold it, and let Latin inside
+   Japanese heads keep Cabinet 800 so each head reads as one weight. */
+:lang(ja) {
+  font-synthesis-weight: none;
+  /* Strict kinsoku: no small kana or closing punctuation at the start of a line. */
+  line-break: strict;
+}
+
+/* Running Japanese text wraps between phrases where the browser can find them
+   (Chromium); elsewhere it falls back to ordinary Japanese line breaking. */
+:lang(ja) p,
+:lang(ja) small {
+  word-break: auto-phrase;
+}
+
+/* Short Japanese lines (ledes) also break only at marked phrase boundaries. */
+:lang(ja) .phrased {
+  word-break: keep-all;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Paper specks where the drum skipped. Ink fields only (pink fills, the blue
+   band, plates), never the bare stock. The specks sit over the field colour
+   and under any text, so set background-color, not the shorthand, beside it. */
+.grain {
+  background-image: var(--grain);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 14px 26px;
+  border-radius: var(--radius-sheet);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.125rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+/* A sheet landing: pressed controls drop 1px down and right. */
+.btn:active {
+  transform: translate(1px, 1px);
+}
+
+.btn-primary {
+  background-color: var(--color-pink);
+  background-image: var(--grain);
+  color: var(--color-pink-ink);
+  border: var(--rule-frame) solid var(--color-pink);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-paper-3);
+  border-color: var(--color-paper-3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-ink);
+  border: var(--rule-frame) solid var(--color-ink);
+}
+
+.btn-secondary:hover {
+  background: var(--color-paper-2);
+}
+
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  padding: 12px 18px;
+  border-radius: var(--radius-sheet);
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+}
+
+/*
+  Motion opts in: every spatial animation lives inside a no-preference query
+  in its component, so reduced motion keeps colour and state changes and
+  loses only the movement.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Switching language crossfades the page while the nav holds still. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out);
+}

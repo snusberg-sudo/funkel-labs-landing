@@ -1,0 +1,119 @@
+---
+import Wordmark from './Wordmark.astro';
+import { contactEmail, type Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <!-- Both drums print the mast; the pink sits a hair out of register, purple where they cross. -->
+    <p class="mast" aria-hidden="true">
+      <span class="plate plate-pink"><Wordmark /></span>
+      <span class="plate plate-blue"><Wordmark /></span>
+    </p>
+    <div class="cols">
+      <div>
+        <p>{t.footer.legalName}</p>
+        <p class="muted">{t.footer.address}</p>
+      </div>
+      <ul>
+        <li><a href={`mailto:${contactEmail}`}>{contactEmail}</a></li>
+        <li><a href={t.footer.privacyHref}>{t.footer.privacy}</a></li>
+        <li><a href={t.nav.switchHref} hreflang={t.nav.switchLang} lang={t.nav.switchLang}>{t.nav.switchLabel}</a></li>
+      </ul>
+      <p class="muted rights">{t.footer.rights}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(56px, 8vw, 96px) 40px;
+  }
+
+  .mast {
+    display: grid;
+    isolation: isolate;
+    font-size: clamp(3.5rem, 13vw, 11rem);
+    line-height: 0.9;
+    margin-bottom: clamp(32px, 5vw, 56px);
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .plate {
+    grid-area: 1 / 1;
+  }
+
+  .plate-pink {
+    color: var(--color-pink);
+    transform: translate(0.035em, 0.03em);
+  }
+
+  .plate-blue {
+    color: var(--color-ink);
+    mix-blend-mode: multiply;
+  }
+
+  /* As the footer scrolls in, the pink plate travels toward register, tied to scroll position. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* Longhands on purpose: the `animation` shorthand cannot carry a timeline. */
+      .plate-pink {
+        animation-name: mast-register;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+    }
+  }
+
+  @keyframes mast-register {
+    from {
+      transform: translate(0.18em, 0.14em);
+    }
+    to {
+      transform: translate(0.035em, 0.03em);
+    }
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    gap: 24px 48px;
+    padding-top: 24px;
+    border-top: var(--rule-frame) solid var(--color-ink);
+    font-size: 0.9375rem;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+
+  .muted {
+    color: var(--color-muted);
+  }
+
+  .rights {
+    justify-self: end;
+  }
+
+  @media (max-width: 760px) {
+    .cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rights {
+      justify-self: start;
+    }
+  }
+</style>

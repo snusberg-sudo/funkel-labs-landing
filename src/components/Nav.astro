@@ -1,0 +1,117 @@
+---
+import Wordmark from './Wordmark.astro';
+import type { Content } from '../i18n/content';
+
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+const home = t.lang === 'ja' ? '/ja/' : '/';
+---
+
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="home" href={home} aria-label={t.nav.home}><Wordmark /></a>
+    <nav aria-label={t.lang === 'ja' ? 'メイン' : 'Main'}>
+      <ul class="links">
+        <li><a href="#services">{t.nav.services}</a></li>
+        <li><a href="#work">{t.nav.work}</a></li>
+        <li><a href="#process">{t.nav.process}</a></li>
+        <li><a href="#about">{t.nav.about}</a></li>
+      </ul>
+    </nav>
+    <div class="actions">
+      <a class="lang" href={t.nav.switchHref} hreflang={t.nav.switchLang} lang={t.nav.switchLang}>{t.nav.switchLabel}</a>
+      <a class="btn btn-primary cta" href="#contact">{t.nav.cta}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    view-transition-name: site-nav;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in oklch, var(--color-paper) 92%, transparent);
+    border-bottom: var(--rule-hair) solid var(--color-rule);
+    backdrop-filter: saturate(1.2) blur(10px);
+  }
+
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    min-height: 76px;
+  }
+
+  .home {
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+
+  nav {
+    margin-left: auto;
+  }
+
+  .links {
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a,
+  .lang {
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: 8px;
+  }
+
+  .links a:hover,
+  .lang:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-pink);
+    text-decoration-thickness: 2px;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .cta {
+    min-height: 44px;
+    padding: 12px 18px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    nav {
+      display: none;
+    }
+
+    .actions {
+      margin-left: auto;
+      gap: 14px;
+    }
+
+    .nav-row {
+      min-height: 64px;
+    }
+
+    .home {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .cta {
+      padding: 10px 12px;
+      font-size: 0.9375rem;
+    }
+  }
+</style>
