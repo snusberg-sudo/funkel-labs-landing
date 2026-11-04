@@ -1,5 +1,4 @@
 ---
-import credits from '../../public/found/credits.json';
 import { contactEmail, type Content } from '../i18n/content';
 
 interface Props {
@@ -13,8 +12,8 @@ const links = [
   { href: `${home}#process`, label: t.nav.process },
   { href: `${home}#about`, label: t.nav.about },
   { href: t.footer.privacyHref, label: t.footer.privacy },
+  { href: t.footer.creditsHref, label: t.footer.credits },
 ];
-const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57).trimEnd()}…` : title);
 ---
 
 <!-- The close: the last rows of the board, every tile filled, the name at full width. -->
@@ -35,6 +34,9 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
       <p class="small"><time data-clock>JST</time> {t.footer.timeLabel}</p>
     </div>
     <div class="tile email">
+      <span class="envelope" aria-hidden="true">
+        <svg viewBox="0 0 48 48" focusable="false"><path d="M4 10h38.5v26.5H4zM4 10l19.25 15 19.25-15" /></svg>
+      </span>
       <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
     </div>
 
@@ -52,16 +54,6 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
       <span class="lead">{t.footer.start}</span>
       <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M10 38 38 10M16 10h22v22" /></svg>
     </a>
-
-    <p class="tile credits">
-      {t.footer.credits}:
-      {credits.map((c, i) => (
-        <Fragment>
-          {' '}<a href={c.page}>“{shortTitle(c.title)}”</a> by {c.creator}, <a href={c.licenseUrl}>{c.license}</a>, via {c.via}{i < credits.length - 1 ? ';' : '.'}
-        </Fragment>
-      ))}
-      {' '}{t.lang === 'ja' ? '二色刷りの色に変更しています。' : 'Colours changed to the two inks.'}
-    </p>
   </div>
 </footer>
 
@@ -139,8 +131,39 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
 
   .email {
     grid-column: span 3;
-    justify-content: flex-end;
     background-color: var(--color-ink-4);
+  }
+
+  /* Printed in the two drums like the rest of the board: the pink drum lays the envelope's fill,
+     the ink sets its key line (the start arrow's stroke and size) multiplied over it, a hair out of register. */
+  .envelope {
+    position: relative;
+    display: block;
+    width: 64px;
+    height: 64px;
+  }
+
+  /* The fill plate, with the grain the board's other pink fields carry; set on the 48-unit grid, 1.5 units off register. */
+  .envelope::before {
+    content: "";
+    position: absolute;
+    left: calc(3.5 / 48 * 100%);
+    top: calc(9.5 / 48 * 100%);
+    width: calc(42.5 / 48 * 100%);
+    height: calc(30.5 / 48 * 100%);
+    background-color: var(--color-pink);
+    background-image: var(--grain);
+  }
+
+  .envelope svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    mix-blend-mode: multiply;
   }
 
   .email a {
@@ -232,16 +255,6 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
     transform: translate(6px, -6px);
   }
 
-  .credits {
-    grid-column: 1 / -1;
-    min-height: 0;
-    display: block;
-    max-width: 75ch;
-    font-size: var(--step-small);
-    background-color: var(--color-paper);
-    padding: 16px 24px 8px;
-  }
-
   /* As the footer scrolls in, the pink plate travels toward register, tied to scroll position. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -278,8 +291,7 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
     }
 
     .mast,
-    .start,
-    .credits {
+    .start {
       grid-column: 1 / -1;
       min-height: 160px;
     }
@@ -298,10 +310,6 @@ const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57)
     .place,
     .statement {
       grid-column: span 1;
-    }
-
-    .credits {
-      min-height: 0;
     }
   }
 </style>

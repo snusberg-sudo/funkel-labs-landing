@@ -70,7 +70,7 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
       </form>
 
       <figure class="poster-wrap" data-rise style="--rise: 3">
-        <div class="poster grain" data-poster aria-hidden="true">
+        <div class="poster grain" data-poster data-examples={JSON.stringify(p.examples)} aria-hidden="true">
           <svg class="poster-spark" viewBox="0 0 24 24" focusable="false">
             <path d={spark} class="spark-pink" />
             <path d={spark} class="spark-blue" transform="translate(0.6 0.5)" />
@@ -163,6 +163,91 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
     render();
   }
 
+  // Until the visitor starts, the press sets a few sample ideas itself, one letter at a time, so the
+  // poster shows what it does. The visitor's own words always win: any focus or typing stops it for good.
+  const examples: string[] = JSON.parse(poster?.dataset.examples ?? '[]');
+  if (poster && plates && idea && form && examples.length && motion.matches) {
+    const placeholder = idea.placeholder;
+    let timer = 0;
+    let lift: Animation | undefined;
+    let visible = false;
+    let stopped = false;
+    let running = false;
+    let index = 0;
+
+    const set = (text: string) => {
+      for (const el of texts) el.dataset.text = text;
+    };
+    const wait = (ms: number, next: () => void) => {
+      timer = window.setTimeout(next, ms);
+    };
+
+    const play = () => {
+      if (stopped || !visible) { running = false; return; }
+      running = true;
+      const full = examples[index];
+      // Fit the whole line first so the letters keep one size while they are set.
+      set(full);
+      fit();
+      set('');
+      idea.placeholder = full;
+      let count = 0;
+      const type = () => {
+        if (stopped || !visible) { running = false; return; }
+        count += 1;
+        set(full.slice(0, count));
+        strike();
+        if (count < full.length) {
+          // A typist's pace: uneven, a little quicker after a space.
+          wait((full[count - 1] === ' ' ? 40 : 70) + Math.random() * 60, type);
+          return;
+        }
+        // Printed: hold, then the sheet lifts off and the next idea is set.
+        wait(2600, () => {
+          if (stopped || !visible) { running = false; return; }
+          lift = plates.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-14px)' }],
+            { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' },
+          );
+          lift.onfinish = () => {
+            lift?.cancel();
+            set('');
+            index = (index + 1) % examples.length;
+            wait(260, play);
+          };
+        });
+      };
+      wait(380, type);
+    };
+
+    const stop = () => {
+      if (stopped) return;
+      stopped = true;
+      window.clearTimeout(timer);
+      lift?.cancel();
+      idea.placeholder = placeholder;
+      render();
+    };
+    form.addEventListener('focusin', stop);
+    form.addEventListener('input', stop);
+
+    // Runs only while the poster is on screen; leaving mid-line restarts that idea on return.
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && entry.intersectionRatio >= 0.6;
+      if (!visible) {
+        window.clearTimeout(timer);
+        lift?.cancel();
+        running = false;
+        if (!stopped) {
+          set(examples[index]);
+          fit();
+        }
+      } else if (!running) {
+        play();
+      }
+    }, { threshold: [0, 0.6, 1] }).observe(poster);
+  }
+
   // Status prints itself as a stamped line on the sheet, never a toast.
   const print = (state: 'sending' | 'sent' | 'failed') => {
     if (!form || !status) return;
@@ -213,7 +298,7 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
   .contact {
     background-color: var(--color-ink);
     color: var(--color-on-ink);
-    padding-block: var(--section-gap) 0;
+    padding-block: var(--chapter-head) 0;
   }
 
   .intro {
@@ -401,7 +486,7 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
   .poster {
     position: relative;
     aspect-ratio: 3 / 4;
-    max-height: 78svh;
+    max-height: min(78svh, var(--chapter-room));
     margin-left: auto;
     background-color: var(--color-paper);
     color: var(--color-ink);

@@ -45,7 +45,7 @@ export interface Content {
   contact: {
     heading: string;
     lede: string;
-    poster: { example: string; printedFor: string; you: string; by: string; caption: string };
+    poster: { example: string; examples: string[]; printedFor: string; you: string; by: string; caption: string };
     fields: { name: string; email: string; company: string; message: string; messageHint: string };
     submit: string;
     sending: string;
@@ -67,7 +67,9 @@ export interface Content {
     rights: string;
     start: string;
     credits: string;
+    creditsHref: string;
   };
+  credits: { title: string; lede: string; back: string };
   privacy: { title: string; updated: string; sections: { heading: string; body: string }[]; back: string };
 }
 
@@ -143,6 +145,8 @@ export const content: Record<Lang, Content> = {
       lede: 'Type what you want to build and watch it come off the press. Send the print and we’ll reply by email.',
       poster: {
         example: 'A booking app for my bakery',
+        // Sample ideas the poster types out before a visitor starts; the first is the example above.
+        examples: ['A booking app for my bakery', 'Live tracking for our delivery vans', 'An AI helper for our support inbox', 'A mobile app for our yoga studio'],
         printedFor: 'Printed for',
         you: 'you',
         by: 'by Funkel Labs',
@@ -175,7 +179,13 @@ export const content: Record<Lang, Content> = {
       privacyHref: '/privacy/',
       rights: `© ${year} Funkel Labs`,
       start: 'Start a project',
-      credits: 'Pictures',
+      credits: 'Picture credits',
+      creditsHref: '/credits/',
+    },
+    credits: {
+      title: 'Picture credits',
+      lede: 'The printing pictures and the press film on this site are used under Creative Commons licences. Their colours have been changed to the two inks.',
+      back: 'Back to the home page',
     },
     privacy: {
       title: 'Privacy',
@@ -258,6 +268,7 @@ export const content: Record<Lang, Content> = {
       lede: 'つくりたいものを\u200B入力すると、\u200Bその場で\u200B刷り上がります。\u200B送信すると、\u200Bメールで\u200Bお返事します。',
       poster: {
         example: 'パン屋の予約アプリ',
+        examples: ['パン屋の予約アプリ', '配送車のリアルタイム追跡', '問い合わせ対応のAIアシスタント', 'ヨガスタジオのモバイルアプリ'],
         printedFor: '',
         you: 'あなた',
         by: 'のために、Funkel Labsが刷りました',
@@ -290,7 +301,13 @@ export const content: Record<Lang, Content> = {
       privacyHref: '/ja/privacy/',
       rights: `© ${year} Funkel Labs`,
       start: '相談をはじめる',
-      credits: '写真',
+      credits: '写真のクレジット',
+      creditsHref: '/ja/credits/',
+    },
+    credits: {
+      title: '写真のクレジット',
+      lede: 'このサイトの印刷の写真と映像は、クリエイティブ・コモンズ・ライセンスのもとで使用しています。色は二色刷りの色に変更しています。',
+      back: 'ホームに戻る',
     },
     privacy: {
       title: 'プライバシーポリシー',

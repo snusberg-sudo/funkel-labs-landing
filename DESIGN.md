@@ -50,6 +50,8 @@ spacing:
   gutter: "clamp(16px, 2.2vw, 32px)"
   measure: "1536px"
   section-gap: "clamp(96px, 14vw, 200px)"
+  chapter-head: "clamp(96px, 8vw, 120px)"
+  chapter-room: "max(360px, 100svh - chapter-head - step-heading - 136px)"
   tile-gap: "8px"
 components:
   button-primary:
@@ -126,7 +128,7 @@ The page is flat paper. Depth comes from overprint and registration, not from li
 - No hairlines, no outlined boxes, no shadows; secondary controls are filled tones.
 - Grain as background-image specks on ink fields only.
 - Five type steps; heavy display (800) over a serif reading face.
-- Found pictures in one two-drum duotone, credited in the footer.
+- Found pictures in one two-drum duotone, credited on the picture credits page linked from the footer.
 - Motion is registration: plates drift and land, sheets feed, parts rise in turn.
 
 ## Colors
@@ -175,7 +177,7 @@ Two inks on one stock: a medium blue that draws and a fluorescent pink that fill
 - **Heading** (800, clamp(36px, 5.2vw, 84px), 1): section heads, the services list at poster scale, the open accordion pass, the contact detail rows.
 - **Lead** (clamp(21px, 2.1vw, 30px), 1.3): hero, work and about ledes held to 26 to 34ch, and in the display face at 800 for card titles, closed accordion tabs, the team heading and the footer start tile.
 - **Body** (400, 1.125rem, 1.55, tabular numerals): running text, 36 to 48ch; buttons, stamps and person names in the display face at 800. JA body line-height 1.85.
-- **Small** (1rem): form labels (600), roles, hints, footer meta and credits.
+- **Small** (1rem): form labels (600), roles, hints, footer meta.
 
 Display tracking is -0.035em on Latin pages and -0.01em on Japanese pages. No other sizes: every size on the page is one of the five steps, except the fitted poster plates and the viewport-width display sizes on phones (hero 15.5vw, mast 12vw).
 
@@ -188,7 +190,7 @@ Display tracking is -0.035em on Latin pages and -0.01em on Japanese pages. No ot
 
 ## Layout
 
-Colour chapters on one tight measure: content sits in a 1536px measure with a narrow gutter (clamp(16px, 2.2vw, 32px)) so large type runs toward the edges, while each chapter's field runs full bleed. Chapters are separated by a change of field and by the section gap (clamp(96px, 14vw, 200px)) as vertical padding, never by a divider. Splits are asymmetric fractional tracks: 8/4 for service name against sentence on a shared first baseline, 7/5 for head against lede, 5/1/5/1 for the process intro, 6/6 for about and for the form against the poster, a 12-column tile board with 8px gaps in the footer.
+Colour chapters on one tight measure: content sits in a 1536px measure with a narrow gutter (clamp(16px, 2.2vw, 32px)) so large type runs toward the edges, while each chapter's field runs full bleed. Chapters are separated by a change of field and by the section gap (clamp(96px, 14vw, 200px)) as vertical padding, never by a divider. Because a chapter lands at the top edge, every chapter after the hero opens on the shorter chapter head (clamp(96px, 8vw, 120px)) and closes on its full gap, so headings land at one height. A piece that must be seen whole (the process accordion, at most 520px, and the contact poster) is capped to the chapter room left below the heading, and services fills at least one viewport so no neighbour shows beneath it. Splits are asymmetric fractional tracks: 8/4 for service name against sentence on a shared first baseline, 7/5 for head against lede, 5/1/5/1 for the process intro, 6/6 for about and for the form against the poster, a 12-column tile board with 8px gaps in the footer.
 
 The hero is a full-viewport stage (100svh minus the 72px nav) pinned for 175svh on desktop. The press room pins for its own height plus the cards' travel at 1024px and up. On phones and under reduced motion both unpin: the hero is a single screen and the work cards stack (two up from 640px). Every split collapses to one column at 760px; the footer board drops to two columns with 6px gaps, mast and start tile first.
 
@@ -236,7 +238,7 @@ Inherit the text colour and carry a 2px pink underline offset 0.22em, thickening
 - **Screenshots:** product screenshots print in their own full colour, square-cut over a deep pink screen with grain, never duotoned.
 
 ### Found Pictures
-Found pictures (CC BY, credited in the footer) print in one two-drum duotone: the image at `grayscale(1) contrast(1.15)` multiplied onto the deep pink screen (paper-3), with a Drum Blue layer above under `mix-blend-mode: lighten`, so shadows print blue and lights print pink. Portraits share the treatment. The press-room video is the one single-drum variant: multiplied onto ink-3 with pink-ink lightened in, so it reads as a blue screen behind the cards. Closed accordion passes show a strip of their picture multiplied into their own blue at half opacity.
+Found pictures (CC BY, credited on the picture credits page) print in one two-drum duotone: the image at `grayscale(1) contrast(1.15)` multiplied onto the deep pink screen (paper-3), with a Drum Blue layer above under `mix-blend-mode: lighten`, so shadows print blue and lights print pink. Portraits share the treatment. The press-room video is the one single-drum variant: multiplied onto ink-3 with pink-ink lightened in, so it reads as a blue screen behind the cards. Closed accordion passes show a strip of their picture multiplied into their own blue at half opacity.
 
 ### Inputs / Fields
 - **Style:** filled stock, no border, 2px radius, 14px 16px padding, min-height 52px (120px for the textarea), pink-ink text, muted placeholder.
@@ -248,22 +250,28 @@ Found pictures (CC BY, credited in the footer) print in one two-drum duotone: th
 States print as stamped lines in the display face at 800, never toasts. Sending is on-ink mist text; sent is a pink stamp, failed a pink-screen stamp, both pink-ink text at 4px 10px. A result lands like a rubber stamp: from scale 1.12 and -2deg to square over 260ms (an opacity-only fade under reduced motion).
 
 ### Navigation
-A plain sticky bar on stock, 72px tall (60px below 480px): the wordmark at the lead step, the language switch, one compact pink primary button. No divider below it. It slides up out of view while scrolling down past 120px and returns on scroll up or on focus (320ms). Section links live in the footer. The nav holds still across the language switch's cross-document view transition (260ms crossfade).
+A plain sticky bar on stock, 72px tall (60px below 480px): the wordmark at the lead step, the language switch, one compact pink primary button. No divider below it. It slides up out of view while scrolling down past the hero's print run (never before 120px), and returns on scroll up or on focus (320ms). It holds through the hero because the hero stage is pinned below it. Section links live in the footer. The nav holds still across the language switch's cross-document view transition (260ms crossfade).
+
+### Scrolling
+On fine-pointer devices, a wheel gesture jumps to the next chapter stop with a GSAP ScrollTo transition that moves at once and lands softly (power4.out, 700ms plus 350ms per viewport travelled, at most 1100ms). Tall chapters add reading stops within them so the hero print run, work rail and lower content remain reachable; a pinned stage's last stop is where it releases. A chapter lands flush with the top edge going down (the nav has stepped aside) and just below the nav going up, and pinned stages redraw in the same frame as each tweened scroll step. A jump's own trackpad momentum is ignored; reversing turns back at once, and a fresh push in the same direction chains to the next stop once the jump is halfway through. Touch, keyboard, scrollbar dragging and reduced-motion scrolling stay native. Section links scroll smoothly with the 96px scroll offset.
 
 ### Print Run Hero (signature)
 Two sheets meet at a seam: stock above, the blue drum with grain below. The headline is set twice in the same place (blue on stock, pink on the drum), each clipped to its own side, so the seam cuts through the second line. On desktop the hero pins and the seam rises from 56% to the top as the sheet feeds into the drum, while the three.js spark (pink plate screened at 15°, blue at 75°, multiplied) pulls into register, squares up and turns a quarter turn. On load each headline line rises from behind its own mask (900ms, 110ms stagger) and the lede fades up. A static two-ink SVG of the spark is the fallback for reduced motion and no WebGL.
+
+### Services Ink Roller
+The service list runs as a press run on desktop with motion allowed. The line in hand is set in blue; a pink plate of its own letters (drawn from `data-text`, offset 0.035em / 0.03em, multiplied, so it prints purple over the blue) rolls on from the left at a constant pace, and the roll is the timer: when the plate covers the line, the next line takes the press. The printed line keeps its full plate as it leaves, and the plate lifts away to 0.16em / 0.12em off register while it fades (420ms) as the letters drop back to navy, so the hand-off reads as one sheet leaving and the next arriving. The sentences share one panel across the last five columns, set at the lead step and centred against the list; the new sentence strikes in 0.4em / 0.25em off register and settles (520ms), the previous one fading out (200ms). The heading holds the first beat (3s) with nothing beside it; the four services then loop at 4.5s each. Hovering the list with a moving mouse or focusing a name pauses the roll, and hovering a name picks it; clicking a name prints it fully and stops the run until the reader leaves the chapter. It runs only while the chapter fills at least half the screen and the tab is visible. Names become real buttons only when the run is armed; on phones, under reduced motion and without script every line and sentence stays printed.
 
 ### Press Room Showcase (signature)
 The deepest-blue chapter. A press-run video loops behind the cards in its blue screen, playing only while on screen and never under reduced motion. On desktop the stage pins and scroll carries the work cards right to left across it; a card's caption prints only once the whole card is inside the margins.
 
 ### Process Accordion (signature)
-Four passes of the run, darkest to lightest in the blue screens. Every pass is a real button. On desktop the open pass takes 4.2 times the flex of the others (450ms), closed passes show their rotated name and a picture strip; on phones they stack. Without script all four stay readable.
+Four passes of the run, darkest to lightest in the blue screens. Every pass is a real button. On desktop the open pass takes 4.2 times the flex of the others (450ms), closed passes show their rotated name and a picture strip. Hover or click selects a pass. On phones they stack. Without script all four stay readable.
 
 ### Print Your Idea Poster (signature)
-The one live thing on the page. A sheet of stock with grain beside the contact form: the visitor's typed idea is set in two plates (pink, and blue multiplied over it) drawn from `data-text`, fitted as large as the sheet allows. On each keystroke the plates strike off register by 6 to 14px and settle to a residual 2.5px / 2px over 520ms. The visitor's name prints in the credit line.
+The one live thing on the page. A sheet of stock with grain beside the contact form: the visitor's typed idea is set in two plates (pink, and blue multiplied over it) drawn from `data-text`, fitted as large as the sheet allows. On each keystroke the plates strike off register by 6 to 14px and settle to a residual 2.5px / 2px over 520ms. The visitor's name prints in the credit line. Until the visitor starts, the press demonstrates itself while the poster is on screen: four sample ideas (the bakery first) are set one letter at a time at a typist's uneven pace (about 70ms a letter), each letter striking the plates off register, at a size fitted to the whole line first so the letters never resize; the line holds 2.6s, then the sheet lifts 14px and fades (420ms) and the next idea is set, the field's placeholder following each one. Any focus or typing in the form stops it for good; under reduced motion the first idea simply stands.
 
 ### Footer Board (signature)
-A board of filled tiles on stock with 8px gaps: statement, links, place and live Tokyo time, email, the mast and a pink start tile with an arrow that moves on hover. The mast prints the wordmark in stock colour on the blue drum over a pink plate; on a scroll-driven view timeline the pink plate travels from 0.2em / 0.16em into its 0.035em / 0.03em register. The credits for every found picture close the board.
+A board of filled tiles on stock with 8px gaps: statement, links, place and live Tokyo time, email with its envelope, the mast and a pink start tile with an arrow that moves on hover. The mast prints the wordmark in stock colour on the blue drum over a pink plate; on a scroll-driven view timeline the pink plate travels from 0.2em / 0.16em into its 0.035em / 0.03em register. The email tile carries an envelope above the address, printed in the two drums like the rest of the board: the pink drum lays its fill (with grain), and its key line, in the start arrow's stroke and size, is multiplied over it 1.5 units out of register, leaving a pink edge at the bottom and right. The links tile ends with the picture credits page, which credits every found picture with a thumbnail.
 
 ### Section Entrances
 The parts of each chapter (marked `data-rise`) rise 28px and fade in turn, staggered 80ms, the first time the chapter enters view. The hiding is armed only once the script adds `.motion` to the root, so the page reads fully without it.
@@ -280,7 +288,7 @@ The parts of each chapter (marked `data-rise`) rise 28px and fade in turn, stagg
 - **Do** mark Japanese head and lede phrase breaks with U+200B and keep them under `word-break: keep-all`.
 - **Do** draw decorative duplicate text from `data-text` pseudo-elements so the page carries each text once.
 - **Do** set `min-width: 0` on flex rails and tracks.
-- **Do** print found pictures in the two-drum duotone and credit them in the footer.
+- **Do** print found pictures in the two-drum duotone and credit each on the picture credits page (`/credits/`, `/ja/credits/`), linked from the footer.
 - **Do** keep spatial motion inside a `prefers-reduced-motion: no-preference` query, and ship a static two-ink print for any WebGL piece.
 - **Do** print form and system states as stamped lines.
 

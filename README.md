@@ -33,7 +33,7 @@ Japanese headings and short lines break only at phrase boundaries marked with th
 
 ## Pictures
 
-The printing pictures and the press clip in [`public/found/`](public/found/) are openly licensed (CC BY) and credited in the footer from [`public/found/credits.json`](public/found/credits.json). They show the world of printing, never Funkel Labs' own work. Remove an entry there when its picture is no longer used.
+The printing pictures and the press clip in [`public/found/`](public/found/) are openly licensed (CC BY) and credited on the picture credits page (`/credits/`, `/ja/credits/`, linked from the footer) from [`public/found/credits.json`](public/found/credits.json). They show the world of printing, never Funkel Labs' own work. Remove an entry there when its picture is no longer used.
 
 ## Design
 

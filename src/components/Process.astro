@@ -47,6 +47,7 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
   if (list) {
     list.classList.add('is-accordion');
     const stages = [...list.querySelectorAll<HTMLElement>('.stage')];
+    const hoverable = window.matchMedia('(min-width: 761px) and (hover: hover)');
     const open = (target: HTMLElement) => {
       for (const stage of stages) {
         const isOpen = stage === target;
@@ -56,6 +57,9 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
     };
     for (const stage of stages) {
       stage.querySelector('.tab')?.addEventListener('click', () => open(stage));
+      stage.addEventListener('pointerenter', () => {
+        if (hoverable.matches) open(stage);
+      });
     }
   }
 </script>
@@ -63,7 +67,7 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
 <style>
   .process {
     background-color: var(--color-paper);
-    padding-block: var(--section-gap);
+    padding-block: var(--chapter-head) var(--section-gap);
   }
 
   .intro {
@@ -188,7 +192,7 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
   @media (min-width: 761px) {
     .is-accordion {
       display: flex;
-      height: 520px;
+      height: min(520px, var(--chapter-room));
     }
 
     .is-accordion .stage {

@@ -21,7 +21,9 @@ const home = t.lang === 'ja' ? '/ja/' : '/';
 </header>
 
 <script>
-  // The bar steps aside while the reader scrolls down and returns on the way back up.
+  import { navHoldY } from '../scripts/nav-hold';
+
+  // The bar steps aside while the reader scrolls down past the hero and returns on the way back up.
   const nav = document.querySelector<HTMLElement>('[data-nav]');
   if (nav) {
     let last = window.scrollY;
@@ -29,8 +31,10 @@ const home = t.lang === 'ja' ? '/ja/' : '/';
     const update = () => {
       queued = false;
       const y = window.scrollY;
+      // A jump settles in sub-pixel steps at fractional zoom; holding still is not a turn back up.
+      if (Math.abs(y - last) < 2) return;
       const down = y > last;
-      nav.classList.toggle('is-away', down && y > 120 && !nav.contains(document.activeElement));
+      nav.classList.toggle('is-away', down && y > navHoldY() && !nav.contains(document.activeElement));
       last = y;
     };
     window.addEventListener(
