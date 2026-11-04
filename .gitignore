@@ -4,3 +4,6 @@ dist/
 .env
 .vercel/
 .impeccable/questions/
+.taste-skill/inspect*/
+.taste-skill/before/
+.impeccable/review/

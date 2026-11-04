@@ -38,21 +38,31 @@
   --color-focus: oklch(44% 0.2 265);
   --color-on-ink: oklch(98.7% 0.004 300);
   --color-on-ink-muted: oklch(88% 0.04 265);
+  /* Lighter screens of the blue drum, darkest to lightest, for ordered fields. */
+  --color-ink-3: oklch(55% 0.135 265);
+  --color-ink-4: oklch(74% 0.085 265);
+  --color-ink-5: oklch(87% 0.045 265);
 
   --font-display: "Cabinet Grotesk", "Dela Gothic One", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Literata Variable", "Zen Kaku Gothic New", ui-serif, Georgia, serif;
   --font-wordmark: "Cabinet Grotesk", ui-sans-serif, sans-serif;
-  --font-ja-system: "Hiragino Sans", "Yu Gothic", "Meiryo", ui-sans-serif, sans-serif;
+  --font-ja-system: ui-sans-serif, system-ui, sans-serif;
 
   --radius-sheet: 2px;
 }
 
 :root {
-  --gutter: clamp(16px, 5vw, 80px);
-  --measure: 1240px;
-  --rule-hair: 1px;
-  --rule-frame: 1.5px;
-  --tracking-display: -0.03em;
+  /* One pair of tight page margins; large things run toward the edges. */
+  --gutter: clamp(16px, 2.2vw, 32px);
+  --measure: 1536px;
+  /* The five type steps the whole page uses. */
+  --step-display: clamp(60px, 9vw, 140px);
+  --step-heading: clamp(36px, 5.2vw, 84px);
+  --step-lead: clamp(21px, 2.1vw, 30px);
+  --step-body: 1.125rem;
+  --step-small: 1rem;
+  --section-gap: clamp(96px, 14vw, 200px);
+  --tracking-display: -0.035em;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
@@ -90,8 +100,8 @@ html {
 body {
   margin: 0;
   background: var(--color-paper);
-  font-size: 1.0625rem;
-  line-height: 1.6;
+  font-size: var(--step-body);
+  line-height: 1.55;
   font-variant-numeric: tabular-nums;
 }
 
@@ -190,7 +200,7 @@ p {
   border-radius: var(--radius-sheet);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.125rem;
+  font-size: var(--step-body);
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
@@ -210,22 +220,20 @@ p {
   background-color: var(--color-pink);
   background-image: var(--grain);
   color: var(--color-pink-ink);
-  border: var(--rule-frame) solid var(--color-pink);
 }
 
 .btn-primary:hover {
   background-color: var(--color-paper-3);
-  border-color: var(--color-paper-3);
 }
 
+/* Surfaces are told apart by a tone step, never an outline. */
 .btn-secondary {
-  background: transparent;
+  background-color: var(--color-paper-2);
   color: var(--color-ink);
-  border: var(--rule-frame) solid var(--color-ink);
 }
 
 .btn-secondary:hover {
-  background: var(--color-paper-2);
+  background-color: var(--color-paper-3);
 }
 
 .btn[disabled],
@@ -269,6 +277,28 @@ p {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/*
+  Section entrances: the parts of a section (heading, text, picture) rise in
+  turn as it enters. Only armed once the script has added .motion to <html>,
+  so the page reads fully without it.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .motion [data-rise] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 900ms var(--ease-out);
+    transition-delay: calc(var(--rise, 0) * 80ms);
+  }
+
+  .motion .is-in [data-rise],
+  .motion [data-rise].is-in {
+    opacity: 1;
+    transform: none;
   }
 }
 

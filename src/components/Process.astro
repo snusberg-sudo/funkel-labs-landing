@@ -5,225 +5,296 @@ interface Props {
   t: Content;
 }
 const { t } = Astro.props;
-
-// Each step prints one more pass of the same sheet: a sketch, the blue plate,
-// the pink plate, then both drums in register.
-const passes = ['sketch', 'blue', 'pink', 'sheet'] as const;
-const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z';
+// Order is carried by ink: the first pass is the full blue drum, each later one a lighter screen of it.
+const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
 ---
 
-<section id="process" class="process" aria-labelledby="process-title">
+<!--
+  Chapter four, back on the stock: the four passes of the run as one accordion,
+  darkest to lightest. Every stage is a real button; with no script all four
+  stay readable as a stack.
+-->
+<section id="process" class="process" data-chapter aria-labelledby="process-title">
   <div class="wrap">
-    <div class="head">
-      <h2 id="process-title">{t.process.heading}</h2>
-      <p class="phrased">{t.process.lede}</p>
+    <div class="intro">
+      <h2 id="process-title" data-rise>{t.process.heading}</h2>
+      <p class="phrased" data-rise style="--rise: 1">{t.process.lede}</p>
     </div>
 
-    <ol class="steps" data-process>
-      {t.process.steps.map((step, i) => {
-        const pass = passes[i] ?? 'sheet';
-        const showBlue = pass === 'sketch' || pass === 'blue' || pass === 'sheet';
-        const showPink = pass === 'pink' || pass === 'sheet';
-        return (
-          <li class:list={['step', `pass-${pass}`]} style={`--i: ${i}`}>
-            <div class="plate-frame">
-              <!-- The plate runs off the frame like a full-bleed print; the phone's foot is cropped. -->
-              <svg viewBox="20 0 160 200" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
-                {showPink && (
-                  <g class="layer pink">
-                    <rect x="50" y="40" width="100" height="100" rx="3" class="screen" />
-                    <path d={spark} transform="translate(56 46) scale(3.667)" class="fill" />
-                    <rect x="56" y="202" width="88" height="26" rx="2" class="fill" />
-                  </g>
-                )}
-                {showBlue && (
-                  <g class:list={['layer', 'blue', { dashed: pass === 'sketch' }]}>
-                    <rect x="38" y="22" width="124" height="260" rx="16" class="stroke" />
-                    {pass === 'sketch' ? (
-                      <path d={spark} transform="translate(56 46) scale(3.667)" class="stroke thin" />
-                    ) : (
-                      <Fragment>
-                        <path d={spark} transform="translate(56 46) scale(3.667)" class="ink" />
-                        <rect x="56" y="152" width="88" height="9" rx="1" class="ink" />
-                        <rect x="56" y="169" width="66" height="9" rx="1" class="ink" />
-                        <rect x="56" y="186" width="76" height="9" rx="1" class="ink" />
-                      </Fragment>
-                    )}
-                  </g>
-                )}
-              </svg>
-            </div>
-            <h3>{step.name}</h3>
+    <ol class="stages" data-stages data-rise style="--rise: 2">
+      {t.process.steps.map((step, i) => (
+        <li class:list={['stage', tones[i]]} data-open={i === 0 ? 'true' : 'false'}>
+          <img class="strip" src={step.photo} alt="" loading="lazy" decoding="async" width="1200" height="900" />
+          <h3>
+            <button type="button" class="tab" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`stage-${i}`}>
+              <span>{step.name}</span>
+            </button>
+          </h3>
+          <div class="body" id={`stage-${i}`}>
             <p>{step.body}</p>
-          </li>
-        );
-      })}
+            <figure>
+              <img src={step.photo} alt={step.photoAlt} loading="lazy" decoding="async" width="1200" height="900" />
+            </figure>
+          </div>
+        </li>
+      ))}
     </ol>
   </div>
 </section>
 
 <script>
-  // Once, when the section comes into view: each plate prints in order, then
-  // the finished sheet slides into register. Without this script (or with
-  // reduced motion) every plate simply shows in its printed state.
-  const steps = document.querySelector<HTMLElement>('[data-process]');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (steps && !reduced && 'IntersectionObserver' in window) {
-    steps.classList.add('will-register');
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          steps.classList.add('in-register');
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.35 },
-    );
-    observer.observe(steps);
+  const list = document.querySelector<HTMLElement>('[data-stages]');
+  if (list) {
+    list.classList.add('is-accordion');
+    const stages = [...list.querySelectorAll<HTMLElement>('.stage')];
+    const open = (target: HTMLElement) => {
+      for (const stage of stages) {
+        const isOpen = stage === target;
+        stage.dataset.open = String(isOpen);
+        stage.querySelector('.tab')?.setAttribute('aria-expanded', String(isOpen));
+      }
+    };
+    for (const stage of stages) {
+      stage.querySelector('.tab')?.addEventListener('click', () => open(stage));
+    }
   }
 </script>
 
 <style>
   .process {
-    padding-block: clamp(72px, 11vw, 144px);
-    border-top: var(--rule-hair) solid var(--color-rule);
+    background-color: var(--color-paper);
+    padding-block: var(--section-gap);
   }
 
-  .head {
+  .intro {
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    gap: 16px clamp(32px, 5vw, 72px);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 1fr) minmax(0, 5fr) minmax(0, 1fr);
     align-items: end;
-    margin-bottom: clamp(36px, 5vw, 64px);
+    margin-bottom: 64px;
   }
 
   h2 {
-    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
-    line-height: 0.98;
+    font-size: var(--step-heading);
+    line-height: 1;
+    grid-column: 1;
   }
 
-  .head p {
-    max-width: 40ch;
-    font-size: 1.1875rem;
-    color: var(--color-ink-2);
+  .intro p {
+    grid-column: 3;
+    font-size: var(--step-body);
+    max-width: 48ch;
   }
 
-  .steps {
+  .stages {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(16px, 2.4vw, 32px);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .step {
-    display: grid;
-    align-content: start;
-    gap: 10px;
+  .stage {
+    background-color: var(--stage-bg);
+    color: var(--stage-ink);
   }
 
-  .plate-frame {
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    border: var(--rule-hair) solid var(--color-ink);
-    border-radius: var(--radius-sheet);
-    margin-bottom: 8px;
+  .tone-1 {
+    --stage-bg: var(--color-ink);
+    --stage-ink: var(--color-on-ink);
   }
 
-  svg {
-    display: block;
-    width: 100%;
-    height: 100%;
+  .tone-2 {
+    --stage-bg: var(--color-ink-3);
+    --stage-ink: var(--color-on-ink);
   }
 
-  .layer {
-    mix-blend-mode: multiply;
+  .tone-3 {
+    --stage-bg: var(--color-ink-4);
+    --stage-ink: var(--color-pink-ink);
   }
 
-  .pink .fill {
-    fill: var(--color-pink);
-  }
-
-  .pink .screen {
-    fill: var(--color-paper-3);
-  }
-
-  .blue .stroke {
-    fill: none;
-    stroke: var(--color-ink);
-    stroke-width: 2.5;
-  }
-
-  .blue .thin {
-    stroke-width: 1;
-  }
-
-  .blue .ink {
-    fill: var(--color-ink);
-  }
-
-  .dashed .stroke {
-    stroke-dasharray: 6 5;
-  }
-
-  .dashed .thin {
-    stroke-dasharray: 1.6 1.4;
-  }
-
-  /* A real print is never perfectly registered: the finished sheet keeps a
-     hair of drift, so pink and blue fringe the purple where they cross. */
-  .pass-sheet .pink {
-    transform: translate(3px, 2.5px);
-  }
-
-  /* The print run: each plate feeds out top to bottom, one pass after another. */
-  .will-register svg {
-    clip-path: polygon(-5% -5%, 105% -5%, 105% -5%, -5% -5%);
-    transition: clip-path 620ms var(--ease-out) calc(var(--i) * 170ms);
-  }
-
-  .will-register .pass-sheet .pink {
-    transition: transform 900ms var(--ease-out) calc(var(--i) * 170ms + 420ms);
-  }
-
-  .will-register:not(.in-register) .pass-sheet .pink {
-    transform: translate(12px, 10px);
-  }
-
-  .in-register svg {
-    clip-path: polygon(-5% -5%, 105% -5%, 105% 105%, -5% 105%);
+  .tone-4 {
+    --stage-bg: var(--color-ink-5);
+    --stage-ink: var(--color-pink-ink);
   }
 
   h3 {
-    font-size: clamp(1.375rem, 1.8vw, 1.625rem);
+    margin: 0;
+    font-size: inherit;
+  }
+
+  /* A closed pass shows a narrow strip of its picture, printed into its own ink. */
+  .strip {
+    display: none;
+  }
+
+  .tab {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    padding: 20px 24px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--step-lead);
     line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+    color: inherit;
+    cursor: pointer;
   }
 
-  .step p {
-    color: var(--color-ink-2);
-    font-size: 1rem;
+  .tab:focus-visible {
+    outline: 2px solid var(--color-pink);
+    outline-offset: -4px;
   }
 
-  @media (max-width: 960px) {
-    .steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      row-gap: 40px;
+  .body {
+    display: grid;
+    gap: 20px;
+    padding: 0 24px 24px;
+  }
+
+  .body p {
+    max-width: 36ch;
+    font-size: var(--step-body);
+  }
+
+  figure {
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--color-paper-3);
+    isolation: isolate;
+    position: relative;
+  }
+
+  /* Found pictures print in both drums: blue shadows into the light pink screen. */
+  figure img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.15);
+    mix-blend-mode: multiply;
+  }
+
+  figure::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-ink);
+    mix-blend-mode: lighten;
+  }
+
+  /* With the script: a horizontal accordion, the open pass at 58% and slivers for the rest. */
+  @media (min-width: 761px) {
+    .is-accordion {
+      display: flex;
+      height: 520px;
     }
 
-    .head {
+    .is-accordion .stage {
+      position: relative;
+      flex: 1 1 0;
+      min-width: 0;
+      overflow: hidden;
+      transition: flex-grow 450ms var(--ease-out);
+    }
+
+    .is-accordion .stage[data-open="true"] {
+      flex-grow: 4.2;
+    }
+
+    .is-accordion .strip {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.2);
+      mix-blend-mode: multiply;
+      opacity: 0.5;
+      transition: opacity 300ms var(--ease-out);
+    }
+
+    .is-accordion .stage[data-open="true"] .strip {
+      opacity: 0;
+    }
+
+    .is-accordion .tab {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      align-items: flex-end;
+      padding: 24px;
+    }
+
+    .is-accordion .tab span {
+      transform-origin: left bottom;
+      transform: translateX(1.1em) rotate(-90deg);
+      white-space: nowrap;
+    }
+
+    .is-accordion .stage[data-open="true"] .tab {
+      position: relative;
+      align-items: flex-start;
+      font-size: var(--step-heading);
+      pointer-events: none;
+    }
+
+    .is-accordion .stage[data-open="true"] .tab span {
+      transform: none;
+    }
+
+    .is-accordion .body {
+      position: absolute;
+      inset: auto 0 0;
+      z-index: 1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms var(--ease-out), visibility 0s linear 300ms;
+    }
+
+    .is-accordion .stage[data-open="true"] .body {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 400ms var(--ease-out) 200ms, visibility 0s;
+    }
+
+    .is-accordion figure {
+      aspect-ratio: 4 / 3;
+    }
+
+    .stage:not([data-open="true"]) .tab:hover {
+      background-color: color-mix(in oklch, var(--stage-bg) 86%, var(--color-paper));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .intro {
       grid-template-columns: minmax(0, 1fr);
+      row-gap: 16px;
+    }
+
+    .intro p {
+      grid-column: 1;
+    }
+
+    .is-accordion .stage:not([data-open="true"]) .body {
+      display: none;
+    }
+
+    figure {
+      aspect-ratio: 4 / 3;
     }
   }
 
-  @media (max-width: 480px) {
-    .steps {
-      column-gap: 14px;
-      row-gap: 32px;
-    }
-
-    .step p {
-      font-size: 0.9375rem;
+  @media (prefers-reduced-motion: reduce) {
+    .is-accordion .stage,
+    .is-accordion .body {
+      transition: none;
     }
   }
 </style>

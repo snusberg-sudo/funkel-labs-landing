@@ -11,49 +11,63 @@ export interface Service {
 export interface Step {
   name: string;
   body: string;
+  /** A found picture of the print run (see public/found/credits.json). */
+  photo: string;
+  photoAlt: string;
 }
 
 export interface App {
   name: string;
   platform: string;
   body: string;
-  /** Path under /public, e.g. /work/app-one.png. Empty shows the placeholder slot. */
+  /** Path under /public, e.g. /work/app-one.png. Empty prints a drawn stand-in plate. */
   image: string;
   imageAlt: string;
   link?: { href: string; label: string };
-  /** Size the slot asks for, shown in the placeholder. */
-  slotHint: string;
 }
 
 export interface Person {
   name: string;
   role: string;
-  bio: string;
-  /** Path under /public. Empty shows the placeholder slot. */
+  /** Path under /public. Empty prints a drawn stand-in tile. */
   photo: string;
 }
 
 export interface Content {
   lang: Lang;
   meta: { title: string; description: string };
-  nav: { services: string; work: string; process: string; about: string; cta: string; switchLabel: string; switchHref: string; switchLang: Lang; home: string };
-  hero: { before: string; spark: string; after: string; lede: string; primary: string; secondary: string; sparkAlt: string };
+  nav: { cta: string; switchLabel: string; switchHref: string; switchLang: Lang; home: string; services: string; work: string; process: string; about: string };
+  hero: { line1: string; line2: string; lede: string; primary: string; sparkAlt: string };
   services: { heading: string; items: Service[] };
-  work: { heading: string; lede: string; placeholder: string; apps: App[] };
+  work: { heading: string; lede: string; apps: App[] };
   process: { heading: string; lede: string; steps: Step[] };
-  about: { heading: string; body: string; teamHeading: string; people: Person[]; photoPlaceholder: string };
+  about: { heading: string; statement: string; teamHeading: string; people: Person[] };
   contact: {
     heading: string;
     lede: string;
-    emailPrompt: string;
+    poster: { example: string; printedFor: string; you: string; by: string; caption: string };
     fields: { name: string; email: string; company: string; message: string; messageHint: string };
     submit: string;
     sending: string;
     sent: string;
     failed: string;
     subject: string;
+    languages: string;
+    hello: string;
+    helloLabel: string;
   };
-  footer: { legalName: string; address: string; privacy: string; privacyHref: string; rights: string };
+  footer: {
+    statement: string;
+    legalName: string;
+    address: string;
+    place: string;
+    timeLabel: string;
+    privacy: string;
+    privacyHref: string;
+    rights: string;
+    start: string;
+    credits: string;
+  };
   privacy: { title: string; updated: string; sections: { heading: string; body: string }[]; back: string };
 }
 
@@ -79,18 +93,16 @@ export const content: Record<Lang, Content> = {
       home: 'Funkel Labs home',
     },
     hero: {
-      before: 'We build software that ',
-      spark: 'sparks.',
-      after: '',
-      lede: 'Web, mobile and AI products, from first idea to launch day.',
+      line1: 'Software',
+      line2: 'that sparks',
+      lede: 'Funkel Labs designs and builds web, mobile and AI products, from first idea to launch day.',
       primary: 'Get in touch',
-      secondary: 'See our work',
       sparkAlt: 'A four-pointed spark printed in pink and blue ink.',
     },
     services: {
       heading: 'What we build',
       items: [
-        { name: 'Product builds and MVPs', body: 'Bring us an idea and leave with a product people can use. We scope it, design it, build it and launch it.' },
+        { name: 'Product builds and MVPs', body: 'Bring us an idea and leave with a product people can use: scoped, designed, built and launched.' },
         { name: 'Web apps', body: 'Fast, accessible web applications, and the backends and APIs behind them.' },
         { name: 'Mobile apps', body: 'iOS and Android apps that feel at home in the hand.' },
         { name: 'AI integration', body: 'LLM features and automation that do real work inside your product, not demos bolted onto the side.' },
@@ -99,59 +111,71 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'Things we’ve made',
       lede: 'A few of the apps we’ve designed and built.',
-      placeholder: 'Screenshot',
       // TODO: replace with the real apps (name, platform, one line, screenshot, store or live link).
       apps: [
-        { name: 'App name', platform: 'iOS and Android', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', slotHint: '1290 × 2796, phone screenshot', link: { href: '', label: 'View on the App Store' } },
-        { name: 'App name', platform: 'Web', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', slotHint: '2880 × 1800, browser screenshot', link: { href: '', label: 'Visit the site' } },
-        { name: 'App name', platform: 'Web and AI', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', slotHint: '2880 × 1800, browser screenshot' },
+        { name: 'App name', platform: 'iOS and Android', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', link: { href: '', label: 'View on the App Store' } },
+        { name: 'App name', platform: 'Web', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', link: { href: '', label: 'Visit the site' } },
+        { name: 'App name', platform: 'Web and AI', body: 'One line on what it does and who it is for.', image: '', imageAlt: '' },
       ],
     },
     process: {
       heading: 'How we work',
       lede: 'Like a two-colour print: each pass adds a layer, and nothing ships until they line up.',
       steps: [
-        { name: 'Discover', body: 'We learn your users, goals and constraints, then agree on what to build first.' },
-        { name: 'Design', body: 'Flows and screens you can click through before any code is written.' },
-        { name: 'Build', body: 'Short cycles, with working software you can try along the way.' },
-        { name: 'Launch and support', body: 'We ship it, watch how it’s used, and keep improving it with you.' },
+        { name: 'Discover', body: 'We learn your users, goals and constraints, then agree on what to build first.', photo: '/found/inks-brayers.jpg', photoAlt: 'Printing inks mixed on a slab beside brayers.' },
+        { name: 'Design', body: 'Flows and screens you can click through before any code is written.', photo: '/found/ink-roller.jpg', photoAlt: 'An ink roller beside a bottle of India ink.' },
+        { name: 'Build', body: 'Short cycles, with working software you can try along the way.', photo: '/found/riso-drum.jpg', photoAlt: 'An ink drum lifted out of a risograph printer.' },
+        { name: 'Launch and support', body: 'We ship it, watch how it’s used, and keep improving it with you.', photo: '/found/riso-two-colour.jpg', photoAlt: 'A finished two-colour risograph print held up to the camera.' },
       ],
     },
     about: {
       heading: 'Why “Funkel”',
-      body: 'Funkel is German for sparkle: the moment a product stops being a plan and starts to feel alive. That moment is the part of the work we love most.',
+      statement: 'Funkel is German for sparkle: the moment a product stops being a plan and starts to feel alive.',
       teamHeading: 'The people',
-      photoPlaceholder: 'Photo',
-      // TODO: replace with the real team (name, role, one-line bio, square photo).
+      // TODO: replace with the real team (name, role, 4:5 photo).
       people: [
-        { name: 'Founder name', role: 'Founder, engineering', bio: 'One line about what they build and what they care about.', photo: '' },
-        { name: 'Team member', role: 'Role', bio: 'One line about what they build and what they care about.', photo: '' },
+        { name: 'Founder name', role: 'Founder, engineering', photo: '' },
+        { name: 'Team member', role: 'Role', photo: '' },
       ],
     },
     contact: {
-      heading: 'Tell us what you want to build.',
-      lede: 'A few lines is enough to start. We’ll reply by email.',
-      emailPrompt: 'Prefer email? Write to',
+      heading: 'Print your idea',
+      lede: 'Type what you want to build and watch it come off the press. Send the print and we’ll reply by email.',
+      poster: {
+        example: 'A booking app for my bakery',
+        printedFor: 'Printed for',
+        you: 'you',
+        by: 'by Funkel Labs',
+        caption: 'Your idea, printed live in two inks.',
+      },
       fields: {
         name: 'Your name',
         email: 'Email',
         company: 'Company (optional)',
-        message: 'What are you building?',
-        messageHint: 'The idea, who it’s for, and any deadline.',
+        message: 'Your idea',
+        messageHint: 'Who it’s for, and any deadline.',
       },
-      submit: 'Send message',
-      sending: 'Sending your message…',
+      submit: 'Send this print',
+      sending: 'Sending your print…',
       sent: 'Sent. Thank you, we’ll be in touch by email.',
       failed: 'That didn’t go through. Check your connection and try again, or email us directly.',
       subject: 'New project enquiry from funkellabs (EN)',
+      languages: 'In English and 日本語',
+      hello: 'Say hello',
+      helloLabel: 'Email Funkel Labs',
     },
     footer: {
+      statement: 'A small studio printing software in two inks: web, mobile and AI, from first idea to launch day.',
       // TODO: legal entity name and registered address.
       legalName: 'Funkel Labs (legal name TODO)',
       address: 'Registered address TODO, Japan',
+      place: 'Japan',
+      timeLabel: 'local time',
       privacy: 'Privacy',
       privacyHref: '/privacy/',
       rights: `© ${year} Funkel Labs`,
+      start: 'Start a project',
+      credits: 'Pictures',
     },
     privacy: {
       title: 'Privacy',
@@ -184,12 +208,10 @@ export const content: Record<Lang, Content> = {
       home: 'Funkel Labs ホーム',
     },
     hero: {
-      before: '',
-      spark: 'きらめく',
-      after: 'ソフトウェアを、\u200Bつくる。',
-      lede: 'Web、モバイル、AI。\u200Bアイデアから、\u200Bリリースの日まで。',
+      line1: 'きらめく',
+      line2: 'ソフトウェア',
+      lede: 'Funkel Labs（フンケル・ラボ）は、\u200BWeb・モバイル・AIのプロダクトを、\u200Bアイデアから\u200Bリリースまで\u200Bつくるスタジオです。',
       primary: 'お問い合わせ',
-      secondary: '制作実績を見る',
       sparkAlt: 'ピンクと青のインクで刷られた、四方に光る星。',
     },
     services: {
@@ -204,59 +226,71 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'これまでに\u200Bつくったもの',
       lede: '私たちが\u200B設計・開発した\u200Bアプリの\u200B一部です。',
-      placeholder: 'スクリーンショット',
       // TODO: 実際のアプリ情報に差し替え（名前、対応環境、一行説明、スクリーンショット、ストアまたは公開URL）。
       apps: [
-        { name: 'アプリ名', platform: 'iOS・Android', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', slotHint: '1290 × 2796、スマートフォン画面', link: { href: '', label: 'App Storeで見る' } },
-        { name: 'アプリ名', platform: 'Web', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', slotHint: '2880 × 1800、ブラウザ画面', link: { href: '', label: 'サイトを見る' } },
-        { name: 'アプリ名', platform: 'Web・AI', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', slotHint: '2880 × 1800、ブラウザ画面' },
+        { name: 'アプリ名', platform: 'iOS・Android', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', link: { href: '', label: 'App Storeで見る' } },
+        { name: 'アプリ名', platform: 'Web', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', link: { href: '', label: 'サイトを見る' } },
+        { name: 'アプリ名', platform: 'Web・AI', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '' },
       ],
     },
     process: {
       heading: '進め方',
       lede: '二色刷りのように、\u200B一層ずつ\u200B重ねていきます。\u200Bすべてが\u200Bぴたりと\u200B重なるまで、\u200B出荷しません。',
       steps: [
-        { name: '発見', body: 'ユーザー、目標、制約を理解し、最初につくるものを一緒に決めます。' },
-        { name: '設計', body: 'コードを書く前に、実際にクリックして試せる画面と流れを用意します。' },
-        { name: '開発', body: '短いサイクルで進め、途中でも動くものを確認いただけます。' },
-        { name: 'リリース・\u200B運用', body: 'リリース後も使われ方を見ながら、一緒に改善を続けます。' },
+        { name: '発見', body: 'ユーザー、目標、制約を理解し、最初につくるものを一緒に決めます。', photo: '/found/inks-brayers.jpg', photoAlt: 'インク台の上で練られた版画用インクとローラー。' },
+        { name: '設計', body: 'コードを書く前に、実際にクリックして試せる画面と流れを用意します。', photo: '/found/ink-roller.jpg', photoAlt: '墨汁の瓶と、インクのついたローラー。' },
+        { name: '開発', body: '短いサイクルで進め、途中でも動くものを確認いただけます。', photo: '/found/riso-drum.jpg', photoAlt: 'リソグラフから取り出したインクドラム。' },
+        { name: 'リリース・\u200B運用', body: 'リリース後も使われ方を見ながら、一緒に改善を続けます。', photo: '/found/riso-two-colour.jpg', photoAlt: '刷り上がった二色刷りのリソグラフ。' },
       ],
     },
     about: {
       heading: 'Funkelという\u200B名前',
-      body: 'Funkel（フンケル）は\u200Bドイツ語で\u200B「きらめき」。\u200Bプロダクトが\u200B計画から\u200B抜け出して、\u200B生き生きと\u200B動き始める\u200B瞬間の\u200Bことです。\u200Bその瞬間こそ、\u200B私たちが\u200Bいちばん\u200B好きな\u200B仕事です。',
+      statement: 'Funkel（フンケル）は\u200Bドイツ語で\u200B「きらめき」。\u200B計画だった\u200Bプロダクトが、\u200B生き生きと\u200B動き出す\u200B瞬間のことです。',
       teamHeading: 'メンバー',
-      photoPlaceholder: '写真',
-      // TODO: 実際のメンバー情報に差し替え（名前、役割、一行紹介、正方形の写真）。
+      // TODO: 実際のメンバー情報に差し替え（名前、役割、4:5の写真）。
       people: [
-        { name: '代表者名', role: '代表・エンジニア', bio: 'つくっているもの、大切にしていることを一行で。', photo: '' },
-        { name: 'メンバー名', role: '役割', bio: 'つくっているもの、大切にしていることを一行で。', photo: '' },
+        { name: '代表者名', role: '代表・エンジニア', photo: '' },
+        { name: 'メンバー名', role: '役割', photo: '' },
       ],
     },
     contact: {
-      heading: 'つくりたいものを、\u200B聞かせてください。',
-      lede: '数行で\u200B大丈夫です。\u200Bメールで\u200Bお返事します。',
-      emailPrompt: 'メールの場合はこちらへ',
+      heading: 'アイデアを\u200B刷ってみる',
+      lede: 'つくりたいものを\u200B入力すると、\u200Bその場で\u200B刷り上がります。\u200B送信すると、\u200Bメールで\u200Bお返事します。',
+      poster: {
+        example: 'パン屋の予約アプリ',
+        printedFor: '',
+        you: 'あなた',
+        by: 'のために、Funkel Labsが刷りました',
+        caption: 'あなたのアイデアを、二色でその場で印刷。',
+      },
       fields: {
         name: 'お名前',
         email: 'メールアドレス',
         company: '会社名（任意）',
-        message: 'つくりたいもの',
-        messageHint: 'アイデア、誰のためのものか、希望の時期など。',
+        message: 'あなたのアイデア',
+        messageHint: '誰のためのものか、希望の時期など。',
       },
-      submit: '送信する',
+      submit: 'この版を送る',
       sending: '送信しています…',
       sent: '送信しました。ありがとうございます。メールでご連絡します。',
       failed: '送信できませんでした。通信環境をご確認のうえ再度お試しいただくか、メールで直接ご連絡ください。',
       subject: '新規プロジェクトのお問い合わせ（JA）',
+      languages: '日本語と English で',
+      hello: 'メールする',
+      helloLabel: 'Funkel Labs にメールする',
     },
     footer: {
+      statement: 'ソフトウェアを\u200B二色で刷る、\u200B小さなスタジオ。\u200BWeb・モバイル・AIを、\u200Bアイデアから\u200Bリリースまで。',
       // TODO: 正式な法人名と所在地。
       legalName: 'Funkel Labs（フンケル・ラボ）法人名 TODO',
       address: '所在地 TODO',
+      place: '日本',
+      timeLabel: '現地時間',
       privacy: 'プライバシーポリシー',
       privacyHref: '/ja/privacy/',
       rights: `© ${year} Funkel Labs`,
+      start: '相談をはじめる',
+      credits: '写真',
     },
     privacy: {
       title: 'プライバシーポリシー',

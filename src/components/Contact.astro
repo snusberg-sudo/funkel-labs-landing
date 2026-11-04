@@ -8,58 +8,102 @@ const { t } = Astro.props;
 // TODO: create a Web3Forms access key for the studio inbox and set PUBLIC_WEB3FORMS_KEY.
 const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 const f = t.contact.fields;
+const p = t.contact.poster;
+const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z';
 ---
 
-<section id="contact" class="contact grain" aria-labelledby="contact-title">
-  <div class="wrap grid">
+<!--
+  The last chapter, the full blue drum. The one live thing on the page: the
+  visitor types an idea and watches it come off the press as a two-ink poster,
+  then sends that print as their enquiry. Without script the poster shows an
+  example and the form posts as usual.
+-->
+<section id="contact" class="contact grain" data-chapter aria-labelledby="contact-title">
+  <div class="wrap">
     <div class="intro">
-      <h2 id="contact-title">{t.contact.heading}</h2>
-      <p class="lede phrased">{t.contact.lede}</p>
-      <p class="email">
-        {t.contact.emailPrompt} <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-      </p>
+      <h2 id="contact-title" data-rise>{t.contact.heading}</h2>
+      <p class="phrased" data-rise style="--rise: 1">{t.contact.lede}</p>
     </div>
 
-    <form
-      class="sheet"
-      action="https://api.web3forms.com/submit"
-      method="POST"
-      data-contact
-      data-sending={t.contact.sending}
-      data-sent={t.contact.sent}
-      data-failed={t.contact.failed}
-    >
-      <input type="hidden" name="access_key" value={accessKey} />
-      <input type="hidden" name="subject" value={t.contact.subject} />
-      <input type="hidden" name="from_name" value="Funkel Labs website" />
-      <!-- Web3Forms spam trap: bots tick it, people never see it. -->
-      <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <div class="press">
+      <form
+        class="form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        data-contact
+        data-sending={t.contact.sending}
+        data-sent={t.contact.sent}
+        data-failed={t.contact.failed}
+        data-rise
+        style="--rise: 2"
+      >
+        <input type="hidden" name="access_key" value={accessKey} />
+        <input type="hidden" name="subject" value={t.contact.subject} />
+        <input type="hidden" name="from_name" value="Funkel Labs website" />
+        <!-- Web3Forms spam trap: bots tick it, people never see it. -->
+        <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-      <div class="row two">
-        <label>
-          <span>{f.name}</span>
-          <input type="text" name="name" autocomplete="name" required />
+        <label class="idea">
+          <span>{f.message}</span>
+          <textarea name="message" rows="3" maxlength="600" required placeholder={p.example} aria-describedby="message-hint" data-idea></textarea>
+          <small id="message-hint">{f.messageHint}</small>
         </label>
+        <div class="pair">
+          <label>
+            <span>{f.name}</span>
+            <input type="text" name="name" autocomplete="name" required data-name />
+          </label>
+          <label>
+            <span>{f.email}</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+        </div>
         <label>
-          <span>{f.email}</span>
-          <input type="email" name="email" autocomplete="email" required />
+          <span>{f.company}</span>
+          <input type="text" name="company" autocomplete="organization" />
         </label>
-      </div>
-      <label>
-        <span>{f.company}</span>
-        <input type="text" name="company" autocomplete="organization" />
-      </label>
-      <label>
-        <span>{f.message}</span>
-        <textarea name="message" rows="5" required aria-describedby="message-hint"></textarea>
-        <small id="message-hint">{f.messageHint}</small>
-      </label>
 
-      <div class="submit">
-        <button class="btn btn-primary" type="submit">{t.contact.submit}</button>
-        <p class="status" role="status" aria-live="polite" data-status></p>
-      </div>
-    </form>
+        <div class="submit">
+          <button class="btn btn-primary" type="submit">{t.contact.submit}</button>
+          <p class="status" role="status" aria-live="polite" data-status></p>
+        </div>
+      </form>
+
+      <figure class="poster-wrap" data-rise style="--rise: 3">
+        <div class="poster grain" data-poster aria-hidden="true">
+          <svg class="poster-spark" viewBox="0 0 24 24" focusable="false">
+            <path d={spark} class="spark-pink" />
+            <path d={spark} class="spark-blue" transform="translate(0.6 0.5)" />
+          </svg>
+          <!-- The plates are drawn from data-text: the poster is a picture of the idea, which lives in the form field. -->
+          <div class="plates" data-plates>
+            <span class="plate plate-pink" data-plate-text data-text={p.example}></span>
+            <span class="plate plate-blue" data-plate-text data-text={p.example}></span>
+          </div>
+          <p class="credit">
+            {t.lang === 'ja' ? (
+              <Fragment><span data-printed-for>{p.you}</span>{p.by}</Fragment>
+            ) : (
+              <Fragment>{p.printedFor}{' '}<span data-printed-for>{p.you}</span>{' '}{p.by}</Fragment>
+            )}
+          </p>
+        </div>
+      </figure>
+    </div>
+
+    <ul class="rows">
+      <li class="row" data-rise>
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+        <img class="round" src="/found/ink-roller.jpg" alt="" width="1920" height="860" loading="lazy" decoding="async" />
+      </li>
+      <li class="row" data-rise style="--rise: 1">{t.contact.languages}</li>
+      <li class="row hello" data-rise style="--rise: 2">
+        <span>{t.contact.hello}</span>
+        <a class="go" href={`mailto:${contactEmail}`} aria-label={t.contact.helloLabel}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13M12 5l7 7-7 7" /></svg>
+        </a>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -67,6 +111,57 @@ const f = t.contact.fields;
   const form = document.querySelector<HTMLFormElement>('[data-contact]');
   const status = form?.querySelector<HTMLElement>('[data-status]');
   const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const idea = form?.querySelector<HTMLTextAreaElement>('[data-idea]');
+  const nameInput = form?.querySelector<HTMLInputElement>('[data-name]');
+  const poster = document.querySelector<HTMLElement>('[data-poster]');
+  const plates = poster?.querySelector<HTMLElement>('[data-plates]');
+  const texts = poster ? [...poster.querySelectorAll<HTMLElement>('[data-plate-text]')] : [];
+  const printedFor = poster?.querySelector<HTMLElement>('[data-printed-for]');
+  const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+  // Set the idea as large as the sheet allows, one step at a time.
+  const fit = () => {
+    if (!plates || !texts[0]) return;
+    const box = plates.getBoundingClientRect();
+    let size = Math.min(box.width * 0.24, 160);
+    for (const el of texts) el.style.fontSize = `${size}px`;
+    while (size > 18 && (texts[0].offsetHeight > box.height + 0.5 || texts[0].scrollWidth > box.width + 1)) {
+      size *= 0.92;
+      for (const el of texts) el.style.fontSize = `${size}px`;
+    }
+  };
+
+  // Each new impression lands a little off, then the plates settle into register.
+  const strike = () => {
+    if (!plates || !motion.matches) return;
+    const dx = 6 + Math.random() * 8;
+    const dy = 4 + Math.random() * 6;
+    plates.animate(
+      [{ '--drift-x': `${dx}px`, '--drift-y': `${dy}px` }, { '--drift-x': '2.5px', '--drift-y': '2px' }],
+      { duration: 520, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    );
+  };
+
+  const fallbackIdea = texts[0]?.dataset.text ?? '';
+  const fallbackName = printedFor?.textContent ?? '';
+  const render = () => {
+    const value = idea?.value.trim() || fallbackIdea;
+    const shown = value.length > 140 ? `${value.slice(0, 137).trimEnd()}…` : value;
+    for (const el of texts) el.dataset.text = shown;
+    if (printedFor) printedFor.textContent = nameInput?.value.trim() || fallbackName;
+    fit();
+  };
+
+  if (poster && idea) {
+    idea.addEventListener('input', () => {
+      render();
+      strike();
+    });
+    nameInput?.addEventListener('input', render);
+    new ResizeObserver(fit).observe(poster);
+    document.fonts?.ready.then(fit);
+    render();
+  }
 
   // Status prints itself as a stamped line on the sheet, never a toast.
   const print = (state: 'sending' | 'sent' | 'failed') => {
@@ -92,6 +187,7 @@ const f = t.contact.fields;
       const result = (await response.json().catch(() => ({}))) as { success?: boolean };
       if (!response.ok || !result.success) throw new Error('Submission failed');
       form.reset();
+      render();
       print('sent');
     } catch {
       print('failed');
@@ -102,65 +198,62 @@ const f = t.contact.fields;
 </script>
 
 <style>
+  @property --drift-x {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 2.5px;
+  }
+
+  @property --drift-y {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 2px;
+  }
+
   .contact {
     background-color: var(--color-ink);
     color: var(--color-on-ink);
-    padding-block: clamp(72px, 11vw, 144px);
+    padding-block: var(--section-gap) 0;
   }
 
-  .grid {
+  .intro {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: clamp(40px, 6vw, 96px);
-    align-items: start;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(16px, 2.2vw, 32px);
+    align-items: end;
+    margin-bottom: clamp(40px, 6vw, 72px);
   }
 
   h2 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    line-height: 0.96;
+    font-size: var(--step-heading);
+    line-height: 1;
   }
 
-  :lang(ja) h2 {
-    font-size: clamp(2rem, 3.4vw, 3rem);
-    line-height: 1.25;
+  .intro p {
+    font-size: var(--step-body);
+    max-width: 44ch;
   }
 
-  .lede {
-    margin-top: 24px;
-    font-size: 1.25rem;
-    color: var(--color-on-ink-muted);
-    max-width: 30ch;
-  }
-
-  .email {
-    margin-top: 32px;
-    color: var(--color-on-ink-muted);
-  }
-
-  .email a {
-    color: var(--color-on-ink);
-    font-weight: 500;
-    overflow-wrap: anywhere;
-  }
-
-  /* The form is a sheet of stock laid on the blue band. */
-  .sheet {
+  .press {
     display: grid;
-    gap: 20px;
-    background: var(--color-paper);
-    color: var(--color-ink);
-    border-radius: var(--radius-sheet);
-    padding: clamp(24px, 3.5vw, 44px);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    gap: clamp(32px, 4vw, 64px);
+    align-items: start;
   }
 
   .botcheck {
     display: none;
   }
 
-  .row.two {
+  .form {
+    display: grid;
+    gap: 22px;
+  }
+
+  .pair {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
   }
 
   label {
@@ -169,50 +262,60 @@ const f = t.contact.fields;
   }
 
   label > span {
-    font-size: 0.9375rem;
-    font-weight: 500;
+    font-size: var(--step-small);
+    font-weight: 600;
   }
 
   input,
   textarea {
     width: 100%;
-    min-height: 48px;
-    padding: 12px 14px;
+    min-height: 52px;
+    padding: 14px 16px;
     font: inherit;
-    font-size: 1.0625rem;
-    color: var(--color-ink);
-    background: var(--color-paper);
-    border: var(--rule-frame) solid var(--color-ink);
+    font-size: var(--step-body);
+    color: var(--color-pink-ink);
+    background-color: var(--color-paper);
+    border: 0;
     border-radius: var(--radius-sheet);
-    transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+    transition: background-color 160ms var(--ease-out);
   }
 
   textarea {
     resize: vertical;
-    min-height: 140px;
+    min-height: 120px;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-muted);
   }
 
   input:hover,
   textarea:hover {
-    background: var(--color-paper-2);
+    background-color: var(--color-paper-2);
   }
 
   input:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 3px solid var(--color-pink);
     outline-offset: 2px;
-    background: var(--color-paper);
+    background-color: var(--color-paper);
+  }
+
+  /* The global focus blue disappears on the blue field; every control here takes the pink ring. */
+  .contact :is(a, button):focus-visible {
+    outline: 3px solid var(--color-pink);
+    outline-offset: 3px;
   }
 
   input:user-invalid,
   textarea:user-invalid {
-    border-color: var(--color-pink);
-    background: var(--color-paper-2);
+    background-color: var(--color-paper-3);
   }
 
   small {
-    font-size: 0.875rem;
-    color: var(--color-muted);
+    font-size: var(--step-small);
+    color: var(--color-on-ink-muted);
   }
 
   .submit {
@@ -220,13 +323,12 @@ const f = t.contact.fields;
     flex-wrap: wrap;
     align-items: center;
     gap: 16px 24px;
-    margin-top: 4px;
   }
 
   .status {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 1.0625rem;
+    font-size: var(--step-body);
     line-height: 1.3;
   }
 
@@ -240,20 +342,20 @@ const f = t.contact.fields;
   }
 
   .status[data-state="sending"] {
-    color: var(--color-muted);
+    color: var(--color-on-ink-muted);
   }
 
   .status[data-state="sent"] {
     padding: 4px 10px;
-    background: var(--color-pink);
+    background-color: var(--color-pink);
     color: var(--color-pink-ink);
     border-radius: var(--radius-sheet);
   }
 
   .status[data-state="failed"] {
     padding: 4px 10px;
-    background: var(--color-paper-2);
-    border: var(--rule-frame) solid var(--color-ink);
+    background-color: var(--color-paper-2);
+    color: var(--color-pink-ink);
     border-radius: var(--radius-sheet);
   }
 
@@ -287,20 +389,188 @@ const f = t.contact.fields;
     }
   }
 
-  /* While sending, the disabled button shows it is working. */
   button[disabled] {
     cursor: progress;
   }
 
-  @media (max-width: 860px) {
-    .grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  /* The poster: a sheet of stock with the idea in both drums, purple where they cross. */
+  .poster-wrap {
+    margin: 0;
   }
 
-  @media (max-width: 520px) {
-    .row.two {
+  .poster {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    max-height: 78svh;
+    margin-left: auto;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    padding: clamp(20px, 3vw, 36px);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .poster-spark {
+    width: 22%;
+    justify-self: end;
+  }
+
+  .spark-pink {
+    fill: var(--color-pink);
+  }
+
+  .spark-blue {
+    fill: var(--color-ink);
+    mix-blend-mode: multiply;
+  }
+
+  .plates {
+    position: relative;
+    min-height: 0;
+    align-self: stretch;
+    margin-block: 12px;
+  }
+
+  /* Each plate sits on the foot of the sheet at its own height, so the fit can measure it. */
+  .plate {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: var(--tracking-display);
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .plate::before {
+    content: attr(data-text);
+  }
+
+  .plate-pink {
+    color: var(--color-pink);
+    transform: translate(var(--drift-x), var(--drift-y));
+  }
+
+  .plate-blue {
+    color: var(--color-ink);
+    mix-blend-mode: multiply;
+  }
+
+  .credit {
+    font-size: var(--step-small);
+    color: var(--color-ink);
+  }
+
+  .credit span {
+    font-weight: 700;
+  }
+
+  /* The details in display rows, on two alternating screens of the blue drum. */
+  .rows {
+    margin: clamp(72px, 10vw, 140px) calc(-1 * var(--gutter)) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: clamp(96px, 10vw, 150px);
+    padding: 0 var(--gutter) 20px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--step-heading);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    overflow-wrap: anywhere;
+  }
+
+  .row:nth-child(odd) {
+    background-color: var(--color-ink-3);
+  }
+
+  .row a {
+    text-decoration-thickness: 3px;
+  }
+
+  .round {
+    flex: none;
+    width: 1.4em;
+    height: 1.4em;
+    margin-bottom: -0.2em;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.2);
+    mix-blend-mode: luminosity;
+  }
+
+  .go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 50%;
+    background-color: var(--color-pink);
+    color: var(--color-pink-ink);
+    transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  }
+
+  .go:hover {
+    background-color: var(--color-paper-3);
+    transform: translateX(4px);
+  }
+
+  .go:active {
+    transform: translate(5px, 1px);
+  }
+
+  .go svg {
+    width: 44%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3;
+  }
+
+  @media (max-width: 760px) {
+    .intro,
+    .press {
       grid-template-columns: minmax(0, 1fr);
+      row-gap: 20px;
+    }
+
+    .poster {
+      max-height: none;
+    }
+
+    .pair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .row {
+      min-height: 84px;
+      padding-bottom: 14px;
+    }
+
+    .hello {
+      background-color: var(--color-pink);
+      color: var(--color-pink-ink);
+    }
+
+    .hello .go {
+      width: 56px;
+      height: 56px;
+      background-color: var(--color-pink-ink);
+      color: var(--color-paper);
     }
   }
 </style>

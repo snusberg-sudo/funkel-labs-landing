@@ -1,119 +1,307 @@
 ---
-import Wordmark from './Wordmark.astro';
+import credits from '../../public/found/credits.json';
 import { contactEmail, type Content } from '../i18n/content';
 
 interface Props {
   t: Content;
 }
 const { t } = Astro.props;
+const home = t.lang === 'ja' ? '/ja/' : '/';
+const links = [
+  { href: `${home}#services`, label: t.nav.services },
+  { href: `${home}#work`, label: t.nav.work },
+  { href: `${home}#process`, label: t.nav.process },
+  { href: `${home}#about`, label: t.nav.about },
+  { href: t.footer.privacyHref, label: t.footer.privacy },
+];
+const shortTitle = (title: string) => (title.length > 60 ? `${title.slice(0, 57).trimEnd()}…` : title);
 ---
 
+<!-- The close: the last rows of the board, every tile filled, the name at full width. -->
 <footer class="footer">
-  <div class="wrap">
-    <!-- Both drums print the mast; the pink sits a hair out of register, purple where they cross. -->
-    <p class="mast" aria-hidden="true">
-      <span class="plate plate-pink"><Wordmark /></span>
-      <span class="plate plate-blue"><Wordmark /></span>
-    </p>
-    <div class="cols">
-      <div>
-        <p>{t.footer.legalName}</p>
-        <p class="muted">{t.footer.address}</p>
-      </div>
+  <div class="board">
+    <div class="tile statement">
+      <p class="phrased">{t.footer.statement}</p>
+      <p class="small">{t.footer.legalName}<br />{t.footer.address}<br />{t.footer.rights}</p>
+    </div>
+    <nav class="tile links" aria-label={t.lang === 'ja' ? 'サイト' : 'Site'}>
       <ul>
-        <li><a href={`mailto:${contactEmail}`}>{contactEmail}</a></li>
-        <li><a href={t.footer.privacyHref}>{t.footer.privacy}</a></li>
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
         <li><a href={t.nav.switchHref} hreflang={t.nav.switchLang} lang={t.nav.switchLang}>{t.nav.switchLabel}</a></li>
       </ul>
-      <p class="muted rights">{t.footer.rights}</p>
+    </nav>
+    <div class="tile place">
+      <p class="lead">{t.footer.place}</p>
+      <p class="small"><time data-clock>JST</time> {t.footer.timeLabel}</p>
     </div>
+    <div class="tile email">
+      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+    </div>
+
+    <!-- Both drums print the mast: the pink plate is drawn underneath, a hair out of register. -->
+    <div class="tile mast" aria-hidden="true">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path class="mark-pink" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z" />
+          <path class="mark-paper" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z" />
+        </svg>
+        <span class="word" data-text="funkel labs">funkel labs</span>
+      </span>
+    </div>
+    <a class="tile start" href={`${home}#contact`}>
+      <span class="lead">{t.footer.start}</span>
+      <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M10 38 38 10M16 10h22v22" /></svg>
+    </a>
+
+    <p class="tile credits">
+      {t.footer.credits}:
+      {credits.map((c, i) => (
+        <Fragment>
+          {' '}<a href={c.page}>“{shortTitle(c.title)}”</a> by {c.creator}, <a href={c.licenseUrl}>{c.license}</a>, via {c.via}{i < credits.length - 1 ? ';' : '.'}
+        </Fragment>
+      ))}
+      {' '}{t.lang === 'ja' ? '二色刷りの色に変更しています。' : 'Colours changed to the two inks.'}
+    </p>
   </div>
 </footer>
 
+<script>
+  // The studio's local time, in Japan.
+  const clock = document.querySelector<HTMLTimeElement>('[data-clock]');
+  if (clock) {
+    const format = new Intl.DateTimeFormat(document.documentElement.lang === 'ja' ? 'ja-JP' : 'en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Tokyo',
+    });
+    const tick = () => {
+      clock.textContent = format.format(new Date());
+    };
+    tick();
+    setInterval(tick, 30_000);
+  }
+</script>
+
 <style>
   .footer {
-    padding-block: clamp(56px, 8vw, 96px) 40px;
+    background-color: var(--color-paper);
+    padding: var(--gutter);
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .tile {
+    margin: 0;
+    padding: 24px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    background-color: var(--color-paper-2);
+    color: var(--color-pink-ink);
+  }
+
+  .lead {
+    font-size: var(--step-lead);
+    line-height: 1.25;
+  }
+
+  .small {
+    font-size: var(--step-small);
+  }
+
+  .statement {
+    grid-column: span 4;
+  }
+
+  .links {
+    grid-column: span 3;
+    background-color: var(--color-ink-5);
+  }
+
+  .links ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 4px;
+  }
+
+  .place {
+    grid-column: span 2;
+    background-color: var(--color-paper-3);
+  }
+
+  .email {
+    grid-column: span 3;
+    justify-content: flex-end;
+    background-color: var(--color-ink-4);
+  }
+
+  .email a {
+    overflow-wrap: anywhere;
   }
 
   .mast {
+    grid-column: span 8;
+    min-height: 320px;
     display: grid;
+    place-items: center;
+    background-color: var(--color-ink);
+    font-size: var(--step-display);
     isolation: isolate;
-    font-size: clamp(3.5rem, 13vw, 11rem);
-    line-height: 0.9;
-    margin-bottom: clamp(32px, 5vw, 56px);
-    overflow-wrap: break-word;
-    min-width: 0;
   }
 
-  .plate {
-    grid-area: 1 / 1;
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-wordmark);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--color-on-ink);
   }
 
-  .plate-pink {
+  .mark svg {
+    width: 0.95em;
+    height: 0.95em;
+    overflow: visible;
+  }
+
+  .mark-pink {
+    fill: var(--color-pink);
+    transform: translate(0.9px, 0.75px);
+  }
+
+  .mark-paper {
+    fill: var(--color-on-ink);
+  }
+
+  .word {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .word::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     color: var(--color-pink);
     transform: translate(0.035em, 0.03em);
   }
 
-  .plate-blue {
-    color: var(--color-ink);
-    mix-blend-mode: multiply;
+  .start {
+    grid-column: span 4;
+    min-height: 320px;
+    background-color: var(--color-pink);
+    background-image: var(--grain);
+    color: var(--color-pink-ink);
+    text-decoration: none;
+    transition: background-color 200ms var(--ease-out);
+  }
+
+  .start .lead {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .start svg {
+    align-self: flex-end;
+    width: 64px;
+    height: 64px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    transition: transform 240ms var(--ease-out);
+  }
+
+  .start:hover {
+    background-color: var(--color-paper-3);
+  }
+
+  .start:hover svg {
+    transform: translate(6px, -6px);
+  }
+
+  .credits {
+    grid-column: 1 / -1;
+    min-height: 0;
+    display: block;
+    max-width: 75ch;
+    font-size: var(--step-small);
+    background-color: var(--color-paper);
+    padding: 16px 24px 8px;
   }
 
   /* As the footer scrolls in, the pink plate travels toward register, tied to scroll position. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       /* Longhands on purpose: the `animation` shorthand cannot carry a timeline. */
-      .plate-pink {
+      .word::before {
         animation-name: mast-register;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
-        animation-range: entry 0% cover 40%;
+        animation-range: entry 0% cover 50%;
       }
     }
   }
 
   @keyframes mast-register {
     from {
-      transform: translate(0.18em, 0.14em);
+      transform: translate(0.2em, 0.16em);
     }
     to {
       transform: translate(0.035em, 0.03em);
     }
   }
 
-  .cols {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
-    gap: 24px 48px;
-    padding-top: 24px;
-    border-top: var(--rule-frame) solid var(--color-ink);
-    font-size: 0.9375rem;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 6px;
-  }
-
-  .muted {
-    color: var(--color-muted);
-  }
-
-  .rights {
-    justify-self: end;
-  }
-
   @media (max-width: 760px) {
-    .cols {
-      grid-template-columns: minmax(0, 1fr);
+
+    .board {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
     }
 
-    .rights {
-      justify-self: start;
+    .tile {
+      padding: 20px;
+      min-height: 160px;
+    }
+
+    .mast,
+    .start,
+    .credits {
+      grid-column: 1 / -1;
+      min-height: 160px;
+    }
+
+    .mast {
+      order: -2;
+      font-size: 12vw;
+    }
+
+    .start {
+      order: -1;
+    }
+
+    .links,
+    .email,
+    .place,
+    .statement {
+      grid-column: span 1;
+    }
+
+    .credits {
+      min-height: 0;
     }
   }
 </style>

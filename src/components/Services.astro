@@ -5,22 +5,16 @@ interface Props {
   t: Content;
 }
 const { t } = Astro.props;
-const [lead, ...rest] = t.services.items;
 ---
 
-<section id="services" class="services" aria-labelledby="services-title">
-  <div class="wrap grid">
-    <h2 id="services-title">{t.services.heading}</h2>
+<!-- Chapter two, the pink screen: what we build, at poster scale. The heading is the list's first line. -->
+<section id="services" class="services grain" data-chapter aria-labelledby="services-title">
+  <div class="wrap">
+    <h2 id="services-title" class="row-name heading" data-rise>{t.services.heading}</h2>
     <ul class="list">
-      {lead && (
-        <li class="row lead grain">
-          <h3>{lead.name}</h3>
-          <p>{lead.body}</p>
-        </li>
-      )}
-      {rest.map((item) => (
-        <li class="row">
-          <h3>{item.name}</h3>
+      {t.services.items.map((item, i) => (
+        <li class="row" data-rise style={`--rise: ${i + 1}`}>
+          <h3 class="row-name">{item.name}</h3>
           <p>{item.body}</p>
         </li>
       ))}
@@ -30,82 +24,58 @@ const [lead, ...rest] = t.services.items;
 
 <style>
   .services {
-    padding-block: clamp(72px, 11vw, 144px);
-    border-top: var(--rule-hair) solid var(--color-rule);
+    background-color: var(--color-paper-3);
+    color: var(--color-pink-ink);
+    min-height: 90svh;
+    padding-block: clamp(96px, 20vh, 200px);
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    gap: clamp(32px, 5vw, 72px);
-    align-items: start;
+  .row-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--step-heading);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    margin: 0;
   }
 
-  h2 {
-    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
-    line-height: 0.98;
-    position: sticky;
-    top: 120px;
+  .heading {
+    color: var(--color-ink);
+    margin-bottom: 0.35em;
   }
 
   .list {
+    display: grid;
+    gap: 0.35em;
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: var(--rule-frame) solid var(--color-ink);
+    font-size: var(--step-heading);
   }
 
+  /* Each name across eight columns, its sentence in the last four on the same baseline. */
   .row {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: 24px;
-    padding-block: 28px 32px;
-    border-bottom: var(--rule-hair) solid var(--color-rule);
-  }
-
-  h3 {
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
-    line-height: 1.05;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    column-gap: clamp(16px, 2.2vw, 32px);
+    align-items: first baseline;
   }
 
   .row p {
-    color: var(--color-ink-2);
-    max-width: 44ch;
+    font-size: var(--step-body);
+    line-height: 1.5;
+    max-width: 40ch;
   }
 
-  /* The service most clients start with prints on the pink screen, set larger. */
-  .lead {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
-    margin-top: 16px;
-    padding: clamp(24px, 3vw, 40px);
-    background-color: var(--color-paper-2);
-    border-radius: var(--radius-sheet);
-    border-bottom: 0;
-  }
-
-  .lead h3 {
-    font-size: clamp(2rem, 3.6vw, 3.25rem);
-  }
-
-  .lead p {
-    font-size: 1.1875rem;
-    color: var(--color-ink);
-    max-width: 52ch;
-  }
-
-  @media (max-width: 860px) {
-    .grid,
+  @media (max-width: 760px) {
     .row {
       grid-template-columns: minmax(0, 1fr);
+      row-gap: 10px;
+      margin-bottom: 28px;
     }
 
-    .row {
-      gap: 10px;
-    }
-
-    h2 {
-      position: static;
+    .row p {
+      padding-left: var(--gutter);
     }
   }
 </style>

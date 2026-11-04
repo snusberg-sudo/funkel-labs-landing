@@ -51,7 +51,7 @@ const fragmentShader = /* glsl */ `
     float diffuse = clamp(dot(n, light), 0.0, 1.0);
     float rim = 1.0 - clamp(dot(n, normalize(-vViewPos)), 0.0, 1.0);
 
-    // Pink lays the body, solid where lit; blue sets the shadow and the edges.
+    // Pink lays the body, solid where lit; blue sets the dark side and the edges.
     float cover = uMode < 0.5
       ? mix(0.42, 1.0, smoothstep(0.05, 0.85, diffuse))
       : clamp(pow(1.0 - diffuse, 1.6) * 0.95 + rim * 0.3, 0.0, 1.0);
@@ -123,16 +123,23 @@ function tokenColor(name: string, fallback: [number, number, number]): Vector3 {
   return new Vector3(r / 255, g / 255, b / 255);
 }
 
-function plate(geometry: BufferGeometry, ink: Vector3, angleDeg: number, cell: number, mode: number) {
-  // Depth prepass so only the nearest surface of each plate takes ink.
-  const prepass = new ShaderMaterial({ vertexShader, fragmentShader, colorWrite: false });
+/** Writes depth only, so each plate inks just the surface nearest the viewer. */
+const depthOnlyShader = /* glsl */ `
+  void main() {
+    gl_FragColor = vec4(1.0);
+  }
+`;
+
+function plate(geometry: BufferGeometry, depthOnly: ShaderMaterial, ink: Vector3, angleDeg: number, cellCss: number, mode: number) {
+  // Ink values are sRGB read straight from the CSS tokens and written out unconverted
+  // (no colorspace_fragment): the plates multiply in sRGB, like ink on paper.
   const material = new ShaderMaterial({
     vertexShader,
     fragmentShader,
     uniforms: {
       uInk: { value: ink },
       uAngle: { value: (angleDeg * Math.PI) / 180 },
-      uCell: { value: cell },
+      uCell: { value: cellCss },
       uMode: { value: mode },
     },
     blending: CustomBlending,
@@ -142,23 +149,22 @@ function plate(geometry: BufferGeometry, ink: Vector3, angleDeg: number, cell: n
     depthFunc: LessEqualDepth,
     depthWrite: false,
   });
-  prepass.uniforms = material.uniforms;
 
   const group = new Group();
-  const depthMesh = new Mesh(geometry, prepass);
+  const depthMesh = new Mesh(geometry, depthOnly);
   depthMesh.renderOrder = 0;
   const inkMesh = new Mesh(geometry, material);
   inkMesh.renderOrder = 1;
   group.add(depthMesh, inkMesh);
-  return { group, material, prepass };
+  return { group, material, cellCss };
 }
+
+const clampUnit = (v: number) => Math.max(-1, Math.min(1, v));
 
 export function createSparkScene(host: HTMLElement) {
   const renderer = new WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'low-power' });
   renderer.setClearColor(0xffffff, 1);
   renderer.autoClear = false;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  renderer.setPixelRatio(dpr);
   renderer.domElement.setAttribute('aria-hidden', 'true');
   host.appendChild(renderer.domElement);
 
@@ -166,20 +172,27 @@ export function createSparkScene(host: HTMLElement) {
   camera.position.set(0, 0, 4.6);
 
   const geometry = sparkGeometry();
-  const pink = plate(geometry, tokenColor('--color-pink', [0.94, 0.28, 0.6]), 15, 7 * dpr, 0);
-  const blue = plate(geometry, tokenColor('--color-ink', [0.17, 0.27, 0.63]), 75, 6 * dpr, 1);
+  const depthOnly = new ShaderMaterial({ vertexShader, fragmentShader: depthOnlyShader, colorWrite: false });
+  const pink = plate(geometry, depthOnly, tokenColor('--color-pink', [0.94, 0.28, 0.6]), 15, 7, 0);
+  const blue = plate(geometry, depthOnly, tokenColor('--color-ink', [0.17, 0.27, 0.63]), 75, 6, 1);
+  const plates = [pink, blue] as const;
   const pinkScene = new Scene();
   pinkScene.add(pink.group);
   const blueScene = new Scene();
   blueScene.add(blue.group);
 
+  // Size and pixel ratio follow the host, and the halftone cell follows the
+  // pixel ratio, so dots keep their printed size when the window changes screens.
   let width = 1;
   let height = 1;
   const resize = () => {
     const rect = host.getBoundingClientRect();
     width = Math.max(1, Math.round(rect.width));
     height = Math.max(1, Math.round(rect.height));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
     renderer.setSize(width, height, false);
+    for (const p of plates) p.material.uniforms.uCell!.value = p.cellCss * dpr;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
   };
@@ -187,48 +200,57 @@ export function createSparkScene(host: HTMLElement) {
   resizeObserver.observe(host);
   resize();
 
-  // Pointer state: tilt toward it, and pull the plates into register as it nears.
-  const pointer = { x: 0, y: 0, active: false };
+  // The event only records where the pointer is; the frame measures the host once.
+  const pointer = { clientX: 0, clientY: 0, x: 0, y: 0, active: false };
   const onPointer = (event: PointerEvent) => {
     if (event.pointerType !== 'mouse') return;
-    const rect = host.getBoundingClientRect();
-    pointer.x = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
-    pointer.y = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
+    pointer.clientX = event.clientX;
+    pointer.clientY = event.clientY;
     pointer.active = true;
   };
   window.addEventListener('pointermove', onPointer, { passive: true });
 
-  const state = { register: 1, tiltX: 0, tiltY: 0, spin: 0 };
-  const worldPerPx = () => (2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.z) / height;
+  // The hero's print run: as the sheet feeds into the drum, the plates register,
+  // the star squares up to the viewer and turns a quarter turn to land.
+  let feed = 0;
+  const onPrintRun = (event: Event) => {
+    feed = Math.min(1, Math.max(0, (event as CustomEvent<number>).detail));
+  };
+  host.addEventListener('printrun', onPrintRun);
 
-  let running = false;
-  let frame = 0;
-  let last = performance.now();
+  const state = { register: 1, tiltX: 0, tiltY: 0, spin: 0 };
+  let last = 0;
   let shown = false;
 
   const render = (now: number) => {
-    const dt = Math.min((now - last) / 1000, 0.05);
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
     last = now;
     const t = now / 1000;
 
+    if (pointer.active) {
+      const rect = host.getBoundingClientRect();
+      pointer.x = (pointer.clientX - (rect.left + rect.width / 2)) / rect.width;
+      pointer.y = (pointer.clientY - (rect.top + rect.height / 2)) / rect.height;
+    }
+
     const distance = pointer.active ? Math.hypot(pointer.x, pointer.y) : 0.6 + 0.4 * Math.sin(t * 0.6);
-    const targetRegister = Math.min(1, Math.max(0, (distance - 0.12) / 0.9));
+    const targetRegister = Math.min(1, Math.max(0, (distance - 0.12) / 0.9)) * (1 - feed);
     state.register += (targetRegister - state.register) * Math.min(1, dt * 4);
     // Tilt follows the pointer but is capped, so the star always reads face-on enough.
-    const clampUnit = (v: number) => Math.max(-1, Math.min(1, v));
     const tiltXTarget = pointer.active ? clampUnit(pointer.y) * 0.3 : 0;
     const tiltYTarget = pointer.active ? clampUnit(pointer.x) * 0.4 : 0;
     state.tiltX += (tiltXTarget - state.tiltX) * Math.min(1, dt * 3);
     state.tiltY += (tiltYTarget - state.tiltY) * Math.min(1, dt * 3);
     // Sway rather than spin, so the star never turns edge-on to the viewer.
-    state.spin = Math.sin(t * 0.35) * 0.55;
+    state.spin = Math.sin(t * 0.35) * 0.55 * (1 - feed);
 
-    for (const p of [pink, blue]) {
-      p.group.rotation.set(0.28 + state.tiltX, state.spin + state.tiltY, Math.sin(t * 0.2) * 0.12);
+    for (const p of plates) {
+      // The landing turn is in the picture plane: four points land on themselves.
+      p.group.rotation.set((0.28 + state.tiltX) * (1 - feed), state.spin + state.tiltY * (1 - feed), Math.sin(t * 0.2) * 0.12 * (1 - feed) + feed * (Math.PI / 2));
     }
 
     // Misregistration in screen pixels, split between the two plates.
-    const unit = worldPerPx();
+    const unit = (2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.z) / height;
     const offX = state.register * 5;
     const offY = state.register * 3.5;
     pink.group.position.set(-offX * unit, offY * unit, 0);
@@ -243,47 +265,75 @@ export function createSparkScene(host: HTMLElement) {
       shown = true;
       host.classList.add('is-live');
     }
-    if (running) frame = requestAnimationFrame(render);
   };
 
+  let ready = false;
+  let running = false;
+  let inView = true;
   const play = () => {
-    if (running) return;
+    if (running || !ready || !inView || document.hidden) return;
     running = true;
-    last = performance.now();
-    frame = requestAnimationFrame(render);
+    last = 0;
+    renderer.setAnimationLoop(render);
   };
   const pause = () => {
     running = false;
-    cancelAnimationFrame(frame);
+    renderer.setAnimationLoop(null);
   };
 
-  let inView = true;
   const visibility = new IntersectionObserver(([entry]) => {
     inView = entry?.isIntersecting ?? false;
-    if (inView && !document.hidden) play();
+    if (inView) play();
     else pause();
   });
   visibility.observe(host);
-  const onVisibility = () => (document.hidden || !inView ? pause() : play());
+  const onVisibility = () => (document.hidden ? pause() : play());
   document.addEventListener('visibilitychange', onVisibility);
 
-  play();
-
-  return {
-    dispose() {
-      pause();
-      visibility.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener('pointermove', onPointer);
-      document.removeEventListener('visibilitychange', onVisibility);
-      host.classList.remove('is-live');
-      geometry.dispose();
-      for (const p of [pink, blue]) {
-        p.material.dispose();
-        p.prepass.dispose();
-      }
-      renderer.dispose();
-      renderer.domElement.remove();
-    },
+  let disposed = false;
+  const dispose = () => {
+    if (disposed) return;
+    disposed = true;
+    pause();
+    visibility.disconnect();
+    resizeObserver.disconnect();
+    window.removeEventListener('pointermove', onPointer);
+    host.removeEventListener('printrun', onPrintRun);
+    document.removeEventListener('visibilitychange', onVisibility);
+    renderer.domElement.removeEventListener('webglcontextlost', onContextLost);
+    host.classList.remove('is-live');
+    geometry.dispose();
+    depthOnly.dispose();
+    for (const p of plates) p.material.dispose();
+    renderer.dispose();
+    renderer.forceContextLoss();
+    renderer.domElement.remove();
   };
+
+  // A lost context (common on phones under memory pressure) hands the hero
+  // back to the static print instead of leaving a blank canvas.
+  const onContextLost = (event: Event) => {
+    event.preventDefault();
+    dispose();
+  };
+  renderer.domElement.addEventListener('webglcontextlost', onContextLost);
+
+  // Where the browser compiles shaders in parallel, build both plates before the
+  // first frame so it never stalls; elsewhere the first frame compiles them.
+  const start = () => {
+    if (disposed) return;
+    ready = true;
+    play();
+  };
+  if (renderer.extensions.has('KHR_parallel_shader_compile')) {
+    renderer
+      .compileAsync(pinkScene, camera)
+      .then(() => renderer.compileAsync(blueScene, camera))
+      .catch(() => undefined)
+      .then(start);
+  } else {
+    start();
+  }
+
+  return { dispose };
 }

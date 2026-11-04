@@ -9,17 +9,10 @@ const { t } = Astro.props;
 const home = t.lang === 'ja' ? '/ja/' : '/';
 ---
 
-<header class="nav">
+<!-- A plain bar: the wordmark, the other language, one action. Section links live in the footer. -->
+<header class="nav" data-nav>
   <div class="wrap nav-row">
     <a class="home" href={home} aria-label={t.nav.home}><Wordmark /></a>
-    <nav aria-label={t.lang === 'ja' ? 'メイン' : 'Main'}>
-      <ul class="links">
-        <li><a href="#services">{t.nav.services}</a></li>
-        <li><a href="#work">{t.nav.work}</a></li>
-        <li><a href="#process">{t.nav.process}</a></li>
-        <li><a href="#about">{t.nav.about}</a></li>
-      </ul>
-    </nav>
     <div class="actions">
       <a class="lang" href={t.nav.switchHref} hreflang={t.nav.switchLang} lang={t.nav.switchLang}>{t.nav.switchLabel}</a>
       <a class="btn btn-primary cta" href="#contact">{t.nav.cta}</a>
@@ -27,91 +20,100 @@ const home = t.lang === 'ja' ? '/ja/' : '/';
   </div>
 </header>
 
+<script>
+  // The bar steps aside while the reader scrolls down and returns on the way back up.
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  if (nav) {
+    let last = window.scrollY;
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const y = window.scrollY;
+      const down = y > last;
+      nav.classList.toggle('is-away', down && y > 120 && !nav.contains(document.activeElement));
+      last = y;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    nav.addEventListener('focusin', () => nav.classList.remove('is-away'));
+  }
+</script>
+
 <style>
   .nav {
     view-transition-name: site-nav;
     position: sticky;
     top: 0;
     z-index: 20;
-    background: color-mix(in oklch, var(--color-paper) 92%, transparent);
-    border-bottom: var(--rule-hair) solid var(--color-rule);
-    backdrop-filter: saturate(1.2) blur(10px);
+    background-color: var(--color-paper);
+    transition: transform 320ms var(--ease-out);
+  }
+
+  .nav:global(.is-away) {
+    transform: translateY(-100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav {
+      transition: none;
+    }
   }
 
   .nav-row {
     display: flex;
     align-items: center;
-    gap: 32px;
-    min-height: 76px;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 72px;
   }
 
   .home {
-    font-size: 1.5rem;
+    font-size: var(--step-lead);
     text-decoration: none;
-  }
-
-  nav {
-    margin-left: auto;
-  }
-
-  .links {
-    display: flex;
-    gap: 28px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .links a,
-  .lang {
-    font-size: 1rem;
-    font-weight: 500;
-    text-decoration: none;
-    padding-block: 8px;
-  }
-
-  .links a:hover,
-  .lang:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--color-pink);
-    text-decoration-thickness: 2px;
   }
 
   .actions {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: 24px;
+  }
+
+  .lang {
+    font-size: var(--step-body);
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: 10px;
+  }
+
+  .lang:hover {
+    text-decoration: underline;
   }
 
   .cta {
     min-height: 44px;
-    padding: 12px 18px;
-    font-size: 1rem;
+    padding: 12px 20px;
   }
 
-  @media (max-width: 900px) {
-    nav {
-      display: none;
+  @media (max-width: 480px) {
+    .nav-row {
+      min-height: 60px;
     }
 
     .actions {
-      margin-left: auto;
       gap: 14px;
     }
 
-    .nav-row {
-      min-height: 64px;
-    }
-
-    .home {
-      font-size: 1.25rem;
-    }
-  }
-
-  @media (max-width: 380px) {
     .cta {
-      padding: 10px 12px;
-      font-size: 0.9375rem;
+      padding: 10px 14px;
+      font-size: var(--step-small);
     }
   }
 </style>

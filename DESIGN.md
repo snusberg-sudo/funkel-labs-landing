@@ -1,14 +1,15 @@
 ---
 name: Funkel Labs
-description: Two-Drum Riso. Software printed in two inks, registered by hand, on bright cool stock.
+description: Two-Drum Riso. Software printed in two inks, registered by hand, on bright cool stock, told in colour chapters.
 colors:
   paper: "oklch(98.7% 0.004 300)"
   paper-2: "oklch(94.6% 0.03 356)"
   paper-3: "oklch(86% 0.1 356)"
   ink: "oklch(40% 0.165 265)"
-  ink-2: "oklch(46% 0.15 265)"
+  ink-3: "oklch(55% 0.135 265)"
+  ink-4: "oklch(74% 0.085 265)"
+  ink-5: "oklch(87% 0.045 265)"
   muted: "oklch(49% 0.11 265)"
-  rule: "oklch(85% 0.045 265)"
   pink: "oklch(68% 0.235 356)"
   pink-ink: "oklch(22% 0.11 265)"
   focus: "oklch(44% 0.2 265)"
@@ -17,46 +18,39 @@ colors:
 typography:
   display:
     fontFamily: "Cabinet Grotesk, Dela Gothic One, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(3rem, 7.2vw, 6rem)"
+    fontSize: "clamp(60px, 9vw, 140px)"
     fontWeight: 800
-    lineHeight: 0.92
-    letterSpacing: "-0.03em"
-  headline:
+    lineHeight: 0.86
+    letterSpacing: "-0.035em"
+  heading:
     fontFamily: "Cabinet Grotesk, Dela Gothic One, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.25rem, 4.4vw, 3.75rem)"
+    fontSize: "clamp(36px, 5.2vw, 84px)"
     fontWeight: 800
-    lineHeight: 0.98
-    letterSpacing: "-0.03em"
-  title:
-    fontFamily: "Cabinet Grotesk, Dela Gothic One, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(1.5rem, 2.4vw, 2rem)"
-    fontWeight: 800
-    lineHeight: 1.05
-    letterSpacing: "-0.03em"
-  lede:
+    lineHeight: 1
+    letterSpacing: "-0.035em"
+  lead:
     fontFamily: "Literata Variable, Zen Kaku Gothic New, ui-serif, Georgia, serif"
-    fontSize: "1.1875rem"
+    fontSize: "clamp(21px, 2.1vw, 30px)"
     fontWeight: 400
-    lineHeight: 1.6
+    lineHeight: 1.3
   body:
     fontFamily: "Literata Variable, Zen Kaku Gothic New, ui-serif, Georgia, serif"
-    fontSize: "1.0625rem"
+    fontSize: "1.125rem"
     fontWeight: 400
-    lineHeight: 1.6
+    lineHeight: 1.55
     fontFeature: "\"tnum\" 1"
-  label:
+  small:
     fontFamily: "Literata Variable, Zen Kaku Gothic New, ui-serif, Georgia, serif"
-    fontSize: "0.9375rem"
-    fontWeight: 500
-    lineHeight: 1.6
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.55
 rounded:
   sheet: "2px"
 spacing:
-  gutter: "clamp(16px, 5vw, 80px)"
-  measure: "1240px"
-  section: "clamp(72px, 11vw, 144px)"
-  column-gap: "clamp(32px, 5vw, 72px)"
-  sheet-pad: "clamp(24px, 3.5vw, 44px)"
+  gutter: "clamp(16px, 2.2vw, 32px)"
+  measure: "1536px"
+  section-gap: "clamp(96px, 14vw, 200px)"
+  tile-gap: "8px"
 components:
   button-primary:
     backgroundColor: "{colors.pink}"
@@ -64,40 +58,54 @@ components:
     rounded: "{rounded.sheet}"
     padding: "14px 26px"
     height: "52px"
-    typography: "{typography.title}"
   button-primary-hover:
     backgroundColor: "{colors.paper-3}"
     textColor: "{colors.pink-ink}"
   button-secondary:
-    backgroundColor: "transparent"
+    backgroundColor: "{colors.paper-2}"
     textColor: "{colors.ink}"
     rounded: "{rounded.sheet}"
     padding: "14px 26px"
     height: "52px"
   button-secondary-hover:
-    backgroundColor: "{colors.paper-2}"
+    backgroundColor: "{colors.paper-3}"
     textColor: "{colors.ink}"
   input:
     backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
+    textColor: "{colors.pink-ink}"
     rounded: "{rounded.sheet}"
-    padding: "12px 14px"
-    height: "48px"
+    padding: "14px 16px"
+    height: "52px"
   input-hover:
     backgroundColor: "{colors.paper-2}"
+  input-invalid:
+    backgroundColor: "{colors.paper-3}"
   status-sent:
     backgroundColor: "{colors.pink}"
     textColor: "{colors.pink-ink}"
     rounded: "{rounded.sheet}"
     padding: "4px 10px"
-  contact-band:
+  status-failed:
+    backgroundColor: "{colors.paper-2}"
+    textColor: "{colors.pink-ink}"
+    rounded: "{rounded.sheet}"
+    padding: "4px 10px"
+  chapter-services:
+    backgroundColor: "{colors.paper-3}"
+    textColor: "{colors.pink-ink}"
+  chapter-press-room:
+    backgroundColor: "{colors.pink-ink}"
+    textColor: "{colors.on-ink}"
+  chapter-about:
+    backgroundColor: "{colors.pink}"
+    textColor: "{colors.pink-ink}"
+  chapter-contact:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.on-ink}"
-  form-sheet:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sheet}"
-    padding: "{spacing.sheet-pad}"
+  footer-tile:
+    backgroundColor: "{colors.paper-2}"
+    textColor: "{colors.pink-ink}"
+    padding: "24px"
 ---
 
 # Design System: Funkel Labs
@@ -106,157 +114,185 @@ components:
 
 **Creative North Star: "Two-Drum Riso"**
 
-Every surface is a print run on bright, cool, uncoated stock through two drums. A medium blue drum sets every word, rule and icon; a fluorescent pink drum lays every fill. Purple is never mixed: it appears only where the two inks overprint, through `mix-blend-mode: multiply`. There is no black anywhere, and no third ink.
+Every surface is a print run on bright, cool, uncoated stock through two drums. A medium blue drum sets every word and stroke; a fluorescent pink drum lays every fill. Purple is never mixed: it appears only where the two inks overprint, through `mix-blend-mode: multiply`. There is no black anywhere, and no third ink.
 
-The page is flat paper. Depth comes from overprint and registration, not from light: a hair of misregistration on one hero word, a two-plate footer mast, the spark that drifts out of register and pulls in as the pointer nears, the process told as separations. Paper specks (grain) appear only where ink has been laid, never on bare stock. Corners are almost square (2px), frames are a 1.5px blue rule, dividers are 1px hairlines.
+The page is told in colour chapters. Each section is a full-bleed field of one ink or screen, and the next section is a different field: stock meeting the blue drum at a waterline in the hero, the deep pink screen for services, the deepest blue for the press room, stock with a dark-to-light blue accordion for process, full pink for about, full blue for contact, and a board of filled tiles to close. Nothing is outlined. Surfaces are told apart by a tone step and by space, never by a rule or a frame.
 
-Type is heavy and close-set: Cabinet Grotesk 800 heads over a Literata reading face. Japanese pages keep the same weight logic in Dela Gothic One and Zen Kaku Gothic New, and Latin inside Japanese heads stays in Cabinet 800.
+The page is flat paper. Depth comes from overprint and registration, not from light: the hero seam rising as the sheet feeds into the drum, the spark's plates pulling into register, the poster plates striking off register and settling, the footer mast's pink plate travelling home. Paper specks (grain) appear only where ink has been laid. Type is heavy and close-set: Cabinet Grotesk 800 over Literata, with Dela Gothic One and Zen Kaku Gothic New on Japanese pages.
 
 **Key Characteristics:**
 - Light cool stock, blue ink, pink fill, purple only from multiply overprint, no black.
-- Flat: no shadows anywhere; depth is overprint and misregistration.
+- Colour chapters: one full-bleed field per section, separated by tone and space.
+- No hairlines, no outlined boxes, no shadows; secondary controls are filled tones.
 - Grain as background-image specks on ink fields only.
-- 2px sheet radius, 1.5px blue frame rule, 1px pale hairlines.
-- Heavy display (800) over a serif reading face; JA heads break only at marked phrase boundaries.
-- Motion is registration: plates drift and land, pressed controls drop 1px.
+- Five type steps; heavy display (800) over a serif reading face.
+- Found pictures in one two-drum duotone, credited in the footer.
+- Motion is registration: plates drift and land, sheets feed, parts rise in turn.
 
 ## Colors
 
-Two inks on one stock: a medium blue that does all the drawing and a fluorescent pink that does all the filling, with tints of each standing in for screens.
+Two inks on one stock: a medium blue that draws and a fluorescent pink that fills, with screens of each standing in for tints and for every surface step.
 
 ### Primary
-- **Drum Blue** (ink): every heading, body word, rule, frame, icon and SVG stroke. It is also the only solid band colour (the contact section), where it prints as a full ink field with grain.
-- **Soft Drum Blue** (ink-2): secondary body copy (section ledes, card body text, JA hero lede). Still the blue drum, a lighter pass.
-- **Focus Blue** (focus): the focus outline only.
+- **Drum Blue** (ink): headings and running text on stock, every icon and SVG stroke, and the full-blue contact field, the hero's lower sheet, the first accordion pass and the footer mast tile.
+- **Blue Screen 3** (ink-3): the second accordion pass, the press-room screen under the video, and the alternating detail rows on the contact field.
+- **Blue Screen 4** (ink-4): the third accordion pass, the email footer tile, a portrait tint.
+- **Blue Screen 5** (ink-5): the fourth accordion pass, the footer links tile, a work card panel, a portrait tint.
+- **Focus Blue** (focus): the default focus outline on stock and pale fields.
 
 ### Secondary
-- **Fluorescent Pink** (pink): every fill. Primary button, the stamped "sent" status, text selection, link underlines, caret, the pink plate of the spark and misregistered copies. Never used for running text on stock.
-- **Pink Screen** (paper-2): a light pink tint. Hover fills for secondary buttons and inputs, the lead service card, photo and screenshot placeholders, the failed status.
-- **Deep Pink Screen** (paper-3): the primary button hover, and the screen inside process-plate phones.
+- **Fluorescent Pink** (pink): every solid fill. The primary button, the full-pink about field, the footer "start" tile, the sent stamp, the round go button, text selection, link underlines, caret, the pink plate of the spark, the poster and the mast. Also the focus outline on blue fields. Never running text on stock.
+- **Pink Screen** (paper-2): the secondary button, input hover, the failed stamp, the default footer tile, a work card panel, a portrait tint.
+- **Deep Pink Screen** (paper-3): the services field, every hover of a pink or pink-screen fill, the invalid input, and the screen that found pictures print onto.
 
 ### Neutral
-- **Cool Stock** (paper): the page, the form sheet, inputs and screenshot frames. A cool near-white, deliberately not cream.
-- **Muted Blue** (muted): meta text (roles, platforms, hints, legal address).
-- **Pale Rule** (rule): 1px section dividers and the nav hairline.
-- **Pink Ink** (pink-ink): text on pink fills. A deep navy from the blue family, not black.
-- **On-Ink Stock** (on-ink) and **On-Ink Mist** (on-ink-muted): text on the blue band.
+- **Cool Stock** (paper): the page, the nav, the process chapter, the footer ground, inputs, the poster sheet, a work card panel. A cool near-white, deliberately not cream.
+- **Pink Ink** (pink-ink): text on pink fills and pale screens, and the press-room field. A deep navy from the blue family, not black.
+- **Muted Blue** (muted): placeholders and legal meta on stock.
+- **On-Ink Stock** (on-ink) and **On-Ink Mist** (on-ink-muted): text, hints and the sending state on blue fields.
 
 ### Named Rules
-**The Two Drums Rule.** Blue draws (words, rules, icons, strokes); pink fills (buttons, stamps, selection, underlines, plates). A colour doing the other drum's job is a defect.
+**The Two Drums Rule.** Blue draws (words, strokes, icons); pink fills (buttons, stamps, selection, underlines, plates). A colour doing the other drum's job is a defect.
 
 **The Overprint Purple Rule.** Purple is never a token. It exists only where a pink and a blue layer cross under `mix-blend-mode: multiply`.
 
-**The No Black Rule.** No `#000`, no neutral greys. The darkest value on the page is the blue family (pink-ink).
+**The No Black Rule.** No `#000`, no neutral greys. The darkest value on the page is pink-ink.
 
-**The Grain-on-Ink Rule.** The grain specks are a `background-image` beside a `background-color` on ink fields (pink fills, pink screens, the blue band, placeholders). Bare stock carries no grain.
+**The Grain-on-Ink Rule.** The grain specks are a `background-image` beside a `background-color` on ink fields (the services, about and contact chapters, the hero drum, pink buttons, the poster, picture plates). Bare stock carries no grain.
+
+**The Ordered Screens Rule.** When fields carry an order, they step through one drum's screens darkest to lightest (ink, ink-3, ink-4, ink-5). Text flips from on-ink to pink-ink at ink-4.
 
 ## Typography
 
 **Display Font:** Cabinet Grotesk 800, self-hosted (with Dela Gothic One for Japanese, then ui-sans-serif)
 **Body Font:** Literata Variable (with Zen Kaku Gothic New on Japanese pages, then ui-serif, Georgia)
-**Japanese:** Dela Gothic One heads, Zen Kaku Gothic New body; Hiragino Sans / Yu Gothic / Meiryo for Japanese words on English pages.
+**Japanese:** Dela Gothic One heads, Zen Kaku Gothic New body; ui-sans-serif for Japanese words on English pages.
 
 **Character:** A blunt, ink-heavy grotesk that looks pressed into the stock, over a warm bookish serif that reads like a printed leaflet.
 
 ### Hierarchy
-- **Display** (800, clamp(3rem, 7.2vw, 6rem), 0.92, -0.03em): the hero head only. Capped at 6rem. JA: clamp(2.5rem, 5.6vw, 4.75rem), line-height 1.12.
-- **Headline** (800, clamp(2.25rem, 4.4vw, 3.75rem), 0.98): section heads. The contact head runs larger (up to 4.5rem) on the blue band.
-- **Title** (800, about 1.375rem to 2rem, 1.05 to 1.1): service, app, step and person names. The lead service card sets its title up to 3.25rem.
-- **Lede** (400, 1.1875rem to 1.5rem): one-sentence section and hero ledes, held to 30 to 40ch.
-- **Body** (400, 1.0625rem, 1.6, tabular numerals): running text, max about 44 to 52ch. JA body line-height 1.85.
-- **Label** (500, 0.9375rem): form labels, nav links, meta lines.
-- **Mast** (wordmark, clamp(3.5rem, 13vw, 11rem), 0.9): the footer mast only.
+- **Display** (800, clamp(60px, 9vw, 140px), 0.86, uppercase on Latin pages): the hero head and the footer mast. 15.5vw on phones (13.5vw JA, line-height 1.02, no uppercase).
+- **Heading** (800, clamp(36px, 5.2vw, 84px), 1): section heads, the services list at poster scale, the open accordion pass, the contact detail rows.
+- **Lead** (clamp(21px, 2.1vw, 30px), 1.3): hero, work and about ledes held to 26 to 34ch, and in the display face at 800 for card titles, closed accordion tabs, the team heading and the footer start tile.
+- **Body** (400, 1.125rem, 1.55, tabular numerals): running text, 36 to 48ch; buttons, stamps and person names in the display face at 800. JA body line-height 1.85.
+- **Small** (1rem): form labels (600), roles, hints, footer meta and credits.
 
-Display tracking is -0.03em on Latin pages and -0.01em on Japanese pages. Buttons and the stamped form status set in the display face at 800.
+Display tracking is -0.035em on Latin pages and -0.01em on Japanese pages. No other sizes: every size on the page is one of the five steps, except the fitted poster plates and the viewport-width display sizes on phones (hero 15.5vw, mast 12vw).
 
 ### Named Rules
-**The One Weight Rule.** Heads are 800 and only 800. Dela Gothic One has a single weight, so Japanese pages set `font-synthesis-weight: none` and Latin inside Japanese heads stays in Cabinet 800 so each head reads as one weight.
+**The Five Steps Rule.** Type sizes come only from the five step tokens (display, heading, lead, body, small). A new size is a new step or it is a defect.
+
+**The One Weight Rule.** Heads are 800 and only 800. Dela Gothic One has a single weight, so Japanese pages set `font-synthesis-weight: none` and Latin inside Japanese heads stays in Cabinet 800.
 
 **The Phrase Break Rule.** Japanese heads and ledes (`.phrased`) use `word-break: keep-all` and break only at the U+200B phrase marks placed in the copy. Running Japanese text uses `word-break: auto-phrase` with `line-break: strict`.
 
 ## Layout
 
-One centred measure of 1240px with a fluid gutter (clamp(16px, 5vw, 80px)). Sections stack with generous vertical padding (clamp(72px, 11vw, 144px)) and are separated by a 1px pale hairline at their top edge. Most sections use an asymmetric two-column split on fractional tracks: 7/5 for the hero, 4/8 for section heads against content, 5/7 for the work grid and contact, 6/6 for about. The section head often sticks (services) or sits as a flex row with its lede aligned to the baseline end (work).
+Colour chapters on one tight measure: content sits in a 1536px measure with a narrow gutter (clamp(16px, 2.2vw, 32px)) so large type runs toward the edges, while each chapter's field runs full bleed. Chapters are separated by a change of field and by the section gap (clamp(96px, 14vw, 200px)) as vertical padding, never by a divider. Splits are asymmetric fractional tracks: 8/4 for service name against sentence on a shared first baseline, 7/5 for head against lede, 5/1/5/1 for the process intro, 6/6 for about and for the form against the poster, a 12-column tile board with 8px gaps in the footer.
 
-Responsive behaviour collapses every split to a single column between 760px and 960px; the process sheet steps from four columns to two at 960px. On mobile the hero spark moves above the head, capped at min(300px, 70vw). The nav hides its section links below 900px and keeps the language switch plus the pink call to action.
+The hero is a full-viewport stage (100svh minus the 72px nav) pinned for 175svh on desktop. The press room pins for its own height plus the cards' travel at 1024px and up. On phones and under reduced motion both unpin: the hero is a single screen and the work cards stack (two up from 640px). Every split collapses to one column at 760px; the footer board drops to two columns with 6px gaps, mast and start tile first.
+
+### Named Rules
+**The Tone-and-Space Rule.** Two surfaces that touch differ by a tone step, or they are held apart by space. If a boundary needs a line to be seen, the tones are too close.
+
+**The Shrinkable Rail Rule.** Any flex child that carries a track, a rail or long text sets `min-width: 0`, so it can shrink inside its parent instead of pushing the page wide.
 
 ## Elevation & Depth
 
-The system is flat. There are no box-shadows anywhere. Depth is conveyed by overprint: layers set to `mix-blend-mode: multiply` so pink under blue reads purple, and by deliberate misregistration (a pink copy offset by about 0.035em right and 0.03em down). Ink fields sit on stock as flat colour; the form on the blue band is a sheet of stock laid flat on the ink, not lifted.
+The system is flat. There are no box-shadows anywhere. Depth is overprint (layers under `mix-blend-mode: multiply`, so pink under blue reads purple) and registration (a pink plate offset about 0.035em right and 0.03em down). Fields stack by clipping and tone, not lift: the hero's stock and drum sheets are clipped either side of one seam, and the form sits on the blue field as flat stock.
 
 ### Named Rules
 **The Overprint Depth Rule.** Stack with multiply and offset, never with shadows or glows. If a layer needs to read "above", it overprints.
 
-**The One Hair Off Rule.** Misregistration is a signature, so it stays rare: one word in the hero head, the two-plate footer mast, and the finished process sheet's residual drift (3px, 2.5px). Body text and controls are always in register.
+**The One Hair Off Rule.** Misregistration is a signature and stays rare: the spark's plates, the poster's plates, the footer mast. Body text and controls are always in register.
+
+**The Draw-Once Rule.** Decorative duplicate text (the hero's stock copy of the headline, the poster plates, the mast's pink plate) is drawn from a `data-text` attribute through `::before { content: attr(data-text) }`, so the page carries each text once and assistive tech reads it once.
 
 ## Shapes
 
-Near-square sheets: every container, button, input, frame and stamp uses the 2px sheet radius. Frames and primary dividers are a 1.5px blue rule (screenshot frames, the services list top, the footer top, inputs, secondary buttons); quieter dividers and process plate frames are 1px. The recurring silhouette is the four-point spark (the wordmark glyph), drawn as a blue outline or as pink and blue halftone plates. Process plates crop like full-bleed prints, running off their frame.
+Near-square and unframed. Buttons, inputs and stamps take the 2px sheet radius; fields, tiles, cards and pictures are square-cut and run to their edges. The only round forms are the go button and the ink-roller picture in the contact rows (50%). There are no borders on any surface or control. The recurring silhouette is the four-point spark (the wordmark glyph), filled solid or printed as pink and blue halftone plates.
 
 ## Components
 
 ### Buttons
 Pressed sheets: heavy display type on a flat block that lands when pressed.
-- **Shape:** near-square (2px), min-height 52px (44px in the nav), padding 14px 26px.
-- **Primary:** pink fill with grain, pink-ink text, a 1.5px border in the same pink, display face at 800, 1.125rem.
-- **Hover:** primary shifts to the deep pink screen (paper-3); secondary fills with the pink screen (paper-2). Transitions are 160ms on the ease-out curve (cubic-bezier(0.16, 1, 0.3, 1)).
+- **Shape:** near-square (2px), min-height 52px (44px in the nav), padding 14px 26px, display face at 800 in the body step.
+- **Primary:** pink fill with grain, pink-ink text.
+- **Secondary:** a filled pink screen (paper-2) with blue text. No frame.
+- **Hover:** both shift to the deep pink screen (paper-3) over 160ms on the ease-out curve (cubic-bezier(0.16, 1, 0.3, 1)).
 - **Active:** the button drops 1px down and right (`translate(1px, 1px)`), a sheet landing.
 - **Focus:** a 2px focus-blue outline offset 3px, no transition.
-- **Secondary:** transparent on stock with a 1.5px blue frame and blue text.
-- **Disabled:** opacity 0.55, not-allowed cursor.
+- **Disabled:** opacity 0.55, not-allowed cursor; progress cursor while the form sends.
 
 ### Links
-Inherit the text colour and carry a 2px pink underline offset 0.22em, thickening to 3.5px on hover. Nav links have no underline at rest and gain the 2px pink underline on hover.
+Inherit the text colour and carry a 2px pink underline offset 0.22em, thickening to 3.5px on hover (3px at rest in the heading-size contact rows).
 
-### Cards / Containers
-- **Corner Style:** 2px.
-- **Background:** stock for frames; the pink screen (paper-2) with grain for the lead service card and for placeholders.
+### Cards / Tiles
+- **Corner Style:** square.
+- **Background:** filled screens of the two drums at a similar lightness, rotating stock, pink screen and blue screen (work panels, portrait tints, footer tiles).
 - **Shadow Strategy:** none (see Elevation & Depth).
-- **Border:** 1.5px blue frame for screenshots; services rows divide with 1px hairlines under a 1.5px blue top rule.
-- **Internal Padding:** clamp(24px, 3vw, 40px) on the lead card.
-- **Imagery:** product screenshots print in their own full colour on the stock, never duotoned. Portraits print in both drums: grayscale multiplied over the pink screen with blue lightened in.
+- **Border:** none. A card is a picture over a filled panel.
+- **Internal Padding:** 28px on work panels (20px stacked), 24px on footer tiles (20px on phones).
+- **Screenshots:** product screenshots print in their own full colour, square-cut over a deep pink screen with grain, never duotoned.
+
+### Found Pictures
+Found pictures (CC BY, credited in the footer) print in one two-drum duotone: the image at `grayscale(1) contrast(1.15)` multiplied onto the deep pink screen (paper-3), with a Drum Blue layer above under `mix-blend-mode: lighten`, so shadows print blue and lights print pink. Portraits share the treatment. The press-room video is the one single-drum variant: multiplied onto ink-3 with pink-ink lightened in, so it reads as a blue screen behind the cards. Closed accordion passes show a strip of their picture multiplied into their own blue at half opacity.
 
 ### Inputs / Fields
-- **Style:** stock fill, 1.5px blue frame, 2px radius, 12px 14px padding, min-height 48px (140px for the textarea).
+- **Style:** filled stock, no border, 2px radius, 14px 16px padding, min-height 52px (120px for the textarea), pink-ink text, muted placeholder.
 - **Hover:** fills with the pink screen.
-- **Focus:** 2px focus-blue outline offset 2px, background returns to stock.
-- **Error:** on `:user-invalid` the frame turns pink and the field takes the pink screen.
+- **Focus:** on the blue field, a 3px pink outline offset 2px; background returns to stock.
+- **Error:** on `:user-invalid` the field takes the deep pink screen.
 
 ### Form Status
-States print as stamped lines in the display face at 800, never toasts. Sending is muted blue text; sent is a pink stamp with pink-ink text (4px 10px); failed is a pink-screen stamp with a 1.5px blue frame.
+States print as stamped lines in the display face at 800, never toasts. Sending is on-ink mist text; sent is a pink stamp, failed a pink-screen stamp, both pink-ink text at 4px 10px. A result lands like a rubber stamp: from scale 1.12 and -2deg to square over 260ms (an opacity-only fade under reduced motion).
 
 ### Navigation
-Sticky bar at 76px (64px below 900px) on translucent stock with a 1px pale hairline below. Wordmark left (spark glyph plus "funkel labs" in Cabinet 800); section links in the body face at 500, 1rem; language switch and a compact pink primary button right.
+A plain sticky bar on stock, 72px tall (60px below 480px): the wordmark at the lead step, the language switch, one compact pink primary button. No divider below it. It slides up out of view while scrolling down past 120px and returns on scroll up or on focus (320ms). Section links live in the footer. The nav holds still across the language switch's cross-document view transition (260ms crossfade).
 
-### Spark Plates (signature)
-The hero's three.js spark is two halftone plates, pink screened at 15° and blue at 75°, multiplied so purple prints where they cross. The plates drift out of register and pull into register as the pointer comes close, with a capped tilt toward the pointer. A static two-ink SVG print of the same plates is the fallback for reduced motion, no WebGL, data-saver and low-memory devices; the canvas fades in over it only once live.
+### Print Run Hero (signature)
+Two sheets meet at a seam: stock above, the blue drum with grain below. The headline is set twice in the same place (blue on stock, pink on the drum), each clipped to its own side, so the seam cuts through the second line. On desktop the hero pins and the seam rises from 56% to the top as the sheet feeds into the drum, while the three.js spark (pink plate screened at 15°, blue at 75°, multiplied) pulls into register, squares up and turns a quarter turn. On load each headline line rises from behind its own mask (900ms, 110ms stagger) and the lede fades up. A static two-ink SVG of the spark is the fallback for reduced motion and no WebGL.
 
-### Process Separations (signature)
-"How we work" is one sheet shown pass by pass: a dashed blue sketch, the blue plate, the pink plate, then the registered sheet. The final sheet slides from (12px, 10px) to a residual (3px, 2.5px) drift once when it scrolls into view (900ms ease-out), and stays still under reduced motion.
+### Press Room Showcase (signature)
+The deepest-blue chapter. A press-run video loops behind the cards in its blue screen, playing only while on screen and never under reduced motion. On desktop the stage pins and scroll carries the work cards right to left across it; a card's caption prints only once the whole card is inside the margins.
 
-### Footer Mast (signature)
-The wordmark printed twice at mast scale: a pink plate offset 0.035em / 0.03em under a multiplied blue plate, over a 1.5px blue rule.
+### Process Accordion (signature)
+Four passes of the run, darkest to lightest in the blue screens. Every pass is a real button. On desktop the open pass takes 4.2 times the flex of the others (450ms), closed passes show their rotated name and a picture strip; on phones they stack. Without script all four stay readable.
+
+### Print Your Idea Poster (signature)
+The one live thing on the page. A sheet of stock with grain beside the contact form: the visitor's typed idea is set in two plates (pink, and blue multiplied over it) drawn from `data-text`, fitted as large as the sheet allows. On each keystroke the plates strike off register by 6 to 14px and settle to a residual 2.5px / 2px over 520ms. The visitor's name prints in the credit line.
+
+### Footer Board (signature)
+A board of filled tiles on stock with 8px gaps: statement, links, place and live Tokyo time, email, the mast and a pink start tile with an arrow that moves on hover. The mast prints the wordmark in stock colour on the blue drum over a pink plate; on a scroll-driven view timeline the pink plate travels from 0.2em / 0.16em into its 0.035em / 0.03em register. The credits for every found picture close the board.
+
+### Section Entrances
+The parts of each chapter (marked `data-rise`) rise 28px and fade in turn, staggered 80ms, the first time the chapter enters view. The hiding is armed only once the script adds `.motion` to the root, so the page reads fully without it.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** draw every word, rule, frame and icon in the blue drum (ink, ink-2, muted) and lay every fill in the pink drum (pink, paper-2, paper-3).
+- **Do** draw every word and stroke in the blue drum and lay every fill in the pink drum or a screen of either.
 - **Do** make purple only by overprinting pink and blue layers with `mix-blend-mode: multiply`.
+- **Do** give each section one full-bleed field and separate chapters by a change of field and the section gap.
+- **Do** tell touching surfaces apart by a tone step; make a quieter control a filled screen (paper-2), not an outline.
 - **Do** put grain on ink fields as `background-image: var(--grain)` beside a `background-color`, never the `background` shorthand.
-- **Do** use the 2px sheet radius, a 1.5px blue frame for primary frames and controls, and 1px hairlines for dividers.
-- **Do** set heads in Cabinet Grotesk 800 (Dela Gothic One on JA) with `font-synthesis-weight: none` on Japanese pages.
+- **Do** take every type size from the five step tokens and set heads in Cabinet Grotesk 800 (Dela Gothic One on JA) with `font-synthesis-weight: none` on Japanese pages.
 - **Do** mark Japanese head and lede phrase breaks with U+200B and keep them under `word-break: keep-all`.
-- **Do** give pressed controls a 1px down-right drop and focus a 2px focus-blue outline offset 3px.
-- **Do** ship a static two-ink print for any WebGL or motion piece, shown under reduced motion and when WebGL is unavailable.
-- **Do** print form and system states as stamped lines on the sheet.
+- **Do** draw decorative duplicate text from `data-text` pseudo-elements so the page carries each text once.
+- **Do** set `min-width: 0` on flex rails and tracks.
+- **Do** print found pictures in the two-drum duotone and credit them in the footer.
+- **Do** keep spatial motion inside a `prefers-reduced-motion: no-preference` query, and ship a static two-ink print for any WebGL piece.
+- **Do** print form and system states as stamped lines.
 
 ### Don't:
+- **Don't** draw hairline rules, dividers, or outlined boxes, on surfaces or on controls.
 - **Don't** use black, neutral grey, or a cream or warm-white stock.
 - **Don't** add box-shadows or glows; depth is overprint.
 - **Don't** introduce a third ink or a purple token.
 - **Don't** put grain on bare stock.
-- **Don't** misregister body text, controls or more than one word per head; the offset is a signature, used sparingly.
-- **Don't** duotone product screenshots; they print in full colour inside a blue frame.
+- **Don't** misregister body text or controls.
+- **Don't** duplicate text in the DOM for a decorative plate.
+- **Don't** show found pictures in their own colour.
 - **Don't** use toasts for form state.
 - **Don't** set display type at weights other than 800 or let the browser synthesise bold.
 - **Don't** add Tailwind utility classes; Tailwind supplies only preflight and the theme tokens, and components style themselves in scoped styles.

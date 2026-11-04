@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-30T04:51:36.597Z",
+  "generatedAt": "2026-11-04T01:18:13.312Z",
   "title": "Design System: Funkel Labs",
   "extensions": {
     "colorMeta": {
@@ -54,29 +54,51 @@
         "displayName": "Drum Blue",
         "canonical": "oklch(40% 0.165 265)",
         "tonalRamp": [
-          "oklch(15% 0.165 265)",
-          "oklch(26% 0.165 265)",
-          "oklch(37% 0.165 265)",
-          "oklch(48% 0.165 265)",
-          "oklch(60% 0.165 265)",
-          "oklch(72% 0.165 265)",
-          "oklch(84% 0.165 265)",
-          "oklch(95% 0.165 265)"
+          "oklch(22% 0.11 265)",
+          "oklch(40% 0.165 265)",
+          "oklch(55% 0.135 265)",
+          "oklch(74% 0.085 265)",
+          "oklch(87% 0.045 265)",
+          "oklch(98.7% 0.004 300)"
         ]
       },
-      "ink-2": {
+      "ink-3": {
         "role": "primary",
-        "displayName": "Soft Drum Blue",
-        "canonical": "oklch(46% 0.15 265)",
+        "displayName": "Blue Screen 3",
+        "canonical": "oklch(55% 0.135 265)",
         "tonalRamp": [
-          "oklch(15% 0.15 265)",
-          "oklch(26% 0.15 265)",
-          "oklch(37% 0.15 265)",
-          "oklch(48% 0.15 265)",
-          "oklch(60% 0.15 265)",
-          "oklch(72% 0.15 265)",
-          "oklch(84% 0.15 265)",
-          "oklch(95% 0.15 265)"
+          "oklch(22% 0.11 265)",
+          "oklch(40% 0.165 265)",
+          "oklch(55% 0.135 265)",
+          "oklch(74% 0.085 265)",
+          "oklch(87% 0.045 265)",
+          "oklch(98.7% 0.004 300)"
+        ]
+      },
+      "ink-4": {
+        "role": "primary",
+        "displayName": "Blue Screen 4",
+        "canonical": "oklch(74% 0.085 265)",
+        "tonalRamp": [
+          "oklch(22% 0.11 265)",
+          "oklch(40% 0.165 265)",
+          "oklch(55% 0.135 265)",
+          "oklch(74% 0.085 265)",
+          "oklch(87% 0.045 265)",
+          "oklch(98.7% 0.004 300)"
+        ]
+      },
+      "ink-5": {
+        "role": "primary",
+        "displayName": "Blue Screen 5",
+        "canonical": "oklch(87% 0.045 265)",
+        "tonalRamp": [
+          "oklch(22% 0.11 265)",
+          "oklch(40% 0.165 265)",
+          "oklch(55% 0.135 265)",
+          "oklch(74% 0.085 265)",
+          "oklch(87% 0.045 265)",
+          "oklch(98.7% 0.004 300)"
         ]
       },
       "muted": {
@@ -92,21 +114,6 @@
           "oklch(72% 0.11 265)",
           "oklch(84% 0.11 265)",
           "oklch(95% 0.11 265)"
-        ]
-      },
-      "rule": {
-        "role": "neutral",
-        "displayName": "Pale Rule",
-        "canonical": "oklch(85% 0.045 265)",
-        "tonalRamp": [
-          "oklch(15% 0.045 265)",
-          "oklch(26% 0.045 265)",
-          "oklch(37% 0.045 265)",
-          "oklch(48% 0.045 265)",
-          "oklch(60% 0.045 265)",
-          "oklch(72% 0.045 265)",
-          "oklch(84% 0.045 265)",
-          "oklch(95% 0.045 265)"
         ]
       },
       "pink": {
@@ -187,28 +194,24 @@
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Display",
-        "purpose": "Hero head only, capped at 6rem. JA: Dela Gothic One, clamp(2.5rem, 5.6vw, 4.75rem), line-height 1.12, tracking -0.01em."
+        "displayName": "Display (--step-display)",
+        "purpose": "Hero head (uppercase on Latin pages) and footer mast. Phones: 15.5vw (13.5vw JA, line-height 1.02)."
       },
-      "headline": {
-        "displayName": "Headline",
-        "purpose": "Section heads. Contact head runs up to 4.5rem on the blue band."
+      "heading": {
+        "displayName": "Heading (--step-heading)",
+        "purpose": "Section heads, the services list at poster scale, the open accordion pass, contact detail rows."
       },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Service, app, step and person names; buttons and stamped status set in this face at 800."
-      },
-      "lede": {
-        "displayName": "Lede",
-        "purpose": "One-sentence section and hero ledes, 30 to 40ch. JA ledes break only at U+200B phrase marks."
+      "lead": {
+        "displayName": "Lead (--step-lead)",
+        "purpose": "Ledes at 26 to 34ch; in the display face at 800 for card titles, closed accordion tabs, the team heading and the footer start tile."
       },
       "body": {
-        "displayName": "Body",
-        "purpose": "Running text, 44 to 52ch, tabular numerals. JA: Zen Kaku Gothic New, line-height 1.85, auto-phrase, strict line-break."
+        "displayName": "Body (--step-body)",
+        "purpose": "Running text, 36 to 48ch, tabular numerals; buttons, stamps and person names in the display face at 800. JA line-height 1.85."
       },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Form labels, nav links, meta lines."
+      "small": {
+        "displayName": "Small (--step-small)",
+        "purpose": "Form labels (600), roles, hints, footer meta and credits."
       }
     },
     "shadows": [],
@@ -216,7 +219,7 @@
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "The single easing curve for every transition."
+        "purpose": "The single easing curve for every transition and animation."
       },
       {
         "name": "control",
@@ -229,29 +232,69 @@
         "purpose": "Pressed controls drop 1px down and right, a sheet landing."
       },
       {
-        "name": "register",
-        "value": "900ms 200ms delay",
-        "purpose": "The process sheet slides from (12px, 10px) into its residual (3px, 2.5px) drift once on view."
+        "name": "print-run",
+        "value": "pinned 175svh, seam 56% to 0",
+        "purpose": "Desktop hero pin: the seam rises as the sheet feeds into the drum; the spark registers, squares up and turns a quarter turn."
       },
       {
-        "name": "plate-fade",
-        "value": "600-700ms",
-        "purpose": "The live spark canvas fades in over the static print."
+        "name": "masked-line",
+        "value": "900ms, 120ms + 110ms per line",
+        "purpose": "Each hero headline line rises from behind its mask on load; the lede fades up at 520ms."
+      },
+      {
+        "name": "rise",
+        "value": "translateY(28px), 700ms opacity / 900ms transform, 80ms stagger",
+        "purpose": "Section entrances for data-rise parts, armed only by the .motion class from rise.ts."
+      },
+      {
+        "name": "press-loop",
+        "value": "video loop while in view",
+        "purpose": "The press-room video plays only on screen and never under reduced motion."
+      },
+      {
+        "name": "accordion",
+        "value": "flex-grow 450ms",
+        "purpose": "The open process pass widens to 4.2; bodies fade 300 to 400ms."
+      },
+      {
+        "name": "nav-away",
+        "value": "translateY(-100%) 320ms",
+        "purpose": "The nav hides on scroll down past 120px and returns on scroll up or focus."
+      },
+      {
+        "name": "plate-strike",
+        "value": "6-14px / 4-10px to 2.5px / 2px, 520ms",
+        "purpose": "Poster plates strike off register on each keystroke and settle."
+      },
+      {
+        "name": "mast-register",
+        "value": "view() timeline, entry 0% to cover 50%",
+        "purpose": "The footer mast pink plate travels from 0.2em / 0.16em into register with scroll."
+      },
+      {
+        "name": "stamp",
+        "value": "260ms, scale 1.12 rotate -2deg to square",
+        "purpose": "A form result lands like a rubber stamp; opacity-only 180ms under reduced motion."
+      },
+      {
+        "name": "view-transition",
+        "value": "260ms crossfade",
+        "purpose": "Cross-document language switch; the nav holds still (view-transition-name: site-nav)."
       },
       {
         "name": "reduced-motion",
-        "value": "durations 0.01ms",
-        "purpose": "All motion collapses; the spark stays a static two-ink print."
+        "value": "spatial motion opts in",
+        "purpose": "All movement sits inside a no-preference query; pins release, the press video pauses, the spark stays a static two-ink print."
       }
     ],
     "breakpoints": [
       {
         "name": "xs",
-        "value": "380px"
+        "value": "480px"
       },
       {
         "name": "sm",
-        "value": "520px"
+        "value": "640px"
       },
       {
         "name": "md",
@@ -259,24 +302,18 @@
       },
       {
         "name": "lg",
-        "value": "860px"
-      },
-      {
-        "name": "nav",
-        "value": "900px"
-      },
-      {
-        "name": "xl",
-        "value": "960px"
+        "value": "1024px"
       }
     ],
     "rules": {
-      "frame": "1.5px solid ink",
-      "hairline": "1px solid rule (pale) or ink on process plate frames",
-      "focus": "2px solid focus, offset 3px (2px on inputs)",
+      "separation": "tone step or space; no borders, hairlines or outlines on surfaces or controls",
+      "focus": "2px solid focus, offset 3px on stock; 3px pink offset 2px on blue-field inputs; 2px pink offset -4px on accordion tabs",
       "grain": "background-image specks on ink fields only",
-      "misregister": "pink copy offset 0.035em right, 0.03em down",
-      "sparkPlates": "pink halftone at 15deg (7px cell), blue at 75deg (6px cell), multiply"
+      "misregister": "pink plate offset 0.035em right, 0.03em down",
+      "drawOnce": "decorative duplicate text from data-text via ::before content: attr(data-text)",
+      "duotone": "grayscale(1) contrast(1.15) multiplied on paper-3, ink layer above under lighten",
+      "sparkPlates": "pink halftone at 15deg (7px cell), blue at 75deg (6px cell), multiply",
+      "flexRails": "min-width: 0 on flex rails and tracks"
     }
   },
   "components": [
@@ -284,82 +321,91 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Pink fill with grain; the single call to action (Get in touch, Send).",
+      "description": "Pink fill with grain; the call to action (Get in touch, Send).",
       "html": "<a class=\"ds-btn-primary\" href=\"#\">Get in touch</a>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 26px; border-radius: var(--radius-sheet, 2px); font-family: var(--font-display, \"Cabinet Grotesk\", sans-serif); font-weight: 800; font-size: 1.125rem; line-height: 1; letter-spacing: -0.01em; text-decoration: none; cursor: pointer; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); background-color: var(--color-pink, oklch(68% 0.235 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-pink-ink, oklch(22% 0.11 265)); border: 1.5px solid var(--color-pink, oklch(68% 0.235 356)); } .ds-btn-primary:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); border-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-btn-primary:active { transform: translate(1px, 1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 26px; border: 0; border-radius: var(--radius-sheet, 2px); font-family: var(--font-display, \"Cabinet Grotesk\", sans-serif); font-weight: 800; font-size: 1.125rem; line-height: 1; text-decoration: none; cursor: pointer; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); background-color: var(--color-pink, oklch(68% 0.235 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-pink-ink, oklch(22% 0.11 265)); } .ds-btn-primary:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-btn-primary:active { transform: translate(1px, 1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; }"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Blue-framed outline on stock; the quieter second action.",
+      "description": "A filled pink screen with blue text; the quieter action. No frame.",
       "html": "<a class=\"ds-btn-secondary\" href=\"#\">See our work</a>",
-      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 26px; border-radius: var(--radius-sheet, 2px); font-family: var(--font-display, \"Cabinet Grotesk\", sans-serif); font-weight: 800; font-size: 1.125rem; line-height: 1; letter-spacing: -0.01em; text-decoration: none; cursor: pointer; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); background: transparent; color: var(--color-ink, oklch(40% 0.165 265)); border: 1.5px solid var(--color-ink, oklch(40% 0.165 265)); } .ds-btn-secondary:hover { background: var(--color-paper-2, oklch(94.6% 0.03 356)); } .ds-btn-secondary:active { transform: translate(1px, 1px); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; }"
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 26px; border: 0; border-radius: var(--radius-sheet, 2px); font-family: var(--font-display, \"Cabinet Grotesk\", sans-serif); font-weight: 800; font-size: 1.125rem; line-height: 1; text-decoration: none; cursor: pointer; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); background-color: var(--color-paper-2, oklch(94.6% 0.03 356)); color: var(--color-ink, oklch(40% 0.165 265)); } .ds-btn-secondary:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-btn-secondary:active { transform: translate(1px, 1px); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; }"
     },
     {
-      "name": "Text Field",
+      "name": "Text Field on the Blue Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "Stock field in a 1.5px blue frame; pink frame on invalid.",
-      "html": "<label class=\"ds-field\"><span>Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@company.com\" /></label>",
-      "css": ".ds-field { display: grid; gap: 8px; color: var(--color-ink, oklch(40% 0.165 265)); font-family: var(--font-body, \"Literata Variable\", Georgia, serif); } .ds-field > span { font-size: 0.9375rem; font-weight: 500; } .ds-input { width: 100%; min-height: 48px; padding: 12px 14px; font: inherit; font-size: 1.0625rem; color: var(--color-ink, oklch(40% 0.165 265)); background: var(--color-paper, oklch(98.7% 0.004 300)); border: 1.5px solid var(--color-ink, oklch(40% 0.165 265)); border-radius: 2px; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-input:hover { background: var(--color-paper-2, oklch(94.6% 0.03 356)); } .ds-input:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 2px; background: var(--color-paper, oklch(98.7% 0.004 300)); } .ds-input:user-invalid { border-color: var(--color-pink, oklch(68% 0.235 356)); background: var(--color-paper-2, oklch(94.6% 0.03 356)); }"
+      "description": "Filled stock field with no border on the contact chapter; pink focus, deep pink screen when invalid.",
+      "html": "<div class=\"ds-field-ground\"><label class=\"ds-field\"><span>Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@company.com\" /></label></div>",
+      "css": ".ds-field-ground { padding: 24px; background-color: var(--color-ink, oklch(40% 0.165 265)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-on-ink, oklch(98.7% 0.004 300)); font-family: var(--font-body, \"Literata Variable\", Georgia, serif); } .ds-field { display: grid; gap: 8px; } .ds-field > span { font-size: 1rem; font-weight: 600; } .ds-input { width: 100%; min-height: 52px; padding: 14px 16px; font: inherit; font-size: 1.125rem; color: var(--color-pink-ink, oklch(22% 0.11 265)); background-color: var(--color-paper, oklch(98.7% 0.004 300)); border: 0; border-radius: 2px; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-input::placeholder { color: var(--color-muted, oklch(49% 0.11 265)); } .ds-input:hover { background-color: var(--color-paper-2, oklch(94.6% 0.03 356)); } .ds-input:focus-visible { outline: 3px solid var(--color-pink, oklch(68% 0.235 356)); outline-offset: 2px; background-color: var(--color-paper, oklch(98.7% 0.004 300)); } .ds-input:user-invalid { background-color: var(--color-paper-3, oklch(86% 0.1 356)); }"
     },
     {
       "name": "Navigation",
       "kind": "nav",
       "refersTo": "nav",
-      "description": "Sticky bar on stock: wordmark left, body-face links, pink call to action right.",
-      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-mark\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" aria-hidden=\"true\"><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" fill=\"currentColor\"/></svg><span>funkel labs</span></a><ul class=\"ds-nav-links\"><li><a href=\"#\">Services</a></li><li><a href=\"#\">Work</a></li><li><a href=\"#\">Process</a></li><li><a href=\"#\">About</a></li></ul><a class=\"ds-nav-cta\" href=\"#\">Get in touch</a></header>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 32px; min-height: 76px; padding-inline: 24px; background: var(--color-paper, oklch(98.7% 0.004 300)); color: var(--color-ink, oklch(40% 0.165 265)); border-bottom: 1px solid var(--color-rule, oklch(85% 0.045 265)); } .ds-nav-mark { display: inline-flex; align-items: center; gap: 0.4em; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em; color: inherit; text-decoration: none; } .ds-nav-links { display: flex; gap: 28px; margin: 0 0 0 auto; padding: 0; list-style: none; } .ds-nav-links a { font-family: \"Literata Variable\", Georgia, serif; font-size: 1rem; font-weight: 500; color: inherit; text-decoration: none; padding-block: 8px; } .ds-nav-links a:hover { text-decoration: underline; text-decoration-color: var(--color-pink, oklch(68% 0.235 356)); text-decoration-thickness: 2px; text-underline-offset: 0.22em; } .ds-nav-links a:focus-visible, .ds-nav-cta:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; } .ds-nav-cta { display: inline-flex; align-items: center; min-height: 44px; padding: 12px 18px; border-radius: 2px; background-color: var(--color-pink, oklch(68% 0.235 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-pink-ink, oklch(22% 0.11 265)); font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 1rem; line-height: 1; text-decoration: none; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-cta:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-nav-cta:active { transform: translate(1px, 1px); }"
-    },
-    {
-      "name": "Lead Service Card",
-      "kind": "card",
-      "refersTo": "card-lead",
-      "description": "The lead service printed on the pink screen with grain, set larger.",
-      "html": "<div class=\"ds-card-lead\"><h3>Mobile apps</h3><p>iOS and Android apps, designed and built end to end, then handed over.</p></div>",
-      "css": ".ds-card-lead { display: grid; gap: 14px; padding: clamp(24px, 3vw, 40px); background-color: var(--color-paper-2, oklch(94.6% 0.03 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); border-radius: 2px; color: var(--color-ink, oklch(40% 0.165 265)); } .ds-card-lead h3 { margin: 0; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: clamp(2rem, 3.6vw, 3.25rem); line-height: 1.05; letter-spacing: -0.03em; } .ds-card-lead p { margin: 0; font-family: \"Literata Variable\", Georgia, serif; font-size: 1.1875rem; line-height: 1.6; max-width: 52ch; }"
+      "description": "Plain sticky bar on stock: wordmark, language switch, one pink action. No divider.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-mark\" href=\"#\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" fill=\"currentColor\"/></svg><span>funkel labs</span></a><div class=\"ds-nav-actions\"><a class=\"ds-nav-lang\" href=\"#\" lang=\"ja\">日本語</a><a class=\"ds-nav-cta\" href=\"#\">Get in touch</a></div></header>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 72px; padding-inline: 24px; background-color: var(--color-paper, oklch(98.7% 0.004 300)); color: var(--color-ink, oklch(40% 0.165 265)); } .ds-nav-mark { display: inline-flex; align-items: center; gap: 0.4em; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: clamp(21px, 2.1vw, 30px); letter-spacing: -0.02em; line-height: 1; color: inherit; text-decoration: none; } .ds-nav-mark svg { width: 0.95em; height: 0.95em; } .ds-nav-actions { display: flex; align-items: center; gap: 24px; } .ds-nav-lang { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 1.125rem; font-weight: 500; color: inherit; text-decoration: none; padding-block: 10px; } .ds-nav-lang:hover { text-decoration: underline; text-decoration-color: var(--color-pink, oklch(68% 0.235 356)); text-decoration-thickness: 2px; text-underline-offset: 0.22em; } .ds-nav-lang:focus-visible, .ds-nav-cta:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; } .ds-nav-cta { display: inline-flex; align-items: center; min-height: 44px; padding: 12px 20px; border-radius: 2px; background-color: var(--color-pink, oklch(68% 0.235 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-pink-ink, oklch(22% 0.11 265)); font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 1.125rem; line-height: 1; text-decoration: none; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-cta:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-nav-cta:active { transform: translate(1px, 1px); }"
     },
     {
       "name": "Stamped Status",
       "kind": "chip",
       "refersTo": "status-sent",
-      "description": "Form state printed as a stamped line on the sheet, never a toast.",
+      "description": "Form state printed as a stamped line on the blue field, never a toast.",
       "html": "<div class=\"ds-stamps\"><span class=\"ds-stamp ds-stamp-sent\">Sent. We will reply soon.</span><span class=\"ds-stamp ds-stamp-failed\">Could not send. Try email.</span></div>",
-      "css": ".ds-stamps { display: flex; flex-wrap: wrap; gap: 12px; } .ds-stamp { display: inline-block; padding: 4px 10px; border-radius: 2px; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 1.0625rem; line-height: 1.3; } .ds-stamp-sent { background: var(--color-pink, oklch(68% 0.235 356)); color: var(--color-pink-ink, oklch(22% 0.11 265)); } .ds-stamp-failed { background: var(--color-paper-2, oklch(94.6% 0.03 356)); color: var(--color-ink, oklch(40% 0.165 265)); border: 1.5px solid var(--color-ink, oklch(40% 0.165 265)); }"
+      "css": ".ds-stamps { display: flex; flex-wrap: wrap; gap: 12px; padding: 24px; background-color: var(--color-ink, oklch(40% 0.165 265)); } .ds-stamp { display: inline-block; padding: 4px 10px; border-radius: 2px; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 1.125rem; line-height: 1.3; color: var(--color-pink-ink, oklch(22% 0.11 265)); animation: ds-stamp 260ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-stamp-sent { background-color: var(--color-pink, oklch(68% 0.235 356)); } .ds-stamp-failed { background-color: var(--color-paper-2, oklch(94.6% 0.03 356)); } @keyframes ds-stamp { from { opacity: 0; transform: scale(1.12) rotate(-2deg); } 60% { opacity: 1; transform: scale(0.98) rotate(0.4deg); } }"
     },
     {
-      "name": "Misregistered Word",
-      "kind": "custom",
-      "refersTo": "display",
-      "description": "One hero word a hair out of register: a pink copy behind the blue.",
-      "html": "<h1 class=\"ds-mis-head\">We build software that <span class=\"ds-mis\" data-text=\"sparks.\">sparks.</span></h1>",
-      "css": ".ds-mis-head { margin: 0; isolation: isolate; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 0.92; letter-spacing: -0.03em; color: var(--color-ink, oklch(40% 0.165 265)); } .ds-mis { position: relative; display: inline-block; } .ds-mis::before { content: attr(data-text); position: absolute; left: 0.035em; top: 0.03em; color: var(--color-pink, oklch(68% 0.235 356)); z-index: -1; pointer-events: none; }"
+      "name": "Duotone Picture",
+      "kind": "card",
+      "refersTo": "found-picture",
+      "description": "A found picture printed in both drums: grayscale multiplied on the deep pink screen, blue lightened in.",
+      "html": "<figure class=\"ds-duotone\"><svg viewBox=\"0 0 300 200\" aria-hidden=\"true\"><defs><linearGradient id=\"ds-g\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#111\"/><stop offset=\"1\" stop-color=\"#eee\"/></linearGradient></defs><rect width=\"300\" height=\"200\" fill=\"url(#ds-g)\"/><circle cx=\"200\" cy=\"90\" r=\"50\" fill=\"#555\"/></svg></figure>",
+      "css": ".ds-duotone { position: relative; max-width: 360px; margin: 0; overflow: hidden; isolation: isolate; aspect-ratio: 3 / 2; background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-duotone svg, .ds-duotone img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; } .ds-duotone::after { content: \"\"; position: absolute; inset: 0; background-color: var(--color-ink, oklch(40% 0.165 265)); mix-blend-mode: lighten; }"
     },
     {
-      "name": "Two-Plate Mast",
+      "name": "Ordered Blue Screens",
       "kind": "custom",
-      "refersTo": "mast",
-      "description": "Wordmark printed in both drums, pink offset under multiplied blue, over a 1.5px blue rule.",
-      "html": "<div class=\"ds-mast\"><span class=\"ds-plate ds-plate-pink\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" aria-hidden=\"true\"><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" fill=\"currentColor\"/></svg><span>funkel labs</span></span><span class=\"ds-plate ds-plate-blue\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" aria-hidden=\"true\"><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" fill=\"currentColor\"/></svg><span>funkel labs</span></span></div>",
-      "css": ".ds-mast { display: grid; isolation: isolate; padding-bottom: 20px; border-bottom: 1.5px solid var(--color-ink, oklch(40% 0.165 265)); font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 4rem; line-height: 0.9; letter-spacing: -0.02em; } .ds-plate { grid-area: 1 / 1; display: inline-flex; align-items: center; gap: 0.4em; white-space: nowrap; } .ds-plate svg { width: 0.95em; height: 0.95em; } .ds-plate-pink { color: var(--color-pink, oklch(68% 0.235 356)); transform: translate(0.035em, 0.03em); } .ds-plate-blue { color: var(--color-ink, oklch(40% 0.165 265)); mix-blend-mode: multiply; }"
+      "refersTo": "process-accordion",
+      "description": "The process passes as fields stepping darkest to lightest through the blue screens; the open pass widens.",
+      "html": "<ol class=\"ds-passes\"><li class=\"ds-pass ds-open\" style=\"--bg: var(--color-ink, oklch(40% 0.165 265)); --fg: var(--color-on-ink, oklch(98.7% 0.004 300))\"><button type=\"button\">Sketch</button></li><li class=\"ds-pass\" style=\"--bg: var(--color-ink-3, oklch(55% 0.135 265)); --fg: var(--color-on-ink, oklch(98.7% 0.004 300))\"><button type=\"button\">Blue plate</button></li><li class=\"ds-pass\" style=\"--bg: var(--color-ink-4, oklch(74% 0.085 265)); --fg: var(--color-pink-ink, oklch(22% 0.11 265))\"><button type=\"button\">Pink plate</button></li><li class=\"ds-pass\" style=\"--bg: var(--color-ink-5, oklch(87% 0.045 265)); --fg: var(--color-pink-ink, oklch(22% 0.11 265))\"><button type=\"button\">Registered</button></li></ol>",
+      "css": ".ds-passes { display: flex; height: 260px; margin: 0; padding: 0; list-style: none; } .ds-pass { flex: 1 1 0; min-width: 0; overflow: hidden; background-color: var(--bg); color: var(--fg); transition: flex-grow 450ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-pass.ds-open { flex-grow: 4.2; } .ds-pass button { all: unset; box-sizing: border-box; display: flex; align-items: flex-end; width: 100%; height: 100%; padding: 20px; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: clamp(21px, 2.1vw, 30px); letter-spacing: -0.035em; line-height: 1.1; cursor: pointer; white-space: nowrap; } .ds-pass:not(.ds-open) button:hover { background-color: color-mix(in oklch, var(--bg) 86%, var(--color-paper, oklch(98.7% 0.004 300))); } .ds-pass button:focus-visible { outline: 2px solid var(--color-pink, oklch(68% 0.235 356)); outline-offset: -4px; }"
+    },
+    {
+      "name": "Print Your Idea Poster",
+      "kind": "custom",
+      "refersTo": "poster",
+      "description": "The idea in two plates drawn from data-text: pink offset under a multiplied blue, purple where they cross. Hover strikes the plates off register.",
+      "html": "<div class=\"ds-poster\"><svg class=\"ds-poster-spark\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" class=\"ds-sp-pink\"/><path d=\"M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z\" class=\"ds-sp-blue\" transform=\"translate(0.6 0.5)\"/></svg><div class=\"ds-plates\"><span class=\"ds-plate ds-plate-pink\" data-text=\"An app that books the onsen.\"></span><span class=\"ds-plate ds-plate-blue\" data-text=\"An app that books the onsen.\"></span></div><p class=\"ds-credit\">Printed for <b>you</b> by Funkel Labs</p></div>",
+      "css": ".ds-poster { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; aspect-ratio: 3 / 4; max-width: 320px; padding: 24px; isolation: isolate; overflow: hidden; background-color: var(--color-paper, oklch(98.7% 0.004 300)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); color: var(--color-ink, oklch(40% 0.165 265)); } .ds-poster-spark { width: 22%; justify-self: end; } .ds-sp-pink { fill: var(--color-pink, oklch(68% 0.235 356)); } .ds-sp-blue { fill: var(--color-ink, oklch(40% 0.165 265)); mix-blend-mode: multiply; } .ds-plates { position: relative; margin-block: 12px; } .ds-plate { position: absolute; left: 0; right: 0; bottom: 0; font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 44px; line-height: 0.92; letter-spacing: -0.035em; } .ds-plate::before { content: attr(data-text); } .ds-plate-pink { color: var(--color-pink, oklch(68% 0.235 356)); transform: translate(2.5px, 2px); transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-poster:hover .ds-plate-pink { transform: translate(10px, 7px); } .ds-plate-blue { color: var(--color-ink, oklch(40% 0.165 265)); mix-blend-mode: multiply; } .ds-credit { margin: 0; font-family: var(--font-body, \"Literata Variable\", Georgia, serif); font-size: 1rem; }"
+    },
+    {
+      "name": "Footer Tile Board",
+      "kind": "custom",
+      "refersTo": "footer-tile",
+      "description": "Filled tiles on stock with 8px gaps: the two-plate mast on blue and a pink start tile.",
+      "html": "<div class=\"ds-board\"><div class=\"ds-tile ds-t-stmt\">A small studio in Tokyo.</div><div class=\"ds-tile ds-t-links\">Services<br/>Work<br/>Process</div><div class=\"ds-tile ds-mast\" aria-hidden=\"true\"><span class=\"ds-word\" data-text=\"funkel labs\">funkel labs</span></div><a class=\"ds-tile ds-start\" href=\"#\"><span>Start a project</span><svg viewBox=\"0 0 48 48\" aria-hidden=\"true\"><path d=\"M10 38 38 10M16 10h22v22\"/></svg></a></div>",
+      "css": ".ds-board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; padding: 16px; background-color: var(--color-paper, oklch(98.7% 0.004 300)); font-family: var(--font-body, \"Literata Variable\", Georgia, serif); } .ds-tile { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; min-height: 140px; padding: 24px; background-color: var(--color-paper-2, oklch(94.6% 0.03 356)); color: var(--color-pink-ink, oklch(22% 0.11 265)); } .ds-t-stmt { grid-column: span 7; } .ds-t-links { grid-column: span 5; background-color: var(--color-ink-5, oklch(87% 0.045 265)); } .ds-mast { grid-column: span 8; display: grid; place-items: center; isolation: isolate; background-color: var(--color-ink, oklch(40% 0.165 265)); color: var(--color-on-ink, oklch(98.7% 0.004 300)); font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 56px; letter-spacing: -0.02em; line-height: 1; white-space: nowrap; } .ds-word { position: relative; isolation: isolate; } .ds-word::before { content: attr(data-text); position: absolute; inset: 0; z-index: -1; color: var(--color-pink, oklch(68% 0.235 356)); transform: translate(0.035em, 0.03em); } .ds-start { grid-column: span 4; background-color: var(--color-pink, oklch(68% 0.235 356)); background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.2 -1.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\"); font-family: \"Cabinet Grotesk\", sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.035em; text-decoration: none; transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-start svg { align-self: flex-end; width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 4; transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-start:hover { background-color: var(--color-paper-3, oklch(86% 0.1 356)); } .ds-start:hover svg { transform: translate(6px, -6px); } .ds-start:focus-visible { outline: 2px solid var(--color-focus, oklch(44% 0.2 265)); outline-offset: 3px; }"
     }
   ],
   "narrative": {
     "northStar": "Two-Drum Riso",
-    "overview": "Every surface is a print run on bright, cool, uncoated stock through two drums. A medium blue drum sets every word, rule and icon; a fluorescent pink drum lays every fill. Purple is never mixed: it appears only where the two inks overprint, through `mix-blend-mode: multiply`. There is no black anywhere, and no third ink.\n\nThe page is flat paper. Depth comes from overprint and registration, not from light: a hair of misregistration on one hero word, a two-plate footer mast, the spark that drifts out of register and pulls in as the pointer nears, the process told as separations. Paper specks (grain) appear only where ink has been laid, never on bare stock. Corners are almost square (2px), frames are a 1.5px blue rule, dividers are 1px hairlines.\n\nType is heavy and close-set: Cabinet Grotesk 800 heads over a Literata reading face. Japanese pages keep the same weight logic in Dela Gothic One and Zen Kaku Gothic New, and Latin inside Japanese heads stays in Cabinet 800.",
+    "overview": "Every surface is a print run on bright, cool, uncoated stock through two drums. A medium blue drum sets every word and stroke; a fluorescent pink drum lays every fill. Purple is never mixed: it appears only where the two inks overprint, through `mix-blend-mode: multiply`. There is no black anywhere, and no third ink.\n\nThe page is told in colour chapters. Each section is a full-bleed field of one ink or screen, and the next section is a different field: stock meeting the blue drum at a waterline in the hero, the deep pink screen for services, the deepest blue for the press room, stock with a dark-to-light blue accordion for process, full pink for about, full blue for contact, and a board of filled tiles to close. Nothing is outlined. Surfaces are told apart by a tone step and by space, never by a rule or a frame.\n\nThe page is flat paper. Depth comes from overprint and registration, not from light: the hero seam rising as the sheet feeds into the drum, the spark's plates pulling into register, the poster plates striking off register and settling, the footer mast's pink plate travelling home. Paper specks (grain) appear only where ink has been laid. Type is heavy and close-set: Cabinet Grotesk 800 over Literata, with Dela Gothic One and Zen Kaku Gothic New on Japanese pages.",
     "keyCharacteristics": [
       "Light cool stock, blue ink, pink fill, purple only from multiply overprint, no black.",
-      "Flat: no shadows anywhere; depth is overprint and misregistration.",
+      "Colour chapters: one full-bleed field per section, separated by tone and space.",
+      "No hairlines, no outlined boxes, no shadows; secondary controls are filled tones.",
       "Grain as background-image specks on ink fields only.",
-      "2px sheet radius, 1.5px blue frame rule, 1px pale hairlines.",
-      "Heavy display (800) over a serif reading face; JA heads break only at marked phrase boundaries.",
-      "Motion is registration: plates drift and land, pressed controls drop 1px."
+      "Five type steps; heavy display (800) over a serif reading face.",
+      "Found pictures in one two-drum duotone, credited in the footer.",
+      "Motion is registration: plates drift and land, sheets feed, parts rise in turn."
     ],
     "rules": [
       {
         "name": "The Two Drums Rule",
-        "body": "Blue draws (words, rules, icons, strokes); pink fills (buttons, stamps, selection, underlines, plates). A colour doing the other drum's job is a defect.",
+        "body": "Blue draws (words, strokes, icons); pink fills (buttons, stamps, selection, underlines, plates). A colour doing the other drum's job is a defect.",
         "section": "colors"
       },
       {
@@ -369,17 +415,27 @@
       },
       {
         "name": "The No Black Rule",
-        "body": "No `#000`, no neutral greys. The darkest value on the page is the blue family (pink-ink).",
+        "body": "No `#000`, no neutral greys. The darkest value on the page is pink-ink.",
         "section": "colors"
       },
       {
         "name": "The Grain-on-Ink Rule",
-        "body": "The grain specks are a `background-image` beside a `background-color` on ink fields (pink fills, pink screens, the blue band, placeholders). Bare stock carries no grain.",
+        "body": "The grain specks are a `background-image` beside a `background-color` on ink fields (the services, about and contact chapters, the hero drum, pink buttons, the poster, picture plates). Bare stock carries no grain.",
         "section": "colors"
       },
       {
+        "name": "The Ordered Screens Rule",
+        "body": "When fields carry an order, they step through one drum's screens darkest to lightest (ink, ink-3, ink-4, ink-5). Text flips from on-ink to pink-ink at ink-4.",
+        "section": "colors"
+      },
+      {
+        "name": "The Five Steps Rule",
+        "body": "Type sizes come only from the five step tokens (display, heading, lead, body, small). A new size is a new step or it is a defect.",
+        "section": "typography"
+      },
+      {
         "name": "The One Weight Rule",
-        "body": "Heads are 800 and only 800. Dela Gothic One has a single weight, so Japanese pages set `font-synthesis-weight: none` and Latin inside Japanese heads stays in Cabinet 800 so each head reads as one weight.",
+        "body": "Heads are 800 and only 800. Dela Gothic One has a single weight, so Japanese pages set `font-synthesis-weight: none` and Latin inside Japanese heads stays in Cabinet 800.",
         "section": "typography"
       },
       {
@@ -388,34 +444,54 @@
         "section": "typography"
       },
       {
+        "name": "The Tone-and-Space Rule",
+        "body": "Two surfaces that touch differ by a tone step, or they are held apart by space. If a boundary needs a line to be seen, the tones are too close.",
+        "section": "layout"
+      },
+      {
+        "name": "The Shrinkable Rail Rule",
+        "body": "Any flex child that carries a track, a rail or long text sets `min-width: 0`, so it can shrink inside its parent instead of pushing the page wide.",
+        "section": "layout"
+      },
+      {
         "name": "The Overprint Depth Rule",
         "body": "Stack with multiply and offset, never with shadows or glows. If a layer needs to read \"above\", it overprints.",
         "section": "elevation"
       },
       {
         "name": "The One Hair Off Rule",
-        "body": "Misregistration is a signature, so it stays rare: one word in the hero head, the two-plate footer mast, and the finished process sheet's residual drift (3px, 2.5px). Body text and controls are always in register.",
+        "body": "Misregistration is a signature and stays rare: the spark's plates, the poster's plates, the footer mast. Body text and controls are always in register.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Draw-Once Rule",
+        "body": "Decorative duplicate text (the hero's stock copy of the headline, the poster plates, the mast's pink plate) is drawn from a `data-text` attribute through `::before { content: attr(data-text) }`, so the page carries each text once and assistive tech reads it once.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "**Do** draw every word, rule, frame and icon in the blue drum (ink, ink-2, muted) and lay every fill in the pink drum (pink, paper-2, paper-3).",
+      "**Do** draw every word and stroke in the blue drum and lay every fill in the pink drum or a screen of either.",
       "**Do** make purple only by overprinting pink and blue layers with `mix-blend-mode: multiply`.",
+      "**Do** give each section one full-bleed field and separate chapters by a change of field and the section gap.",
+      "**Do** tell touching surfaces apart by a tone step; make a quieter control a filled screen (paper-2), not an outline.",
       "**Do** put grain on ink fields as `background-image: var(--grain)` beside a `background-color`, never the `background` shorthand.",
-      "**Do** use the 2px sheet radius, a 1.5px blue frame for primary frames and controls, and 1px hairlines for dividers.",
-      "**Do** set heads in Cabinet Grotesk 800 (Dela Gothic One on JA) with `font-synthesis-weight: none` on Japanese pages.",
+      "**Do** take every type size from the five step tokens and set heads in Cabinet Grotesk 800 (Dela Gothic One on JA) with `font-synthesis-weight: none` on Japanese pages.",
       "**Do** mark Japanese head and lede phrase breaks with U+200B and keep them under `word-break: keep-all`.",
-      "**Do** give pressed controls a 1px down-right drop and focus a 2px focus-blue outline offset 3px.",
-      "**Do** ship a static two-ink print for any WebGL or motion piece, shown under reduced motion and when WebGL is unavailable.",
-      "**Do** print form and system states as stamped lines on the sheet."
+      "**Do** draw decorative duplicate text from `data-text` pseudo-elements so the page carries each text once.",
+      "**Do** set `min-width: 0` on flex rails and tracks.",
+      "**Do** print found pictures in the two-drum duotone and credit them in the footer.",
+      "**Do** keep spatial motion inside a `prefers-reduced-motion: no-preference` query, and ship a static two-ink print for any WebGL piece.",
+      "**Do** print form and system states as stamped lines."
     ],
     "donts": [
+      "**Don't** draw hairline rules, dividers, or outlined boxes, on surfaces or on controls.",
       "**Don't** use black, neutral grey, or a cream or warm-white stock.",
       "**Don't** add box-shadows or glows; depth is overprint.",
       "**Don't** introduce a third ink or a purple token.",
       "**Don't** put grain on bare stock.",
-      "**Don't** misregister body text, controls or more than one word per head; the offset is a signature, used sparingly.",
-      "**Don't** duotone product screenshots; they print in full colour inside a blue frame.",
+      "**Don't** misregister body text or controls.",
+      "**Don't** duplicate text in the DOM for a decorative plate.",
+      "**Don't** show found pictures in their own colour.",
       "**Don't** use toasts for form state.",
       "**Don't** set display type at weights other than 800 or let the browser synthesise bold.",
       "**Don't** add Tailwind utility classes; Tailwind supplies only preflight and the theme tokens, and components style themselves in scoped styles."
