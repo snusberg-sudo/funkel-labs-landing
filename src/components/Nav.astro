@@ -25,16 +25,24 @@ const home = t.lang === 'ja' ? '/ja/' : '/';
 
   // The bar steps aside while the reader scrolls down past the hero and returns on the way back up.
   const nav = document.querySelector<HTMLElement>('[data-nav]');
+  // How far a reader must scroll back up before the bar returns, so a stray nudge does not call it back.
+  const reveal = 10;
   if (nav) {
     let last = window.scrollY;
+    let turn = last; // where the current run up began
     let queued = false;
     const update = () => {
       queued = false;
       const y = window.scrollY;
       // A jump settles in sub-pixel steps at fractional zoom; holding still is not a turn back up.
       if (Math.abs(y - last) < 2) return;
-      const down = y > last;
-      nav.classList.toggle('is-away', down && y > navHoldY() && !nav.contains(document.activeElement));
+      const hold = navHoldY();
+      if (y > last) {
+        turn = y;
+        nav.classList.toggle('is-away', y > hold && !nav.contains(document.activeElement));
+      } else if (turn - y >= reveal || y <= hold) {
+        nav.classList.remove('is-away');
+      }
       last = y;
     };
     window.addEventListener(
