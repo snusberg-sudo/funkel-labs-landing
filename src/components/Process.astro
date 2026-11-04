@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import type { Content } from '../i18n/content';
+import { picture } from '../scripts/pictures';
 
 interface Props {
   t: Content;
@@ -24,7 +26,8 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
     <ol class="stages" data-stages data-rise style="--rise: 2">
       {t.process.steps.map((step, i) => (
         <li class:list={['stage', tones[i]]} data-open={i === 0 ? 'true' : 'false'}>
-          <img class="strip" src={step.photo} alt="" loading="lazy" decoding="async" width="1200" height="900" />
+          {/* The strip and the open picture share one set of sizes, so the browser fetches each picture once. */}
+          <Image class="strip" src={picture(step.photo)} alt="" widths={[640, 960, 1280]} sizes="(max-width: 760px) 100vw, 60vw" />
           <h3>
             <button type="button" class="tab" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`stage-${i}`}>
               <span>{step.name}</span>
@@ -33,7 +36,7 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
           <div class="body" id={`stage-${i}`}>
             <p>{step.body}</p>
             <figure>
-              <img src={step.photo} alt={step.photoAlt} loading="lazy" decoding="async" width="1200" height="900" />
+              <Image src={picture(step.photo)} alt={step.photoAlt} widths={[640, 960, 1280]} sizes="(max-width: 760px) 100vw, 60vw" />
             </figure>
           </div>
         </li>

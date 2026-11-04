@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { contactEmail, type Content } from '../i18n/content';
+import { picture } from '../scripts/pictures';
 
 interface Props {
   t: Content;
@@ -94,7 +96,8 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
     <ul class="rows">
       <li class="row" data-rise>
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-        <img class="round" src="/found/ink-roller.jpg" alt="" width="1920" height="860" loading="lazy" decoding="async" />
+        {/* A coin cut from a 2.2:1 picture: the file must be about 2.2 times the coin's width to fill its height. */}
+        <Image class="round" src={picture('/found/ink-roller.jpg')} alt="" widths={[320, 640]} sizes="320px" />
       </li>
       <li class="row" data-rise style="--rise: 1">{t.contact.languages}</li>
       <li class="row hello" data-rise style="--rise: 2">

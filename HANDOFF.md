@@ -22,7 +22,7 @@ The check after any change is `npm run build` plus `npm run check`; both pass, w
 ## Hard rules from the owner
 
 - Use real proof only: no invented metrics, testimonials, client logos or reviews.
-- The pictures in `public/found/` show the world of printing. Never present them as Funkel's own work, team or apps. Every picture used has an entry in `public/found/credits.json`, which renders on the picture credits page linked from the footer. When you add or remove a picture, update that file.
+- The pictures in `src/assets/found/` (and the press clip in `public/found/`) show the world of printing. Never present them as Funkel's own work, team or apps. Every picture used has an entry in `public/found/credits.json`, which renders on the picture credits page linked from the footer. When you add or remove a picture, update that file.
 - The Japanese name is フンケル・ラボ, chosen to avoid FANCL (ファンケル). The Japanese copy is a draft awaiting a native speaker's review.
 - Keep the light theme and the two inks. Purple only comes from the two layers printed over each other (`mix-blend-mode: multiply`); there is no black.
 

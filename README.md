@@ -24,8 +24,8 @@ Copy `.env.example` to `.env` (and set the same variables in Vercel):
 
 All copy lives in [`src/i18n/content.ts`](src/i18n/content.ts), English and Japanese side by side. Search for `TODO`:
 
-- **Apps** (`work.apps`): name, platform, one line, screenshot, store or live link. Put screenshots in `public/work/` and set `image` to `/work/<file>`; each card shows the top of a 16:10 crop. Until then a drawn two-ink plate stands in. Screenshots keep their full colour.
-- **Team** (`about.people`): name, role, and a 4:5 portrait in `public/team/`. Portraits are printed in both drums automatically; until then a drawn star tile stands in.
+- **Apps** (`work.apps`): name, platform, one line, screenshot, store or live link. Put screenshots in `src/assets/work/` and set `image` to `/work/<file>` (Astro resizes them); each card shows the top of a 16:10 crop. Until then a drawn two-ink plate stands in. Screenshots keep their full colour.
+- **Team** (`about.people`): name, role, and a 4:5 portrait in `src/assets/team/` (set `photo` to `/team/<file>`). Portraits are printed in both drums automatically; until then a drawn star tile stands in.
 - **Footer** (`footer`): legal company name and registered address.
 - **Domain**: `site` in [`astro.config.mjs`](astro.config.mjs) (used for canonical and hreflang links).
 
@@ -33,7 +33,7 @@ Japanese headings and short lines break only at phrase boundaries marked with th
 
 ## Pictures
 
-The printing pictures and the press clip in [`public/found/`](public/found/) are openly licensed (CC BY) and credited on the picture credits page (`/credits/`, `/ja/credits/`, linked from the footer) from [`public/found/credits.json`](public/found/credits.json). They show the world of printing, never Funkel Labs' own work. Remove an entry there when its picture is no longer used.
+The printing pictures in [`src/assets/found/`](src/assets/found/) and the press clip in [`public/found/`](public/found/) are openly licensed (CC BY) and credited on the picture credits page (`/credits/`, `/ja/credits/`, linked from the footer) from [`public/found/credits.json`](public/found/credits.json). They show the world of printing, never Funkel Labs' own work. Remove an entry there when its picture is no longer used.
 
 ## Design
 

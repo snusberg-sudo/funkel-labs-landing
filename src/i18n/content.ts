@@ -11,7 +11,7 @@ export interface Service {
 export interface Step {
   name: string;
   body: string;
-  /** A found picture of the print run (see public/found/credits.json). */
+  /** A found picture of the print run, under src/assets (see public/found/credits.json). */
   photo: string;
   photoAlt: string;
 }
@@ -20,7 +20,7 @@ export interface App {
   name: string;
   platform: string;
   body: string;
-  /** Path under /public, e.g. /work/app-one.png. Empty prints a drawn stand-in plate. */
+  /** Path under src/assets, e.g. /work/app-one.png. Empty prints a drawn stand-in plate. */
   image: string;
   imageAlt: string;
   link?: { href: string; label: string };
@@ -29,7 +29,7 @@ export interface App {
 export interface Person {
   name: string;
   role: string;
-  /** Path under /public. Empty prints a drawn stand-in tile. */
+  /** Path under src/assets, e.g. /team/name.jpg. Empty prints a drawn stand-in tile. */
   photo: string;
 }
 

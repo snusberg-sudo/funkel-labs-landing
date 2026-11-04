@@ -1,17 +1,20 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Wordmark from './Wordmark.astro';
 import Footer from './Footer.astro';
 import credits from '../../public/found/credits.json';
 import { content, type Lang } from '../i18n/content';
+import { picture } from '../scripts/pictures';
 
 interface Props {
   lang: Lang;
 }
 const t = content[Astro.props.lang];
 const home = t.lang === 'ja' ? '/ja/' : '/';
-// A film is shown by its poster frame.
-const thumb = (file: string) => file.replace(/^public/, '').replace(/\.webm$/, '-poster.jpg');
+// A picture is shown from src/assets; a film (served from public) by its poster frame.
+const still = (file: string) => picture(file.replace(/^src\/assets/, ''));
+const poster = (file: string) => file.replace(/^public/, '').replace(/\.webm$/, '-poster.jpg');
 ---
 
 <Base lang={t.lang} title={`${t.credits.title} | Funkel Labs`} description={t.meta.description} path="/credits/">
@@ -24,7 +27,11 @@ const thumb = (file: string) => file.replace(/^public/, '').replace(/\.webm$/, '
     <ul class="list">
       {credits.map((c) => (
         <li>
-          <span class="thumb"><img src={thumb(c.file)} alt="" width="160" height="120" loading="lazy" decoding="async" /></span>
+          <span class="thumb">
+            {c.media === 'image'
+              ? <Image src={still(c.file)} alt="" widths={[120, 240]} sizes="120px" />
+              : <img src={poster(c.file)} alt="" width="160" height="120" loading="lazy" decoding="async" />}
+          </span>
           <p>
             {t.lang === 'ja' ? (
               <Fragment><a href={c.page}>「{c.title}」</a>、{c.creator}、<a href={c.licenseUrl}>{c.license}</a>（{c.via}）</Fragment>

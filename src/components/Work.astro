@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import type { Content } from '../i18n/content';
+import { picture } from '../scripts/pictures';
 
 interface Props {
   t: Content;
@@ -35,7 +37,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         <li class:list={['card', tones[i % tones.length]]}>
           <div class="shot">
             {app.image ? (
-              <img src={app.image} alt={app.imageAlt} loading="lazy" decoding="async" width="1440" height="900" />
+              <Image src={picture(app.image)} alt={app.imageAlt} widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" />
             ) : (
               // TODO: stand-in plate until the app's own screenshot arrives (see README).
               <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
