@@ -1,5 +1,5 @@
 ---
-import { contactEmail, type Content } from '../i18n/content';
+import { contactEmail, contactEmailParts, type Content } from '../i18n/content';
 
 interface Props {
   t: Content;
@@ -35,9 +35,9 @@ const links = [
     </div>
     <div class="tile email">
       <span class="envelope" aria-hidden="true">
-        <svg viewBox="0 0 48 48" focusable="false"><path d="M4 10h38.5v26.5H4zM4 10l19.25 15 19.25-15" /></svg>
+        <svg viewBox="0 0 256 256" focusable="false"><path class="shut" d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z" /><path class="open" transform="translate(0 -8)" d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM96.72,152,40,192V111.53Zm16.37,8h29.82l56.63,40H56.46Zm46.19-8L216,111.53V192ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78Z" /></svg>
       </span>
-      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      <a href={`mailto:${contactEmail}`}>{contactEmailParts.map((part, i) => <>{i > 0 && <wbr />}{part}</>)}</a>
     </div>
 
     <!-- Both drums print the mast: the pink plate is drawn underneath, a hair out of register. -->
@@ -135,7 +135,7 @@ const links = [
   }
 
   /* Printed in the two drums like the rest of the board: the pink drum lays the envelope's fill,
-     the ink sets its key line (the start arrow's stroke and size) multiplied over it, a hair out of register. */
+     the ink sets its key line multiplied over it, a hair out of register. */
   .envelope {
     position: relative;
     display: block;
@@ -143,16 +143,53 @@ const links = [
     height: 64px;
   }
 
-  /* The fill plate, with the grain the board's other pink fields carry; set on the 48-unit grid, 1.5 units off register. */
+  /* The fill plate, with the grain the board's other pink fields carry; set on the icon's 256-unit grid, 8 units off register.
+     Its box holds the opened envelope; the clip cuts it to the shut one, and opening raises the flap's point. */
   .envelope::before {
     content: "";
     position: absolute;
-    left: calc(3.5 / 48 * 100%);
-    top: calc(9.5 / 48 * 100%);
-    width: calc(42.5 / 48 * 100%);
-    height: calc(30.5 / 48 * 100%);
+    left: calc(32 / 256 * 100%);
+    top: calc(25 / 256 * 100%);
+    width: calc(208 / 256 * 100%);
+    height: calc(191 / 256 * 100%);
     background-color: var(--color-pink);
     background-image: var(--grain);
+    clip-path: polygon(0 16.2%, 50% 16.2%, 100% 16.2%, 100% 100%, 0 100%);
+  }
+
+  .envelope .open {
+    opacity: 0;
+  }
+
+  /* Hovering the tile, or focusing its address, opens the envelope. */
+  .email:is(:hover, :focus-within) .envelope::before {
+    clip-path: polygon(0 37.2%, 50% 0, 100% 37.2%, 100% 100%, 0 100%);
+  }
+
+  .email:is(:hover, :focus-within) .envelope .shut {
+    opacity: 0;
+  }
+
+  .email:is(:hover, :focus-within) .envelope .open {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .envelope::before {
+      transition: clip-path 200ms var(--ease-out);
+    }
+
+    .envelope path {
+      transition: opacity 100ms linear;
+    }
+
+    .email:is(:hover, :focus-within) .envelope::before {
+      transition-duration: 320ms;
+    }
+
+    .email:is(:hover, :focus-within) .envelope .open {
+      transition: opacity 160ms linear 80ms;
+    }
   }
 
   .envelope svg {
@@ -160,9 +197,7 @@ const links = [
     display: block;
     width: 100%;
     height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 4;
+    fill: currentColor;
     mix-blend-mode: multiply;
   }
 
@@ -278,6 +313,16 @@ const links = [
     }
   }
 
+  /* Tablets: the four small tiles pair up, so the place and email tiles are not squeezed to a sliver. */
+  @media (max-width: 1023px) {
+    .statement,
+    .links,
+    .place,
+    .email {
+      grid-column: span 6;
+    }
+  }
+
   @media (max-width: 760px) {
 
     .board {
@@ -305,10 +350,14 @@ const links = [
       order: -1;
     }
 
+    /* The statement and email run the full width; links and place share a row. */
+    .statement,
+    .email {
+      grid-column: 1 / -1;
+    }
+
     .links,
-    .email,
-    .place,
-    .statement {
+    .place {
       grid-column: span 1;
     }
   }

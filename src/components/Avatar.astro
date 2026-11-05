@@ -1,0 +1,142 @@
+---
+/**
+ * Drawn founder portraits, printed like the rest of the page: a pink drum offset a few
+ * pixels from the blue line drum, which multiplies over it (purple only where they overlap).
+ */
+interface Props {
+  who: 'wai-yan-lin' | 'thu-ta';
+}
+const { who } = Astro.props;
+const spark = 'l5 15 15 5-15 5-5 15-5-15-15-5 15-5z';
+/** Tilts a head about the base of its neck, so the neck stays centred on the shoulders. */
+const tilt = (deg: number) => `rotate(${deg} 202 410)`;
+/** Wai Yan Lin's full, round face: wider through the cheeks and jaw than it is at the crown. */
+const roundHead = 'M200 64C262 64 296 110 298 180C302 250 310 300 292 340C274 380 238 394 200 394C162 394 126 380 108 340C90 300 98 250 102 180C104 110 138 64 200 64Z';
+/** Thu Ta's curtains: a middle part with two curtains framing the forehead, down past the temple at the back. */
+const curtains = 'M108 226C94 140 128 56 206 50C272 46 306 96 300 162C298 178 290 190 280 194C278 160 262 128 236 108C228 140 208 162 180 172C198 148 208 118 210 86C188 120 158 152 128 218Z';
+/** A medium-length curly mop as overlapping curls [cx, cy, r]: crown, sides over the ears, fringe. */
+const curls = [
+  [200, 110, 52], [158, 128, 42], [248, 120, 42],
+  [128, 152, 32], [140, 108, 32], [172, 78, 34], [212, 66, 34], [252, 76, 34], [286, 102, 30], [304, 138, 26],
+  [106, 190, 26], [98, 226, 20], [312, 170, 18],
+  [172, 144, 22], [208, 140, 22], [244, 144, 20], [278, 152, 18],
+];
+---
+
+{who === 'wai-yan-lin' && (
+  <svg viewBox="0 0 400 500" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="wyl-body"><path d="M30 500C40 438 104 414 162 410H246C304 414 360 438 370 500Z" /></clipPath>
+    </defs>
+    <g class="pink">
+      <path d="M30 500C40 438 104 414 162 410H246C304 414 360 438 370 500Z" />
+      <g transform={tilt(-8)}>
+        <g opacity=".3">
+          <path d={roundHead} />
+          <rect x="166" y="360" width="72" height="62" />
+          <path d="M102 222q-26 4-20 30q4 12 20 8z" />
+        </g>
+        <circle cx="168" cy="268" r="24" opacity=".6" />
+      </g>
+      <path d={`M304 444${spark}`} />
+    </g>
+    <g class="ink">
+      <g clip-path="url(#wyl-body)"><path class="line" d="M10 456H390M10 486H390" /></g>
+      <path class="line" d="M30 500C40 438 104 414 162 410H246C304 414 360 438 370 500" />
+      <path class="line thin" d={`M304 444${spark}`} />
+      <g transform={tilt(-8)}>
+        <path class="line" d="M166 384V418M238 384V418" />
+        <path class="line" d="M158 418q44 24 88 0" />
+        <path class="line" d={roundHead} />
+        <path class="line" d="M102 222q-26 4-20 30q4 12 20 8" />
+        <g class="solid">
+          {curls.map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} />)}
+        </g>
+        <path class="line thin" d="M176 176q16-10 32-2M234 170q14-8 28 0" />
+        <ellipse class="solid" cx="194" cy="206" rx="10" ry="14" />
+        <ellipse class="solid" cx="250" cy="202" rx="10" ry="14" />
+        <path class="line" d="M236 228C254 256 258 274 232 280" />
+        <path class="line" d="M206 318q24 16 50-6" />
+        <path class="line thin" d="M180 366q24 10 48 0" />
+        <g class="solid">
+          <circle cx="226" cy="340" r="3.5" /><circle cx="240" cy="346" r="3.5" /><circle cx="214" cy="348" r="3.5" />
+        </g>
+      </g>
+    </g>
+  </svg>
+)}
+
+{who === 'thu-ta' && (
+  <svg viewBox="0 0 400 500" aria-hidden="true" focusable="false">
+    <defs>
+      <mask id="tt-part" maskUnits="userSpaceOnUse" x="-100" y="-100" width="600" height="700">
+        <rect x="-100" y="-100" width="600" height="700" fill="white" />
+        <path d="M210 86C208 70 210 60 214 52" fill="none" stroke="black" stroke-width="5" stroke-linecap="round" />
+      </mask>
+    </defs>
+    <g class="pink">
+      <path d="M34 500C44 436 104 410 166 406H242C304 410 358 436 368 500Z" />
+      <g transform={tilt(-6)}>
+        <g opacity=".3">
+          <rect x="120" y="66" width="160" height="314" rx="80" />
+          <rect x="170" y="340" width="64" height="76" />
+          <path d="M124 228q-24 4-18 28q4 12 18 8z" />
+        </g>
+        <circle cx="184" cy="272" r="18" opacity=".6" />
+        <path d={curtains} />
+      </g>
+    </g>
+    <g class="ink">
+      <path class="line" d="M34 500C44 436 104 410 166 406H242C304 410 358 436 368 500" />
+      <path class="line" d="M134 410C140 448 268 448 274 410" />
+      <path class="line thin" d="M180 440V476M228 440V470" />
+      <circle class="solid" cx="180" cy="482" r="8" />
+      <circle class="solid" cx="228" cy="476" r="8" />
+      <g transform={tilt(-6)}>
+        <path class="line" d="M170 376V414M234 376V414" />
+        <rect class="line" x="120" y="66" width="160" height="314" rx="80" />
+        <path class="line" d="M124 228q-24 4-18 28q4 12 18 8" />
+        <path class="solid" d={curtains} mask="url(#tt-part)" />
+        <path class="line thin" d="M180 170q16-8 32-2M236 164q14-6 28 0" />
+        <ellipse class="solid" cx="198" cy="200" rx="10" ry="14" />
+        <ellipse class="solid" cx="252" cy="196" rx="10" ry="14" />
+        <path class="line" d="M240 224C258 252 262 270 236 276" />
+        <path class="line" d="M214 310q28 20 54-4" />
+      </g>
+    </g>
+  </svg>
+)}
+
+<style>
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The pink drum lands slightly off register, as on every print in the page. */
+  .pink {
+    fill: var(--color-pink);
+    transform: translate(7px, 5px);
+  }
+
+  .ink {
+    mix-blend-mode: multiply;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .thin {
+    stroke-width: 6;
+  }
+
+  .solid {
+    fill: var(--color-ink);
+  }
+</style>

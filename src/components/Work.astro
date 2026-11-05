@@ -37,9 +37,14 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         <li class:list={['card', tones[i % tones.length]]}>
           <div class="shot">
             {app.image ? (
-              <Image src={picture(app.image)} alt={app.imageAlt} widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" />
+              <Fragment>
+                {/* Two separations of the screenshot, pink then blue, that print it before full colour comes through. */}
+                <span class="plate plate-pink" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" /></span>
+                <span class="plate plate-blue" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" /></span>
+                <Image class="full" src={picture(app.image)} alt={app.imageAlt} widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" />
+              </Fragment>
             ) : (
-              // TODO: stand-in plate until the app's own screenshot arrives (see README).
+              // An unprinted plate: the open slot for the visitor's app, or any app still without a screenshot.
               <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
                 <rect x="96" y="18" width="128" height="230" rx="16" class="ink-line" />
                 <path d={spark} transform={`translate(124 ${44 + i * 4}) scale(3)`} class="pink-fill" />
@@ -53,7 +58,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
           <div class="panel">
             <h3>{app.name}</h3>
             <div class="meta">
-              <p>{app.platform}</p>
+              {app.platform && <p>{app.platform}</p>}
               <p>{app.body}</p>
               {app.link?.href && <a href={app.link.href}>{app.link.label}</a>}
             </div>
@@ -81,6 +86,23 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     };
     if (!motion.matches) video.pause();
     new IntersectionObserver(([entry]) => sync(entry?.isIntersecting ?? false)).observe(section);
+  }
+
+  // Each card prints once, the first time it is well on screen and inside the margins.
+  if (section && track && motion.matches) {
+    section.dataset.armed = '';
+    const seen = new Set<Element>();
+    const print = (card: Element) => {
+      if (seen.has(card) && !card.classList.contains('is-out')) card.classList.add('printed');
+    };
+    const watch = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) seen.add(entry.target);
+        print(entry.target);
+      }
+    }, { threshold: 0.6 });
+    for (const card of track.children) watch.observe(card);
+    window.addEventListener('cardsmoved', () => seen.forEach(print));
   }
 
   // Scroll carries the cards across the held press, right to left.
@@ -126,6 +148,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         const edge = edges[index];
         card.classList.toggle('is-out', edge.right + shift > width + 1 || edge.left + shift < -1);
       });
+      window.dispatchEvent(new Event('cardsmoved'));
     };
 
     let queued = false;
@@ -257,6 +280,117 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     isolation: isolate;
   }
 
+  /*
+    The two-pass print. A screenshot prints as two separations of itself: the pink plate lands well
+    off register, the blue plate strikes over it (multiplied, so they overprint purple), both pull into
+    register, and the full-colour screenshot comes through. The plates exist only once the script arms
+    the section, so without script or motion the screenshot simply stands.
+  */
+  .shot {
+    position: relative;
+  }
+
+  .plate {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-paper);
+    isolation: isolate;
+  }
+
+  .plate img {
+    filter: grayscale(1) contrast(1.25);
+    mix-blend-mode: multiply;
+  }
+
+  .plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-pink);
+    mix-blend-mode: lighten;
+  }
+
+  .plate-blue {
+    mix-blend-mode: multiply;
+  }
+
+  .plate-blue::after {
+    background-color: var(--color-ink);
+  }
+
+  .work[data-armed] .shot:has(.plate) {
+    background-color: var(--color-paper);
+    background-image: none;
+  }
+
+  .work[data-armed] .plate {
+    display: block;
+    opacity: 0;
+  }
+
+  .work[data-armed] .shot .full {
+    position: relative;
+    opacity: 0;
+  }
+
+  .work[data-armed] .card:not(:global(.printed)) .panel > * {
+    opacity: 0;
+  }
+
+  .work[data-armed] :global(.printed) .plate-pink {
+    animation: plate-pink 1400ms both;
+  }
+
+  .work[data-armed] :global(.printed) .plate-blue {
+    animation: plate-blue 1400ms both;
+  }
+
+  .work[data-armed] :global(.printed) .full {
+    animation: full-colour 1400ms both;
+  }
+
+  /* The caption stamps on once the sheet is printed; on the unprinted plate, straight away. */
+  .work[data-armed] :global(.printed) .panel > * {
+    animation: stamp 260ms var(--ease-out) both;
+    animation-delay: 1300ms;
+  }
+
+  .work[data-armed] :global(.printed) .panel > .meta {
+    animation-delay: 1370ms;
+  }
+
+  .work[data-armed] :global(.printed) .shot:not(:has(.plate)) ~ .panel > * {
+    animation-delay: 120ms;
+  }
+
+  .work[data-armed] :global(.printed) .shot:not(:has(.plate)) ~ .panel > .meta {
+    animation-delay: 190ms;
+  }
+
+  @keyframes plate-pink {
+    0% { opacity: 0; transform: translate(9%, 5%); animation-timing-function: var(--ease-out); }
+    22% { opacity: 1; transform: translate(3.6%, 5%); }
+    40% { transform: translate(3.6%, 5%); animation-timing-function: var(--ease-out); }
+    82%, 100% { opacity: 1; transform: none; }
+  }
+
+  @keyframes plate-blue {
+    0%, 28% { opacity: 0; transform: translate(-1.7%, -2.4%) scale(1.04); animation-timing-function: var(--ease-out); }
+    40% { opacity: 1; transform: translate(-1.7%, -2.4%); animation-timing-function: var(--ease-out); }
+    82%, 100% { opacity: 1; transform: none; }
+  }
+
+  @keyframes full-colour {
+    0%, 78% { opacity: 0; }
+    96%, 100% { opacity: 1; }
+  }
+
+  @keyframes stamp {
+    from { opacity: 0; transform: scale(1.12) rotate(-2deg); }
+    to { opacity: 1; transform: none; }
+  }
+
   .ink-line {
     fill: none;
     stroke: var(--color-ink);
@@ -356,6 +490,21 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
       padding-left: 12%;
       will-change: transform;
     }
+
+    /*
+      Short screens: size the card to exactly the height left under the intro so it is never
+      clipped. Mirrors the stage's top padding, the intro (heading or two-line lede, whichever
+      is taller) and its bottom padding, and the bed's block padding.
+    */
+    .card {
+      --room: calc(
+        100svh - 96px
+        - max(var(--step-heading), 2.6 * var(--step-lead))
+        - clamp(32px, 5vh, 56px)
+        - 2 * clamp(32px, 6vh, 64px)
+      );
+      width: min(600px, 44vw, var(--room) * 720 / 560);
+    }
   }
 
   /* Phones and reduced motion: the press as a band, the cards stacked. */
@@ -368,7 +517,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     .card {
       width: 100%;
       aspect-ratio: auto;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
     }
 
     .shot {

@@ -11,7 +11,7 @@ const t = content[Astro.props.lang];
 const home = t.lang === 'ja' ? '/ja/' : '/';
 ---
 
-<Base lang={t.lang} title={`${t.privacy.title} | Funkel Labs`} description={t.meta.description} path="/privacy/">
+<Base lang={t.lang} title={`${t.privacy.title} | Funkel Labs`} description={t.privacy.sections[0].body} path="/privacy/">
   <header class="wrap top">
     <a href={home} aria-label={t.nav.home}><Wordmark /></a>
   </header>

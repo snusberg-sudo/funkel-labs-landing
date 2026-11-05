@@ -17,7 +17,7 @@ const still = (file: string) => picture(file.replace(/^src\/assets/, ''));
 const poster = (file: string) => file.replace(/^public/, '').replace(/\.webm$/, '-poster.jpg');
 ---
 
-<Base lang={t.lang} title={`${t.credits.title} | Funkel Labs`} description={t.meta.description} path="/credits/">
+<Base lang={t.lang} title={`${t.credits.title} | Funkel Labs`} description={t.credits.lede} path="/credits/">
   <header class="wrap top">
     <a href={home} aria-label={t.nav.home}><Wordmark /></a>
   </header>

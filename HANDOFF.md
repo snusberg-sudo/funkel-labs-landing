@@ -44,7 +44,7 @@ These need content from the owner. `grep -rn TODO src` finds each one:
 - The real apps, screenshots and links (`work.apps`). Until they arrive, drawn plates stand in.
 - The team names, roles and 4:5 portraits (`about.people`).
 - The legal company name and registered address (`footer`).
-- `PUBLIC_WEB3FORMS_KEY`, `PUBLIC_CONTACT_EMAIL`, and the real domain in `site` in `astro.config.mjs`. It is currently `funkellabs.example`.
+- `PUBLIC_WEB3FORMS_KEY` and `PUBLIC_CONTACT_EMAIL`.
 
 These are design calls the owner hasn't made yet. Change them only on request:
 

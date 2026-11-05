@@ -1,15 +1,20 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // TODO: set to the production domain once it is registered.
-  site: 'https://funkellabs.example',
+  site: 'https://www.funkellabs.com',
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'ja'],
     routing: { prefixDefaultLocale: false },
   },
+  integrations: [
+    sitemap({
+      i18n: { defaultLocale: 'en', locales: { en: 'en', ja: 'ja' } },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
     build: {

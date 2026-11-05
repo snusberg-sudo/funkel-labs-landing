@@ -105,6 +105,8 @@ const lines = [t.hero.line1, t.hero.line2];
     --seam-start: 56%;
     /* The seam rises from just past halfway to the top as the sheet feeds. */
     --seam: calc(var(--seam-start) * (1 - var(--progress)));
+    /* The content edge of .wrap, so the headline and spark line up with the nav above them on wide screens. */
+    --edge: max(var(--gutter), (100% - var(--measure)) / 2);
     position: relative;
   }
 
@@ -133,7 +135,7 @@ const lines = [t.hero.line1, t.hero.line2];
 
   .head {
     position: absolute;
-    left: var(--gutter);
+    left: var(--edge);
     /* Put the middle of the second line on the seam. */
     top: calc(var(--seam-start) - 1.29em);
     margin: 0;
@@ -175,7 +177,7 @@ const lines = [t.hero.line1, t.hero.line2];
     --head-size: var(--step-display);
     --head-foot: 0.43;
     position: absolute;
-    left: var(--gutter);
+    left: var(--edge);
     top: calc(var(--seam-start) + var(--head-size) * var(--head-foot) + 40px);
     max-width: 34ch;
     font-size: var(--step-lead);
@@ -191,7 +193,7 @@ const lines = [t.hero.line1, t.hero.line2];
   .spark {
     position: absolute;
     top: 6%;
-    right: var(--gutter);
+    right: var(--edge);
     width: min(34vw, 44svh);
     aspect-ratio: 1;
     margin: 0;

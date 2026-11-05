@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { contactEmail, type Content } from '../i18n/content';
+import { contactEmail, contactEmailParts, type Content } from '../i18n/content';
 import { picture } from '../scripts/pictures';
 
 interface Props {
@@ -95,7 +95,7 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
 
     <ul class="rows">
       <li class="row" data-rise>
-        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+        <a href={`mailto:${contactEmail}`}>{contactEmailParts.map((part, i) => <>{i > 0 && <wbr />}{part}</>)}</a>
         {/* A coin cut from a 2.2:1 picture: the file must be about 2.2 times the coin's width to fill its height. */}
         <Image class="round" src={picture('/found/ink-roller.jpg')} alt="" widths={[320, 640]} sizes="320px" />
       </li>
@@ -322,10 +322,11 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
     max-width: 44ch;
   }
 
+  /* The same 7/5 split and gutter as the intro, so the poster stands under the lede at every height. */
   .press {
     display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
-    gap: clamp(32px, 4vw, 64px);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(16px, 2.2vw, 32px);
     align-items: start;
   }
 
@@ -490,7 +491,6 @@ const spark = 'M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 
     position: relative;
     aspect-ratio: 3 / 4;
     max-height: min(78svh, var(--chapter-room));
-    margin-left: auto;
     background-color: var(--color-paper);
     color: var(--color-ink);
     padding: clamp(20px, 3vw, 36px);

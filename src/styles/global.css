@@ -98,6 +98,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
   scrollbar-color: var(--color-ink) var(--color-paper-2);
+  scrollbar-width: thin;
   caret-color: var(--color-pink);
 }
 

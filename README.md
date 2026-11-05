@@ -25,9 +25,8 @@ Copy `.env.example` to `.env` (and set the same variables in Vercel):
 All copy lives in [`src/i18n/content.ts`](src/i18n/content.ts), English and Japanese side by side. Search for `TODO`:
 
 - **Apps** (`work.apps`): name, platform, one line, screenshot, store or live link. Put screenshots in `src/assets/work/` and set `image` to `/work/<file>` (Astro resizes them); each card shows the top of a 16:10 crop. Until then a drawn two-ink plate stands in. Screenshots keep their full colour.
-- **Team** (`about.people`): name, role, and a 4:5 portrait in `src/assets/team/` (set `photo` to `/team/<file>`). Portraits are printed in both drums automatically; until then a drawn star tile stands in.
+- **Team** (`about.people`): name, role, and a 4:5 portrait in `src/assets/team/` (set `photo` to `/team/<file>`). Portraits are printed in both drums automatically. Without one, the person's drawn avatar (`avatar`, drawn in [`src/components/Avatar.astro`](src/components/Avatar.astro)) or a star tile stands in. An optional `message` (with `messageCite` when quoting someone, and `messageLang` when it is in the other language) is revealed over the tile on hover or tap.
 - **Footer** (`footer`): legal company name and registered address.
-- **Domain**: `site` in [`astro.config.mjs`](astro.config.mjs) (used for canonical and hreflang links).
 
 Japanese headings and short lines break only at phrase boundaries marked with the escape for U+200B (a backslash, then u200B) in the copy; add one wherever a new line should be allowed to wrap.
 

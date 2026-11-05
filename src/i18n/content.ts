@@ -1,7 +1,8 @@
 export type Lang = 'en' | 'ja';
 
-// TODO: replace with the real public contact address (also set PUBLIC_CONTACT_EMAIL).
-export const contactEmail: string = import.meta.env.PUBLIC_CONTACT_EMAIL || 'hello@funkellabs.example';
+export const contactEmail: string = import.meta.env.PUBLIC_CONTACT_EMAIL || 'hello@funkellabs.com';
+/** The address cut after the @ and before the last dot, so narrow lines wrap there instead of mid-word. */
+export const contactEmailParts: string[] = contactEmail.split(/(?<=@)|(?=\.[^.]*$)/);
 
 export interface Service {
   name: string;
@@ -29,8 +30,15 @@ export interface App {
 export interface Person {
   name: string;
   role: string;
-  /** Path under src/assets, e.g. /team/name.jpg. Empty prints a drawn stand-in tile. */
+  /** Path under src/assets, e.g. /team/name.jpg. Empty prints the drawn avatar, or a stand-in tile. */
   photo: string;
+  avatar?: 'wai-yan-lin' | 'thu-ta';
+  /** A note revealed over the avatar on hover or tap; a line break splits it into lines. */
+  message?: string;
+  /** Who the note is quoting, if not the person themself. */
+  messageCite?: string;
+  /** The note's language when it differs from the page's. */
+  messageLang?: Lang;
 }
 
 export interface Content {
@@ -41,7 +49,7 @@ export interface Content {
   services: { heading: string; items: Service[] };
   work: { heading: string; lede: string; apps: App[] };
   process: { heading: string; lede: string; steps: Step[] };
-  about: { heading: string; statement: string; teamHeading: string; people: Person[] };
+  about: { heading: string; statement: string; teamHeading: string; people: Person[]; showMessage: string };
   contact: {
     heading: string;
     lede: string;
@@ -113,11 +121,17 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'Things we’ve made',
       lede: 'A few of the apps we’ve designed and built.',
-      // TODO: replace with the real apps (name, platform, one line, screenshot, store or live link).
+      // TODO: add each app's platform and store or live link; add the other apps as they are ready.
       apps: [
-        { name: 'App name', platform: 'iOS and Android', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', link: { href: '', label: 'View on the App Store' } },
-        { name: 'App name', platform: 'Web', body: 'One line on what it does and who it is for.', image: '', imageAlt: '', link: { href: '', label: 'Visit the site' } },
-        { name: 'App name', platform: 'Web and AI', body: 'One line on what it does and who it is for.', image: '', imageAlt: '' },
+        {
+          name: 'KotobaGo', platform: '', body: 'A flashcard app for learning Japanese words.',
+          image: '/work/kotobago.png', imageAlt: 'A KotobaGo flashcard for 会う (あう), “to meet”, among word chips in Japanese, English and Burmese.',
+        },
+        // The open slot: an unprinted plate inviting the visitor's own app onto the press.
+        {
+          name: 'Your app', platform: '', body: 'The next one off the press could be yours.',
+          image: '', imageAlt: '', link: { href: '#contact', label: 'Start a project' },
+        },
       ],
     },
     process: {
@@ -134,11 +148,19 @@ export const content: Record<Lang, Content> = {
       heading: 'Why “Funkel”',
       statement: 'Funkel is German for sparkle: the moment a product stops being a plan and starts to feel alive.',
       teamHeading: 'The people',
-      // TODO: replace with the real team (name, role, 4:5 photo).
+      // TODO: confirm each founder's role.
       people: [
-        { name: 'Founder name', role: 'Founder, engineering', photo: '' },
-        { name: 'Team member', role: 'Role', photo: '' },
+        {
+          name: 'Wai Yan Lin', role: 'Co-founder', photo: '', avatar: 'wai-yan-lin',
+          message: 'The less you know, the more you think you know.\nThe deeper you learn, the more you realise you still know nothing.',
+        },
+        {
+          name: 'Thu Ta', role: 'Co-founder', photo: '', avatar: 'thu-ta',
+          message: 'I had a dream I could buy my way to Heaven\nWhen I awoke, I spent that on a necklace', messageCite: 'Ye',
+        },
       ],
+      // {name} is replaced with the person's name.
+      showMessage: 'A note from {name}',
     },
     contact: {
       heading: 'Print your idea',
@@ -236,11 +258,16 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'これまでに\u200Bつくったもの',
       lede: '私たちが\u200B設計・開発した\u200Bアプリの\u200B一部です。',
-      // TODO: 実際のアプリ情報に差し替え（名前、対応環境、一行説明、スクリーンショット、ストアまたは公開URL）。
+      // TODO: 各アプリの対応環境とストアまたは公開URLを追加。ほかのアプリも準備ができ次第追加。
       apps: [
-        { name: 'アプリ名', platform: 'iOS・Android', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', link: { href: '', label: 'App Storeで見る' } },
-        { name: 'アプリ名', platform: 'Web', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '', link: { href: '', label: 'サイトを見る' } },
-        { name: 'アプリ名', platform: 'Web・AI', body: '何をするアプリか、誰のためのものかを一行で。', image: '', imageAlt: '' },
+        {
+          name: 'KotobaGo', platform: '', body: '日本語の単語を覚えるためのフラッシュカードアプリ。',
+          image: '/work/kotobago.png', imageAlt: '「会う（あう）・to meet」のKotobaGoのフラッシュカードと、日本語・英語・ビルマ語の単語チップ。',
+        },
+        {
+          name: 'あなたのアプリ', platform: '', body: '次に刷り上がるのは、あなたのアプリかもしれません。',
+          image: '', imageAlt: '', link: { href: '#contact', label: '相談をはじめる' },
+        },
       ],
     },
     process: {
@@ -257,11 +284,18 @@ export const content: Record<Lang, Content> = {
       heading: 'Funkelという\u200B名前',
       statement: 'Funkel（フンケル）は\u200Bドイツ語で\u200B「きらめき」。\u200B計画だった\u200Bプロダクトが、\u200B生き生きと\u200B動き出す\u200B瞬間のことです。',
       teamHeading: 'メンバー',
-      // TODO: 実際のメンバー情報に差し替え（名前、役割、4:5の写真）。
+      // TODO: 各創業者の役割を確認。
       people: [
-        { name: '代表者名', role: '代表・エンジニア', photo: '' },
-        { name: 'メンバー名', role: '役割', photo: '' },
+        {
+          name: 'ワイヤンリン', role: '共同創業者', photo: '', avatar: 'wai-yan-lin',
+          message: '知らないほど、自分は知っていると思う。\n深く学ぶほど、自分がまだ何も知らないことに気づく。',
+        },
+        {
+          name: 'トゥタ', role: '共同創業者', photo: '', avatar: 'thu-ta',
+          message: '金で天国に行ける、そんな夢を見た。目が覚めた俺は、その金を首飾りに費やした。', messageCite: 'イェ', messageLang: 'en',
+        },
       ],
+      showMessage: '{name}からのひとこと',
     },
     contact: {
       heading: 'アイデアを\u200B刷ってみる',
