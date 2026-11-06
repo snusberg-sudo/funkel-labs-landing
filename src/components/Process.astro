@@ -200,6 +200,8 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
 
     .is-accordion .stage {
       position: relative;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
       flex: 1 1 0;
       min-width: 0;
       overflow: hidden;
@@ -250,13 +252,15 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
 
     .is-accordion .stage[data-open="true"] .tab span {
       transform: none;
+      white-space: normal;
     }
 
     .is-accordion .body {
-      position: absolute;
-      inset: auto 0 0;
+      position: relative;
       z-index: 1;
+      min-height: 0;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
       align-items: end;
       padding: 24px;
       opacity: 0;
@@ -272,6 +276,7 @@ const tones = ['tone-1', 'tone-2', 'tone-3', 'tone-4'];
 
     .is-accordion figure {
       aspect-ratio: 4 / 3;
+      max-height: 100%;
     }
 
     .stage:not([data-open="true"]) .tab:hover {

@@ -39,9 +39,9 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
             {app.image ? (
               <Fragment>
                 {/* Two separations of the screenshot, pink then blue, that print it before full colour comes through. */}
-                <span class="plate plate-pink" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" /></span>
-                <span class="plate plate-blue" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" /></span>
-                <Image class="full" src={picture(app.image)} alt={app.imageAlt} widths={[640, 960, 1440]} sizes="(max-width: 760px) 90vw, 40vw" />
+                <span class="plate plate-pink" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 760px" /></span>
+                <span class="plate plate-blue" aria-hidden="true"><Image src={picture(app.image)} alt="" widths={[640, 960, 1440]} sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 760px" /></span>
+                <Image class="full" src={picture(app.image)} alt={app.imageAlt} widths={[640, 960, 1440]} sizes="(max-width: 639px) 92vw, (max-width: 1023px) 46vw, 760px" />
               </Fragment>
             ) : (
               // An unprinted plate: the open slot for the visitor's app, or any app still without a screenshot.
@@ -108,11 +108,11 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
   // Scroll carries the cards across the held press, right to left.
   if (section && track) {
     const rail = track.parentElement as HTMLElement;
-    const stage = section.firstElementChild as HTMLElement;
+    const intro = section.querySelector<HTMLElement>('.intro')!;
     const cards = [...track.children] as HTMLElement[];
     let travel = 0;
     let width = 0;
-    let span = 0;
+    let lead = 0;
     let shift = 0;
     let edges: { left: number; right: number }[] = [];
 
@@ -128,7 +128,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
       width = rail.clientWidth;
       travel = Math.max(0, track.scrollWidth - width);
       section.style.setProperty('--travel', `${travel}px`);
-      span = section.offsetHeight - stage.offsetHeight;
+      // The bed pins once the intro has scrolled away, and holds for the cards' travel.
+      lead = intro.offsetTop + intro.offsetHeight;
       const origin = rail.getBoundingClientRect().left + shift;
       edges = cards.map((card) => {
         const box = card.getBoundingClientRect();
@@ -140,7 +141,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     const update = () => {
       if (!travel) return;
       const top = section.getBoundingClientRect().top;
-      const progress = span > 0 ? Math.min(1, Math.max(0, -top / span)) : 0;
+      const progress = Math.min(1, Math.max(0, (-top - lead) / travel));
       shift = -progress * travel;
       track.style.transform = `translate3d(${shift.toFixed(1)}px, 0, 0)`;
       // A card's caption prints only once the whole card is inside the margins.
@@ -191,7 +192,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
 
   .rail {
     position: relative;
-    margin-inline: var(--gutter);
+    /* The same content edge as .wrap, so the first card lines up under the heading. */
+    margin-inline: max(var(--gutter), (100% - var(--measure)) / 2);
     overflow: clip;
   }
 
@@ -254,10 +256,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
 
   .card {
     flex: none;
-    width: min(600px, 44vw);
-    aspect-ratio: 720 / 560;
     display: grid;
-    grid-template-rows: 68fr 32fr;
     color: var(--color-pink-ink);
   }
 
@@ -273,7 +272,6 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
   }
 
   .shot svg {
@@ -409,7 +407,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
 
   .panel {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* The name takes its own width, up to half; the sentence gets the rest. */
+    grid-template-columns: fit-content(50%) minmax(0, 1fr);
     align-items: end;
     gap: 16px;
     padding: 28px;
@@ -460,25 +459,29 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     margin-top: 4px;
   }
 
-  /* Pinned on desktop: the stage holds while the cards cross it. */
+  /*
+    Pinned on desktop: the intro scrolls away, then the bed holds a full screen while the cards
+    cross it. The stage's tail adds the travel, so the bed stays pinned for exactly that long.
+  */
   @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .work {
-      height: calc(100svh + var(--travel));
+    .stage {
+      overflow: clip;
+      padding-top: 96px;
     }
 
-    .stage {
+    .stage::after {
+      content: "";
+      display: block;
+      height: var(--travel);
+    }
+
+    .bed {
       position: sticky;
       top: 0;
       height: 100svh;
       display: flex;
-      flex-direction: column;
-      padding-top: 96px;
-    }
-
-    .bed {
-      flex: 1;
-      display: flex;
       align-items: center;
+      container-type: size;
     }
 
     .rail {
@@ -487,23 +490,19 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     }
 
     .track {
-      padding-left: 12%;
       will-change: transform;
     }
 
     /*
-      Short screens: size the card to exactly the height left under the intro so it is never
-      clipped. Mirrors the stage's top padding, the intro (heading or two-line lede, whichever
-      is taller) and its bottom padding, and the bed's block padding.
+      Two cards fill the rail and every screenshot shares one 3:2 row, so the captions line up
+      (the row stretches the cards to the tallest caption). On a short screen the screenshot gives
+      up height to leave the caption its room, cropping from the centre.
     */
     .card {
-      --room: calc(
-        100svh - 96px
-        - max(var(--step-heading), 2.6 * var(--step-lead))
-        - clamp(32px, 5vh, 56px)
-        - 2 * clamp(32px, 6vh, 64px)
-      );
-      width: min(600px, 44vw, var(--room) * 720 / 560);
+      --rail: min(100cqw - 2 * var(--gutter), var(--measure));
+      --card: min(760px, (var(--rail) - 40px) / 2);
+      width: var(--card);
+      grid-template-rows: min(var(--card) * 2 / 3, 100cqh - 10rem) auto;
     }
   }
 
@@ -516,12 +515,11 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
 
     .card {
       width: 100%;
-      aspect-ratio: auto;
       grid-template-rows: auto 1fr;
     }
 
     .shot {
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
     }
 
     .panel {

@@ -265,7 +265,7 @@ export const content: Record<Lang, Content> = {
           image: '/work/kotobago.png', imageAlt: '「会う（あう）・to meet」のKotobaGoのフラッシュカードと、日本語・英語・ビルマ語の単語チップ。',
         },
         {
-          name: 'あなたのアプリ', platform: '', body: '次に刷り上がるのは、あなたのアプリかもしれません。',
+          name: 'あなたの\u200Bアプリ', platform: '', body: '次に刷り上がるのは、あなたのアプリかもしれません。',
           image: '', imageAlt: '', link: { href: '#contact', label: '相談をはじめる' },
         },
       ],

@@ -18,12 +18,12 @@ export function armSectionJumps(): void {
   let targetIndex = 0;
   let originIndex = 0;
   let heading = 0;
-  // After a jump fires, its own fading momentum is ignored until the reader pushes again.
+  // A gesture gets one jump; only a pause or reversal starts another gesture.
   let guarded = false;
   let wheelTotal = 0;
   let lastWheel = 0;
   let lastDirection = 0;
-  let recent = [0, 0];
+  let recent: number[] = [];
 
   const stops = (): Stop[] => {
     const viewport = window.innerHeight;
@@ -108,17 +108,19 @@ export function armSectionJumps(): void {
     event.preventDefault();
 
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
-    const size = Math.abs(delta);
     const direction = Math.sign(delta);
+    // Trackpads emit empty samples mid-gesture; they are not a reversal.
+    if (!direction) return;
     const now = performance.now();
     const fresh = now - lastWheel > 180 || direction !== lastDirection;
-    // Trackpad momentum shrinks event by event; input that holds or grows is a new push.
-    const pushing = fresh || (size >= 4 && size >= Math.max(...recent));
-    recent = fresh ? [0, size] : [recent[1], size];
+    // Momentum can run straight into the next swipe, which shows as input leaping far above the fading tail.
+    const size = Math.abs(delta);
+    const push = size >= 10 && size > 3 * Math.max(...recent);
+    recent = fresh ? [size] : [...recent.slice(-2), size];
     lastWheel = now;
     lastDirection = direction;
     if (fresh) wheelTotal = 0;
-    if (guarded && !pushing) return;
+    if (guarded && !fresh && !push) return;
     guarded = false;
     wheelTotal += delta;
     if (Math.abs(wheelTotal) < 28) return;
