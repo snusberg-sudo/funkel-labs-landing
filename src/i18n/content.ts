@@ -32,7 +32,7 @@ export interface Person {
   role: string;
   /** Path under src/assets, e.g. /team/name.jpg. Empty prints the drawn avatar, or a stand-in tile. */
   photo: string;
-  avatar?: 'wai-yan-lin' | 'thu-ta';
+  avatar?: 'wai-yan-lin' | 'thu-ta' | 'hannah';
   /** A note revealed over the avatar on hover or tap; a line break splits it into lines. */
   message?: string;
   /** Who the note is quoting, if not the person themself. */
@@ -127,6 +127,11 @@ export const content: Record<Lang, Content> = {
           name: 'KotobaGo', platform: '', body: 'A flashcard app for learning Japanese words.',
           image: '/work/kotobago.png', imageAlt: 'A KotobaGo flashcard for 会う (あう), “to meet”, among word chips in Japanese, English and Burmese.',
         },
+        {
+          name: 'Husvera', platform: '', body: 'AI diagnosis for home repairs, with cost estimates and quotes from vetted contractors.',
+          image: '/work/husvera.png', imageAlt: 'A ceiling water stain beside a Husvera AI diagnosis card suggesting a leak from upstairs, with an estimated cost of ¥48,000–135,000.',
+          link: { href: 'https://husvera.funkellabs.com', label: 'Visit Husvera' },
+        },
         // The open slot: an unprinted plate inviting the visitor's own app onto the press.
         {
           name: 'Your app', platform: '', body: 'The next one off the press could be yours.',
@@ -158,6 +163,7 @@ export const content: Record<Lang, Content> = {
           name: 'Thu Ta', role: 'Co-founder', photo: '', avatar: 'thu-ta',
           message: 'I had a dream I could buy my way to Heaven\nWhen I awoke, I spent that on a necklace', messageCite: 'Ye',
         },
+        { name: 'Hannah', role: 'Digital Marketing', photo: '', avatar: 'hannah' },
       ],
       // {name} is replaced with the person's name.
       showMessage: 'A note from {name}',
@@ -265,6 +271,11 @@ export const content: Record<Lang, Content> = {
           image: '/work/kotobago.png', imageAlt: '「会う（あう）・to meet」のKotobaGoのフラッシュカードと、日本語・英語・ビルマ語の単語チップ。',
         },
         {
+          name: 'Husvera', platform: '', body: '住まいの不具合をAIで診断し、概算費用と信頼できる業者の見積もりを届けるサービス。',
+          image: '/work/husvera.png', imageAlt: '天井のシミの写真と、上階からの漏水の可能性と概算費用¥48,000〜135,000を示すHusveraのAI診断カード。',
+          link: { href: 'https://husvera.funkellabs.com', label: 'Husveraを見る' },
+        },
+        {
           name: 'あなたの\u200Bアプリ', platform: '', body: '次に刷り上がるのは、あなたのアプリかもしれません。',
           image: '', imageAlt: '', link: { href: '#contact', label: '相談をはじめる' },
         },
@@ -294,6 +305,7 @@ export const content: Record<Lang, Content> = {
           name: 'トゥタ', role: '共同創業者', photo: '', avatar: 'thu-ta',
           message: '金で天国に行ける、そんな夢を見た。目が覚めた俺は、その金を首飾りに費やした。', messageCite: 'イェ', messageLang: 'en',
         },
+        { name: 'ハンナ', role: 'デジタルマーケティング', photo: '', avatar: 'hannah' },
       ],
       showMessage: '{name}からのひとこと',
     },

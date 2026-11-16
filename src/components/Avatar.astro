@@ -4,7 +4,7 @@
  * pixels from the blue line drum, which multiplies over it (purple only where they overlap).
  */
 interface Props {
-  who: 'wai-yan-lin' | 'thu-ta';
+  who: 'wai-yan-lin' | 'thu-ta' | 'hannah';
 }
 const { who } = Astro.props;
 const spark = 'l5 15 15 5-15 5-5 15-5-15-15-5 15-5z';
@@ -20,6 +20,17 @@ const curls = [
   [128, 152, 32], [140, 108, 32], [172, 78, 34], [212, 66, 34], [252, 76, 34], [286, 102, 30], [304, 138, 26],
   [106, 190, 26], [98, 226, 20], [312, 170, 18],
   [172, 144, 22], [208, 140, 22], [244, 144, 20], [278, 152, 18],
+];
+/** Hannah's soft oval face. */
+const ovalHead = 'M200 70C258 70 290 120 290 200C290 290 260 384 200 384C140 384 110 290 110 200C110 120 142 70 200 70Z';
+/** Long hair falling straight behind the head and down past the shoulders. */
+const longHair = 'M200 44C122 44 84 104 82 190C80 260 72 330 76 400H324C328 330 320 260 318 190C316 104 278 44 200 44Z';
+/** The top of the hair, side-parted, sweeping a fringe across the forehead. */
+const crown = 'M104 236C92 130 130 46 204 44C276 42 312 120 296 236C288 186 270 140 236 104C214 130 180 142 146 146C126 160 112 196 104 236Z';
+/** Curls only at the ends [cx, cy, r], resting on the shoulders. */
+const ends = [
+  [84, 396, 26], [110, 410, 26], [136, 404, 24], [72, 430, 24], [100, 440, 26], [128, 438, 22],
+  [316, 396, 26], [290, 410, 26], [264, 404, 24], [328, 430, 24], [300, 440, 26], [272, 438, 22],
 ];
 ---
 
@@ -102,6 +113,54 @@ const curls = [
         <ellipse class="solid" cx="252" cy="196" rx="10" ry="14" />
         <path class="line" d="M240 224C258 252 262 270 236 276" />
         <path class="line" d="M214 310q28 20 54-4" />
+      </g>
+    </g>
+  </svg>
+)}
+
+{who === 'hannah' && (
+  <svg viewBox="0 0 400 500" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- The long hair sits behind the face, neck and shoulders. -->
+      <mask id="hn-back" maskUnits="userSpaceOnUse" x="-100" y="-100" width="600" height="700">
+        <rect x="-100" y="-100" width="600" height="700" fill="white" />
+        <path d={ovalHead} fill="black" />
+        <rect x="170" y="340" width="64" height="80" fill="black" />
+        <path d="M38 500C48 438 106 412 168 408H236C298 412 356 438 366 500V600H38Z" transform={tilt(-5)} fill="black" />
+      </mask>
+    </defs>
+    <g class="pink">
+      <path d="M38 500C48 438 106 412 168 408H236C298 412 356 438 366 500Z" />
+      <g transform={tilt(5)}>
+        <g opacity=".3">
+          <path d={ovalHead} />
+          <rect x="172" y="350" width="60" height="66" />
+        </g>
+        <circle cx="176" cy="270" r="20" opacity=".6" />
+        <path d={longHair} mask="url(#hn-back)" />
+        {ends.map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} />)}
+        <path d={crown} />
+      </g>
+      <path d={`M228 452${spark}`} />
+    </g>
+    <g class="ink">
+      <path class="line" d="M38 500C48 438 106 412 168 408H236C298 412 356 438 366 500" />
+      <path class="line" d="M170 412L202 452L234 412" />
+      <path class="line thin" d={`M228 452${spark}`} />
+      <g transform={tilt(5)}>
+        <path class="line" d="M174 376V412M230 376V412" />
+        <path class="solid" d={longHair} mask="url(#hn-back)" />
+        <g class="solid">
+          {ends.map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} />)}
+        </g>
+        <path class="line" d={ovalHead} />
+        <path class="solid" d={crown} />
+        <path class="line thin" d="M168 172q16-8 32-2M228 168q14-6 28 0" />
+        <ellipse class="solid" cx="190" cy="202" rx="10" ry="14" />
+        <ellipse class="solid" cx="244" cy="198" rx="10" ry="14" />
+        <path class="line thin" d="M180 190l-8-6M254 186l8-6" />
+        <path class="line" d="M232 226C250 254 254 270 228 276" />
+        <path class="line" d="M196 314q26 18 52-4" />
       </g>
     </g>
   </svg>
