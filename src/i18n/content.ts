@@ -47,7 +47,7 @@ export interface Content {
   nav: { cta: string; switchLabel: string; switchHref: string; switchLang: Lang; home: string; services: string; work: string; process: string; about: string };
   hero: { line1: string; line2: string; lede: string; primary: string; sparkAlt: string };
   services: { heading: string; items: Service[] };
-  work: { heading: string; lede: string; apps: App[] };
+  work: { heading: string; lede: string; previous: string; next: string; apps: App[] };
   process: { heading: string; lede: string; steps: Step[] };
   about: { heading: string; statement: string; teamHeading: string; people: Person[]; showMessage: string };
   contact: {
@@ -121,6 +121,8 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'Things we’ve made',
       lede: 'A few of the apps we’ve designed and built.',
+      previous: 'Previous project',
+      next: 'Next project',
       // TODO: add each app's platform and store or live link; add the other apps as they are ready.
       apps: [
         {
@@ -163,7 +165,10 @@ export const content: Record<Lang, Content> = {
           name: 'Thu Ta', role: 'Co-founder', photo: '', avatar: 'thu-ta',
           message: 'I had a dream I could buy my way to Heaven\nWhen I awoke, I spent that on a necklace', messageCite: 'Ye',
         },
-        { name: 'Hannah', role: 'Digital Marketing', photo: '', avatar: 'hannah' },
+        {
+          name: 'Hannah', role: 'Digital Marketing', photo: '', avatar: 'hannah',
+          message: 'Make memories, money can come back.\nTime can’t.',
+        },
       ],
       // {name} is replaced with the person's name.
       showMessage: 'A note from {name}',
@@ -264,6 +269,8 @@ export const content: Record<Lang, Content> = {
     work: {
       heading: 'これまでに\u200Bつくったもの',
       lede: '私たちが\u200B設計・開発した\u200Bアプリの\u200B一部です。',
+      previous: '前のプロジェクト',
+      next: '次のプロジェクト',
       // TODO: 各アプリの対応環境とストアまたは公開URLを追加。ほかのアプリも準備ができ次第追加。
       apps: [
         {
@@ -305,7 +312,10 @@ export const content: Record<Lang, Content> = {
           name: 'トゥタ', role: '共同創業者', photo: '', avatar: 'thu-ta',
           message: '金で天国に行ける、そんな夢を見た。目が覚めた俺は、その金を首飾りに費やした。', messageCite: 'イェ', messageLang: 'en',
         },
-        { name: 'ハンナ', role: 'デジタルマーケティング', photo: '', avatar: 'hannah' },
+        {
+          name: 'ハンナ', role: 'デジタルマーケティング', photo: '', avatar: 'hannah',
+          message: '思い出をつくろう。お金はまた戻ってくる。\n時間は戻らない。',
+        },
       ],
       showMessage: '{name}からのひとこと',
     },

@@ -67,11 +67,25 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
       ))}
     </ul>
       </div>
+      <!-- Steps the cards across by hand, one project at a time; only while the press is pinned. -->
+      <div class="steps" data-steps hidden>
+        <button type="button" data-step="-1" aria-label={t.work.previous}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <button type="button" data-step="1" aria-label={t.work.next}>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
+  import gsap from 'gsap';
+  import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+  gsap.registerPlugin(ScrollToPlugin);
+
   const section = document.querySelector<HTMLElement>('[data-showcase]');
   const track = section?.querySelector<HTMLElement>('[data-track]');
   const video = section?.querySelector<HTMLVideoElement>('[data-press]');
@@ -110,6 +124,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     const rail = track.parentElement as HTMLElement;
     const intro = section.querySelector<HTMLElement>('.intro')!;
     const cards = [...track.children] as HTMLElement[];
+    const steps = section.querySelector<HTMLElement>('[data-steps]')!;
+    const [back, forward] = steps.querySelectorAll<HTMLButtonElement>('button');
     let travel = 0;
     let width = 0;
     let lead = 0;
@@ -123,6 +139,7 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         track.style.removeProperty('transform');
         for (const card of cards) card.classList.remove('is-out');
         travel = 0;
+        steps.hidden = true;
         return;
       }
       width = rail.clientWidth;
@@ -135,8 +152,36 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         const box = card.getBoundingClientRect();
         return { left: box.left - origin, right: box.right - origin };
       });
+      steps.hidden = !travel;
       update();
     };
+
+    /** How far the track travels to bring each card to the left margin, in order. */
+    const stops = () => edges.map((edge) => Math.min(travel, edge.left));
+
+    // A step scrolls the page to the next card's stop, so the scroll-driven travel stays the one source of truth.
+    steps.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('[data-step]');
+      if (!button) return;
+      const direction = Number(button.dataset.step);
+      const at = -shift;
+      const list = stops();
+      const stop = direction > 0 ? list.find((x) => x > at + 2) : list.findLast((x) => x < at - 2);
+      if (stop === undefined) return;
+      const top = section.getBoundingClientRect().top + window.scrollY;
+      const root = document.documentElement;
+      root.style.scrollBehavior = 'auto';
+      const settle = () => root.style.removeProperty('scroll-behavior');
+      gsap.to(window, {
+        scrollTo: { y: top + lead + stop, autoKill: true },
+        duration: 0.8,
+        ease: 'power4.out',
+        overwrite: true,
+        onUpdate: () => window.dispatchEvent(new Event('jumpframe')),
+        onComplete: settle,
+        onInterrupt: settle,
+      });
+    });
 
     const update = () => {
       if (!travel) return;
@@ -149,6 +194,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
         const edge = edges[index];
         card.classList.toggle('is-out', edge.right + shift > width + 1 || edge.left + shift < -1);
       });
+      back.disabled = shift > -2;
+      forward.disabled = shift < -travel + 2;
       window.dispatchEvent(new Event('cardsmoved'));
     };
 
@@ -459,6 +506,57 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
     margin-top: 4px;
   }
 
+  .steps {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 20px max(var(--gutter), (100% - var(--measure)) / 2) 0;
+  }
+
+  .steps[hidden] {
+    display: none;
+  }
+
+  .steps button {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid currentColor;
+    background-color: var(--color-pink-ink);
+    color: var(--color-on-ink);
+    cursor: pointer;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), opacity 160ms var(--ease-out);
+  }
+
+  .steps button:hover:not(:disabled) {
+    background-color: var(--color-pink);
+    color: var(--color-pink-ink);
+    border-color: var(--color-pink);
+  }
+
+  .steps button:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  .steps button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .steps svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   /*
     Pinned on desktop: the intro scrolls away, then the bed holds a full screen while the cards
     cross it. The stage's tail adds the travel, so the bed stays pinned for exactly that long.
@@ -480,12 +578,12 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
       top: 0;
       height: 100svh;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: center;
       container-type: size;
     }
 
     .rail {
-      flex: 1;
       min-width: 0;
     }
 
@@ -502,7 +600,8 @@ const tones = ['tone-stock', 'tone-pink', 'tone-blue'];
       --rail: min(100cqw - 2 * var(--gutter), var(--measure));
       --card: min(760px, (var(--rail) - 40px) / 2);
       width: var(--card);
-      grid-template-rows: min(var(--card) * 2 / 3, 100cqh - 10rem) auto;
+      /* The screenshot also leaves room below the cards for the step buttons. */
+      grid-template-rows: min(var(--card) * 2 / 3, 100cqh - 10rem - 68px) auto;
     }
   }
 
